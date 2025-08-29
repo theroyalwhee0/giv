@@ -1,7 +1,10 @@
-#![doc = include_str!("../README.md")]
-#![forbid(missing_docs)]
-#![forbid(unsafe_code)]
-#![warn(clippy::doc_markdown)]
+//! Giv - A command-line utility providing various useful tools.
+//!
+//! This crate provides output for the following:
+//! - Formatted dates.
+//! - Key generation.
+//! - UUID v7 generation.
+//! - PI.
 
 /// Date command module.
 #[cfg(feature = "date")]
