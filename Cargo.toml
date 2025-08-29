@@ -5,7 +5,7 @@ edition = "2024"
 description = "A CLI for generating useful values."
 authors = ["Adam Mill <hismajesty@theroyalwhee.com>"]
 homepage = "https://www.theroyalwhee.com#giv"
-license = "UNLICENSED"
+license = "Apache-2.0"
 rust-version = "1.88.0"
 
 [lints.rust]
@@ -72,7 +72,6 @@ uuid = ["dep:uuid"]
 # Option features.
 json = ["dep:serde_json", "dep:serde"]
 
-# Enable more optimization in the release profile at the cost of compile time.
 [profile.release]
 codegen-units = 1
 lto = "thin"
