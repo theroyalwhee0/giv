@@ -24,6 +24,10 @@
 .vscode/
 *.code-workspace
 
+# AI Specific.
+.claude/
+CLAUDE.md
+
 # Local development.
 .local/
 
