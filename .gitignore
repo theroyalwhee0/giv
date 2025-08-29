@@ -1,0 +1,38 @@
+# Logs and Instrumentation.
+*.log
+
+# Secrets and Configs.
+.ssh/
+.env
+*.kbdx
+
+# Large files.
+*.iso
+*.dmg
+*.img
+*.zip
+*.tar
+*.gz
+*.tgz
+*.7z
+
+# Backups and temporary files.
+*.bak
+
+# IDE Specific.
+.idea/
+.vscode/
+*.code-workspace
+
+# Local development.
+.local/
+
+# OS Specific.
+.DS_Store
+Thumbs.db
+
+# Rust ecosystem.
+/target
+
+# Node ecosystem.
+node_modules/

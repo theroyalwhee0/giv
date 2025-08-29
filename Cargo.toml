@@ -1,0 +1,47 @@
+[package]
+name = "giv"
+version = "0.1.0"
+edition = "2024"
+description = "A CLI for generating useful values."
+authors = ["Adam Mill <hismajesty@theroyalwhee.com>"]
+homepage = "https://www.theroyalwhee.com#giv"
+license = "UNLICENSED"
+
+[dependencies]
+clap = { version = "4.5.35", features = ["derive"] }
+thiserror = "2.0.12"
+# Optional dependencies.
+chrono = { version = "0.4.40", optional = true }
+rand = { version = "0.9.0", optional = true }
+serde_json = { version = "1.0.140", optional = true }
+uuid = { version = "1.4", features = ["v7"], optional = true }
+
+[features]
+default = ["all"]
+all = [
+    # Commands.
+    "date",
+    "key",
+    "pi",
+    "uuid",
+    # Options.
+    "json",
+]
+# Command features.
+date = ["dep:chrono"]
+key = ["dep:rand"]
+pi = []
+uuid = ["dep:uuid"]
+# Option features.
+json = ["dep:serde_json"]
+
+# Enable more optimization in the release profile at the cost of compile time.
+[profile.release]
+codegen-units = 1
+lto = "thin"
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
