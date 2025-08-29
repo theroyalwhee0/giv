@@ -8,6 +8,7 @@ use crate::cli::CommandOptions;
 ///
 /// - `options` The command options.
 /// - `value` The output string to be printed.
+#[allow(clippy::print_stdout)]
 pub fn outputln(options: CommandOptions, value: impl Into<String>) {
     let value: String = value.into();
 
@@ -15,10 +16,10 @@ pub fn outputln(options: CommandOptions, value: impl Into<String>) {
     #[cfg(feature = "json")]
     if options.json {
         let json_output = serde_json::to_string(&value).unwrap();
-        println!("{}", json_output);
+        println!("{json_output}");
         return;
     }
 
     // Else output plain text.
-    println!("{}", value);
+    println!("{value}");
 }

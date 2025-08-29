@@ -1,5 +1,3 @@
-#![cfg(feature = "date")]
-
 use crate::{cli::CommandOptions, error::GivError, output::outputln};
 use chrono::{DateTime, SecondsFormat, Utc};
 
@@ -11,11 +9,11 @@ pub enum DateKind {
     Now,
     /// Now defaulting to a Timestamp format.
     Timestamp,
-    /// Now defaulting to a Rfc3339Date format.
+    /// Now defaulting to a `Rfc3339Date` format.
     Today,
-    /// Yesterday defaulting to a Rfc3339Date format.
+    /// Yesterday defaulting to a `Rfc3339Date` format.
     Yesterday,
-    /// Tomorrow defaulting to a Rfc3339Date format.
+    /// Tomorrow defaulting to a `Rfc3339Date` format.
     Tomorrow,
 }
 

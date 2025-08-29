@@ -98,7 +98,6 @@ impl From<&Cli> for CommandOptions {
         Self {
             #[cfg(feature = "json")]
             json: cli.json,
-            ..Self::default()
         }
     }
 }

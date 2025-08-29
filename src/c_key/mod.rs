@@ -1,23 +1,22 @@
-#![cfg(feature = "key")]
-
 use crate::{cli::CommandOptions, error::GivError, output::outputln};
 use rand::RngCore;
 
-// The default size of the key.
+/// The default size of the key.
 const DEFAULT_KEY_SIZE: usize = 36;
 
-// The alphabet used for generating the key.
+/// The alphabet used for generating the key.
 const KEY_ALPHABET: &str = concat!(
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     "abcdefghijklmnopqrstuvwxyz",
     "0123456789",
 );
 
-// The maximum value for the RNG byte to prevent bias.
+/// The maximum value for the RNG byte to prevent bias.
 const U8_MAX: usize = u8::MAX as usize;
+/// Range for random number generation to avoid modulo bias.
 const RNG_RANGE: usize = U8_MAX - (U8_MAX % KEY_ALPHABET.len());
 
-// The prefix for the generated key.
+/// The prefix for the generated key.
 const KEY_PREFIX: &str = "key_";
 
 /// Generate a random prefixless key of the specified size.

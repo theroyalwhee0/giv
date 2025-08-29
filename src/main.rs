@@ -3,21 +3,27 @@
 #![forbid(unsafe_code)]
 #![warn(clippy::doc_markdown)]
 
+/// Date command module.
 #[cfg(feature = "date")]
 mod c_date;
+/// Key generation module.
 #[cfg(feature = "key")]
 mod c_key;
+/// Pi calculation module.
 #[cfg(feature = "pi")]
 mod c_pi;
+/// UUID generation module.
 #[cfg(feature = "uuid")]
 mod c_uuid;
+/// Command-line interface module.
 mod cli;
+/// Error handling module.
 mod error;
+/// Output formatting module.
 mod output;
 
-use c_date::DateKind;
 #[cfg(feature = "date")]
-use c_date::date_command;
+use c_date::{DateKind, date_command};
 #[cfg(feature = "key")]
 use c_key::key_command;
 #[cfg(feature = "pi")]
@@ -33,6 +39,7 @@ use std::process::ExitCode;
 /// # Returns
 ///
 /// Returns an `ExitCode` indicating success or failure.
+#[allow(clippy::print_stderr)]
 fn main() -> ExitCode {
     // Parse command line arguments.
     let cli = Cli::parse();

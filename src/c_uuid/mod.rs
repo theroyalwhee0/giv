@@ -1,5 +1,3 @@
-#![cfg(feature = "uuid")]
-
 use crate::{cli::CommandOptions, error::GivError, output::outputln};
 use uuid::Uuid;
 
