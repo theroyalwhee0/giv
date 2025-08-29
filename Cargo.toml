@@ -6,19 +6,52 @@ description = "A CLI for generating useful values."
 authors = ["Adam Mill <hismajesty@theroyalwhee.com>"]
 homepage = "https://www.theroyalwhee.com#giv"
 license = "UNLICENSED"
+rust-version = "1.88.0"
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[lints.rustdoc]
+missing_crate_level_docs = "warn"
+broken_intra_doc_links = "warn"
+private_intra_doc_links = "warn"
+invalid_codeblock_attributes = "warn"
+bare_urls = "warn"
+redundant_explicit_links = "warn"
+
+[lints.clippy]
+print_stdout = "deny"
+print_stderr = "deny"
+disallowed_methods = "deny"
+missing_docs_in_private_items = "warn"
+missing_panics_doc = "warn"
+missing_errors_doc = "warn"
+missing_safety_doc = "warn"
 
 [dependencies]
 # General.
 thiserror = "2.0.12"
+# Types.
+chrono = { version = "0.4.41", default-features = false, features = [
+    "clock",
+    "std",
+    "serde",
+], optional = true }
+uuid = { version = "1.17.0", features = ["v7", "serde"], optional = true }
+# Logging.
+env_logger = "0.11.8"
+log = "0.4.27"
 # CLI and Terminal.
 clap = { version = "4.5.35", features = ["derive"] }
-# Types.
-chrono = { version = "0.4.40", optional = true }
-uuid = { version = "1.4", features = ["v7"], optional = true }
 # Security.
 rand = { version = "0.9.0", optional = true }
 # Serialziation.
-serde_json = { version = "1.0.140", optional = true }
+serde = { version = "1.0.219", features = ["derive"], optional = true }
+serde_json = { version = "1.0.142", features = [
+    "preserve_order",
+    "arbitrary_precision",
+], optional = true }
 
 [features]
 default = ["full"]
@@ -37,7 +70,7 @@ key = ["dep:rand"]
 pi = []
 uuid = ["dep:uuid"]
 # Option features.
-json = ["dep:serde_json"]
+json = ["dep:serde_json", "dep:serde"]
 
 # Enable more optimization in the release profile at the cost of compile time.
 [profile.release]

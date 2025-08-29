@@ -1,0 +1,6 @@
+disallowed-methods = [
+    # No `to_string_lossy` methods, as they lead to loss of information.
+    # Prefer using `to_str` or `to_string` with proper error handling.
+    "std::ffi::OsStr::to_string_lossy",
+    "std::path::Path::to_string_lossy",
+]
