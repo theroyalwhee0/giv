@@ -8,17 +8,21 @@ homepage = "https://www.theroyalwhee.com#giv"
 license = "UNLICENSED"
 
 [dependencies]
-clap = { version = "4.5.35", features = ["derive"] }
+# General.
 thiserror = "2.0.12"
-# Optional dependencies.
+# CLI and Terminal.
+clap = { version = "4.5.35", features = ["derive"] }
+# Types.
 chrono = { version = "0.4.40", optional = true }
-rand = { version = "0.9.0", optional = true }
-serde_json = { version = "1.0.140", optional = true }
 uuid = { version = "1.4", features = ["v7"], optional = true }
+# Security.
+rand = { version = "0.9.0", optional = true }
+# Serialziation.
+serde_json = { version = "1.0.140", optional = true }
 
 [features]
-default = ["all"]
-all = [
+default = ["full"]
+full = [
     # Commands.
     "date",
     "key",

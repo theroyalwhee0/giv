@@ -8,7 +8,6 @@ use crate::cli::CommandOptions;
 ///
 /// - `options` The command options.
 /// - `value` The output string to be printed.
-#[allow(unused_variables)]
 pub fn outputln(options: CommandOptions, value: impl Into<String>) {
     let value: String = value.into();
 
