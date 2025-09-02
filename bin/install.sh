@@ -2,6 +2,9 @@
 
 set -e
 
+# Run Clippy.
+cargo clippy --all-targets --all-features -- -D warnings || exit 1
+
 # Run tests.
 cargo test || exit 1
 

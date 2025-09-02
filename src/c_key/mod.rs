@@ -81,7 +81,7 @@ pub fn key_command(size: Option<usize>, options: CommandOptions) -> Result<(), G
     // Generate the key with the specified size.
     let key = get_key(size)?;
     // Print the generated key with the prefix.
-    outputln(options, format!("{}{}", KEY_PREFIX, key));
+    outputln(options, format!("{KEY_PREFIX}{key}"));
     // Success.
     Ok(())
 }
