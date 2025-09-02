@@ -1,8 +1,12 @@
 /// Module containing PI decimal constants.
 mod decimals;
 
-use crate::{cli::CommandOptions, error::GivError, output::outputln};
-use decimals::PI_DECIMALS;
+use crate::{
+    c_pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
+    cli::CommandOptions,
+    error::GivError,
+    output::outputln,
+};
 use std::borrow::Cow;
 
 /// The default rounding behavior.
@@ -15,9 +19,6 @@ const PI_DEFAULT_PLACES: usize = 15;
 /// The PI prefix.
 /// This is separated from the decimals to make the indexes 0-based.
 const PI_PREFIX: &str = "3.";
-
-/// The maximum number of decimal places for PI.
-const PI_MAX_DECIMALS: usize = PI_DECIMALS.len();
 
 /// The digit used for rounding up.
 const ROUND_UP_FROM: u8 = 5;
@@ -103,9 +104,9 @@ pub fn pi_command(
     // Determines if rounding is enabled from CLI flags.
     let round = match rounding {
         // User explicitly enabled rounding.
-        (Some(true), _) => true,
+        (Some(true), None) => true,
         // User explicitly disabled rounding.
-        (_, Some(true)) => false,
+        (None, Some(true)) => false,
         // Otherwise, use the default.
         (_, _) => DEFAULT_ROUND,
     };
