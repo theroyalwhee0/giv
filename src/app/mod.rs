@@ -7,6 +7,8 @@ pub mod output;
 
 pub use context::AppContext;
 
+#[cfg(feature = "bytes")]
+use crate::c_bytes::bytes_command;
 #[cfg(feature = "date")]
 use crate::c_date::{DateKind, date_command};
 #[cfg(feature = "key")]
@@ -38,6 +40,13 @@ pub fn run() -> ExitCode {
 
     // Handle the command line arguments.
     let result = match cli.command {
+        // The 'bytes' command.
+        #[cfg(feature = "bytes")]
+        Commands::Bytes {
+            length,
+            encoding,
+            pad,
+        } => bytes_command(length, encoding, pad, &mut ctx),
         // The 'now' command. An alias for 'date now'.
         #[cfg(feature = "date")]
         Commands::Now { format } => date_command(DateKind::Now, format, &mut ctx),

@@ -29,6 +29,28 @@ impl Outputer {
         }
     }
 
+    /// Check if the outputer is configured for JSON output.
+    ///
+    /// # Returns
+    ///
+    /// `true` if JSON output is enabled, `false` otherwise.
+    #[cfg(feature = "json")]
+    #[must_use]
+    pub fn is_json(&self) -> bool {
+        self.json
+    }
+
+    /// Check if the outputer is configured for JSON output.
+    ///
+    /// # Returns
+    ///
+    /// Always returns `false` when the JSON feature is disabled.
+    #[cfg(not(feature = "json"))]
+    #[must_use]
+    pub fn is_json(&self) -> bool {
+        false
+    }
+
     /// Output a value that implements the `Output` trait.
     ///
     /// This will output the value in either plain text or JSON format,

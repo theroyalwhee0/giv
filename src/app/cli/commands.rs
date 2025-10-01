@@ -1,9 +1,24 @@
 use crate::c_date::{DateFormat, DateKind};
+#[cfg(feature = "bytes")]
+use crate::c_bytes::BytesEncoding;
 use clap::Subcommand;
 
 /// The available commands for the CLI.
 #[derive(Subcommand)]
 pub enum Commands {
+    /// Generate random bytes with specified encoding (hex, base64, raw)
+    #[cfg(feature = "bytes")]
+    Bytes {
+        /// Number of bytes to generate (default: 32)
+        #[arg(default_value = None)]
+        length: Option<usize>,
+        /// Encoding format for output (default: base64)
+        #[arg(short, long, value_enum, default_value = None)]
+        encoding: Option<BytesEncoding>,
+        /// Enable padding for base64 encoding (default: false)
+        #[arg(long, default_value_t = false)]
+        pad: bool,
+    },
     /// Generate a random key in the format of `key_<alphanumeric[size]>`
     #[cfg(feature = "key")]
     Key {
