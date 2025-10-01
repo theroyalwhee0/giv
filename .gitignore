@@ -11,9 +11,6 @@
 !/CHANGELOG.md
 !docs/**/*.md
 
-# AI Integration.
-!CLAUDE.md
-
 # Rust ecosystem.
 !Cargo.toml
 !Cargo.lock
@@ -21,8 +18,8 @@
 !src/**/*.rs
 
 # Bin and Scripts.
-!/bin/*.sh
-!/bin/*.py
+!/scripts/*.sh
+!/scripts/*.py
 
 # Disallow completely.
 /target
