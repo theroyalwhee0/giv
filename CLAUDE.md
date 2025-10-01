@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-`giv` is a Rust CLI tool for generating useful values (dates, UUIDs, keys, pi digits). It emphasizes strict code quality, comprehensive documentation, and safe coding practices.
+`giv` is a Rust CLI tool for generating useful values (dates, UUIDs, keys, pi digits, random numbers). It emphasizes strict code quality, comprehensive documentation, and safe coding practices.
 
 ## Key Project Characteristics
 
@@ -18,9 +18,14 @@
 
 ### Architecture Patterns
 
-- **Command modules**: Named with `c_` prefix (e.g., `c_date`, `c_key`, `c_uuid`, `c_pi`)
+- **Command modules**: Named with `c_` prefix (e.g., `c_date`, `c_key`, `c_uuid`, `c_pi`, `c_rng`)
 - **Feature flags**: Each command is a Cargo feature that can be independently enabled/disabled
-- **Output system**: Centralized in `output.rs`, supports both plain text and JSON output
+- **Output system**:
+  - Core output trait in `app/output/output_trait.rs`
+  - Each command has its own `output.rs` with a structured output type
+  - Supports both plain text and JSON output via the `Output` trait
+  - JSON output uses descriptive object properties (e.g., `{"key":"..."}`, `{"pi":"...","rounded":true}`)
+  - Includes metadata fields where relevant (version, precision, rounding flags, source values)
 - **Error handling**: Custom error types in `error.rs` using `thiserror`
 
 ### File Organization (One Item Per File)
@@ -49,15 +54,33 @@
 ```text
 src/
 ├── main.rs           # Entry point with command routing
-├── cli.rs            # Clap-based CLI definitions
-├── output.rs         # Centralized output handling
 ├── error.rs          # Error types
+├── app/              # Application infrastructure
+│   ├── cli/          # Clap-based CLI definitions
+│   ├── output/       # Output trait and formatting
+│   └── context.rs    # Command execution context
 ├── c_date/           # Date/time generation
+│   ├── mod.rs
+│   ├── date_format.rs
+│   ├── date_kind.rs
+│   └── output.rs     # DateOutput struct
 ├── c_key/            # Random key generation
+│   ├── mod.rs
+│   └── output.rs     # KeyOutput struct
 ├── c_uuid/           # UUID v7 generation
-└── c_pi/             # Pi digit generation
+│   ├── mod.rs
+│   └── output.rs     # UuidOutput struct
+├── c_pi/             # Pi digit generation
+│   ├── mod.rs
+│   ├── decimals.rs   # Pre-calculated pi digits
+│   └── output.rs     # PiOutput struct
+└── c_rng/            # Random number generation
     ├── mod.rs
-    └── decimals.rs   # Pre-calculated pi digits
+    ├── spec.rs       # Specification parsing
+    ├── execute.rs    # Execution logic
+    ├── generator.rs  # RNG functions
+    ├── result.rs     # Result types
+    └── output.rs     # RngOutput struct
 ```
 
 ### Development Workflow
@@ -84,17 +107,48 @@ This ensures only intentional source files are committed, preventing accidental 
 3. **Error Propagation**: Use `Result` types with descriptive errors
 4. **Output Abstraction**: Never use `println!` or `eprintln!` directly (except in main.rs error handler)
 5. **Feature Gates**: Use `#[cfg(feature = "...")]` for optional functionality
+6. **Structured Output**: All commands must provide structured JSON output with descriptive properties and metadata
+
+### Output Pattern
+
+Each command follows a consistent output pattern:
+
+1. **Output struct**: Define in `output.rs` with `#[derive(Debug, Serialize)]`
+2. **Implement `Output` trait**:
+   - `to_plain()`: Returns simple string output for CLI users
+   - `to_json()`: Returns structured JSON with descriptive properties
+3. **JSON structure guidelines**:
+   - Use object properties, not bare strings (e.g., `{"pi":"..."}` not `"..."`)
+   - Include relevant metadata (version, precision, rounding flags, source data)
+   - Use consistent naming: `source` for raw/unformatted data, `value` for formatted results
+4. **Backward compatibility**: Plain text output should remain simple and unchanged
+
+Example output structures:
+- `{"key":"key_xxx"}` - Simple value
+- `{"pi":"3.14","rounded":true}` - Value with metadata
+- `{"uuid":"xxx","version":"v7"}` - Value with version info
+- `{"rng":[{"value":"2.5","source":[2.51...],...}]}` - Array with formatted and raw data
 
 ### Common Tasks
 
 - **Adding a new command**:
-  1. Create `c_commandname/mod.rs` module
-  2. Add feature to `Cargo.toml` with dependencies
-  3. Add command variant to `cli.rs`
-  4. Add command handler to `main.rs`
-  5. Gate with `#[cfg(feature = "commandname")]`
+  1. Create `c_commandname/mod.rs` module with command logic
+  2. Create `c_commandname/output.rs` implementing the `Output` trait
+     - Define a struct for the command output (e.g., `CommandOutput`)
+     - Implement `to_plain()` for plain text output
+     - Implement `to_json()` for JSON output with descriptive properties
+     - Include metadata fields where relevant (version, precision, flags, etc.)
+  3. Add feature to `Cargo.toml` with dependencies
+  4. Add command variant to `app/cli/commands.rs`
+  5. Add command handler to `app/mod.rs`
+  6. Gate with `#[cfg(feature = "commandname")]`
 
-- **Output formatting**: Use `output::outputln(options, value)` for all program output
+- **Output formatting**:
+  - Create a structured output type in `output.rs` that implements the `Output` trait
+  - Use `ctx.output().output(&output)` to send output
+  - JSON output should use descriptive object properties, not bare strings
+  - Include contextual metadata (e.g., `{"uuid":"...","version":"v7"}`)
+  - Keep plain text output simple and backward compatible
 
 ### Dependencies Philosophy
 
