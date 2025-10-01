@@ -278,19 +278,20 @@ giv --json now --format timestamp
     - `"range_float"`: Float range (e.g., `1.0..10.0`)
   - `notation` (string): The parsed specification notation
   - `value` (number|string): The final result
-    - For `dice`: Sum of all rolls (number)
+    - For `dice`: Sum of all rolls plus modifier (number, can be negative)
     - For `range_int`: The generated integer (number)
     - For `range_float`: Formatted string with precision
+  - `modifier` (number): The modifier applied to dice rolls (dice only, can be negative)
   - `precision` (number): Decimal places (float ranges only)
   - `source` (array): Raw data
-    - For `dice`: Individual roll results
+    - For `dice`: Individual roll results (before modifier)
     - For `range_float`: Full-precision floating point value(s)
     - Not present for `range_int`
 
 **Examples**:
 
 ```bash
-# Dice roll
+# Dice roll without modifier
 giv --json rng 3d6
 ```
 
@@ -301,7 +302,46 @@ giv --json rng 3d6
       "type": "dice",
       "notation": "3d6",
       "value": 13,
+      "modifier": 0,
       "source": [6, 4, 3]
+    }
+  ]
+}
+```
+
+```bash
+# Dice roll with positive modifier
+giv --json rng 3d6+2
+```
+
+```json
+{
+  "rng": [
+    {
+      "type": "dice",
+      "notation": "3d6+2",
+      "value": 15,
+      "modifier": 2,
+      "source": [5, 6, 2]
+    }
+  ]
+}
+```
+
+```bash
+# Dice roll with negative modifier
+giv --json rng 1d20-1
+```
+
+```json
+{
+  "rng": [
+    {
+      "type": "dice",
+      "notation": "d20-1",
+      "value": 14,
+      "modifier": -1,
+      "source": [15]
     }
   ]
 }
@@ -355,6 +395,7 @@ giv --json rng 2d6 1..100 0.0..1.0
       "type": "dice",
       "notation": "2d6",
       "value": 8,
+      "modifier": 0,
       "source": [5, 3]
     },
     {
