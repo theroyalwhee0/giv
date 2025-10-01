@@ -12,6 +12,13 @@ A CLI for generating useful values.
   - JavaScript array: `giv bytes -e javascript 16`
   - TypeScript array: `giv bytes -e typescript 16`
   - Raw bytes: `giv bytes -e raw 100 | hexyl`
+- `giv chars`: Convert emoji shortcodes and character patterns to Unicode.
+  - Emoji: `giv chars :smile: :rocket: :thumbsup:`
+  - Fractions: `giv chars 1/4 1/2 3/4`
+  - Symbols: `giv chars "(c)" "(r)" "(tm)"`
+  - Arrows: `giv chars -> <- =>`
+  - Punctuation: `giv chars ... -- :)`
+  - Multiple: `giv chars 1/4 :smile: "(c)" ->` → `¼ 😄 © →`
 - `giv date`: Prints the date in various formats.
   - `giv now`: Prints the current time in various formats.
 - `giv uuid`: Print a random UUID v7.
