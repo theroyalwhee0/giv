@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 # Run Clippy.
 cargo clippy --all-targets --all-features -- -D warnings || exit 1
 
@@ -9,4 +7,4 @@ cargo clippy --all-targets --all-features -- -D warnings || exit 1
 cargo test || exit 1
 
 # Install the binary.
-cargo install --path .
+cargo install --path . || exit 1

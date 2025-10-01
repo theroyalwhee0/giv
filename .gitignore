@@ -1,42 +1,27 @@
-# Logs and Instrumentation.
-*.log
+# Ignore all files, but allow all directories.
+*
+!.gitignore
+!*/
+!*/**/
 
-# Secrets and Configs.
-.ssh/
-.env
-*.kbdx
+# Documentation.
+!CHANGELOG.md
+!README.md
+!docs/**/*.md
 
-# Large files.
-*.iso
-*.dmg
-*.img
-*.zip
-*.tar
-*.gz
-*.tgz
-*.7z
-
-# Backups and temporary files.
-*.bak
-
-# IDE Specific.
-.idea/
-.vscode/
-*.code-workspace
-
-# AI Specific.
-.claude/
-CLAUDE.md
-
-# Local development.
-.local/
-
-# OS Specific.
-.DS_Store
-Thumbs.db
+# AI Integration.
+!CLAUDE.md
 
 # Rust ecosystem.
-/target
+!Cargo.toml
+!Cargo.lock
+!clippy.toml
+!src/**/*.rs
 
-# Node ecosystem.
-node_modules/
+# Bin and Scripts.
+!/bin/*.sh
+
+# Disallow completely.
+/target
+/.focus
+.local/
