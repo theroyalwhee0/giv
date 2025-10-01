@@ -32,3 +32,7 @@ A CLI for generating useful values.
   - Multiple specs: `giv rng 2d6 1..100 0.0..1.0`
 
 `giv --help` for basic help. `giv <COMMAND> --help` for help on a specific command.
+
+## Security
+
+For security vulnerabilities and reporting guidelines, see [SECURITY.md](SECURITY.md).
