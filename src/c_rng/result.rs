@@ -9,10 +9,10 @@ pub enum RngResult {
     Dice {
         /// The dice notation used
         notation: String,
-        /// The individual roll results
-        rolls: Vec<u64>,
         /// The sum of all rolls
         value: u64,
+        /// The individual roll results
+        source: Vec<u64>,
     },
     /// Integer range result
     #[serde(rename = "range_int")]
@@ -27,9 +27,11 @@ pub enum RngResult {
     RangeFloat {
         /// The range notation used
         notation: String,
-        /// The generated value
-        value: f64,
+        /// The formatted value (rounded to precision)
+        value: String,
         /// Number of decimal places
         precision: usize,
+        /// The full-precision source values
+        source: Vec<f64>,
     },
 }

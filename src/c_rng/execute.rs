@@ -18,8 +18,8 @@ use super::spec::RngSpec;
 pub fn execute_spec<R: RngCore>(rng: &mut R, spec: &RngSpec) -> Result<RngResult, GivError> {
     match spec {
         RngSpec::Dice { count, sides } => {
-            let rolls: Vec<u64> = (0..*count).map(|_| gen_range_int(rng, 1, *sides)).collect();
-            let value: u64 = rolls.iter().sum();
+            let source: Vec<u64> = (0..*count).map(|_| gen_range_int(rng, 1, *sides)).collect();
+            let value: u64 = source.iter().sum();
             let notation = if *count == 1 {
                 format!("d{sides}")
             } else {
@@ -27,8 +27,8 @@ pub fn execute_spec<R: RngCore>(rng: &mut R, spec: &RngSpec) -> Result<RngResult
             };
             Ok(RngResult::Dice {
                 notation,
-                rolls,
                 value,
+                source,
             })
         }
         RngSpec::RangeInt { start, end } => {
@@ -41,13 +41,15 @@ pub fn execute_spec<R: RngCore>(rng: &mut R, spec: &RngSpec) -> Result<RngResult
             end,
             precision,
         } => {
-            let value = gen_range_float(rng, *start, *end);
+            let raw_value = gen_range_float(rng, *start, *end);
+            let value = format!("{raw_value:.precision$}");
             // Format notation with the precision to preserve decimal places
             let notation = format!("{start:.precision$}..{end:.precision$}");
             Ok(RngResult::RangeFloat {
                 notation,
                 value,
                 precision: *precision,
+                source: vec![raw_value],
             })
         }
     }
@@ -69,14 +71,14 @@ mod tests {
         match result {
             RngResult::Dice {
                 notation,
-                rolls,
                 value,
+                source,
             } => {
                 assert_eq!(notation, "3d6");
-                assert_eq!(rolls.len(), 3);
-                let expected_sum: u64 = rolls.iter().sum();
+                assert_eq!(source.len(), 3);
+                let expected_sum: u64 = source.iter().sum();
                 assert_eq!(value, expected_sum);
-                for roll in rolls {
+                for roll in source {
                     assert!(roll >= 1 && roll <= 6);
                 }
                 assert!(value >= 3 && value <= 18);
@@ -107,10 +109,16 @@ mod tests {
                 notation,
                 value,
                 precision,
+                source,
             } => {
                 assert_eq!(notation, "0.000..1.000");
                 assert_eq!(precision, 3);
-                assert!(value >= 0.0 && value <= 1.0);
+                assert_eq!(source.len(), 1);
+                assert!(source[0] >= 0.0 && source[0] <= 1.0);
+                // Value should be formatted with 3 decimal places
+                assert_eq!(value.matches('.').count(), 1);
+                let parts: Vec<&str> = value.split('.').collect();
+                assert_eq!(parts[1].len(), 3);
             }
             _ => panic!("Expected RangeFloat result"),
         }

@@ -1,11 +1,14 @@
 /// Module containing PI decimal constants.
 mod decimals;
+/// Output formatting for pi command.
+mod output;
 
 use crate::{
     app::AppContext,
     c_pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
     error::GivError,
 };
+use output::PiOutput;
 use std::borrow::Cow;
 
 /// The default rounding behavior.
@@ -138,8 +141,14 @@ pub fn pi_command(
     // Get the PI value with the specified number of decimal places.
     let pi_value = get_pi(places, round)?;
 
+    // Create output with the pi value.
+    let output = PiOutput {
+        pi: pi_value,
+        rounded: round,
+    };
+
     // Output the PI value.
-    ctx.output().output(&pi_value);
+    ctx.output().output(&output);
 
     // Success.
     Ok(())

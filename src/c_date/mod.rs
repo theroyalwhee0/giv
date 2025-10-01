@@ -2,12 +2,15 @@
 mod date_format;
 /// Date kind enumeration.
 mod date_kind;
+/// Output formatting for date command.
+mod output;
 
 pub use date_format::DateFormat;
 pub use date_kind::DateKind;
 
 use crate::{app::AppContext, error::GivError};
 use chrono::{DateTime, SecondsFormat, Utc};
+use output::DateOutput;
 
 /// Get the date format based on the kind and format options.
 ///
@@ -117,8 +120,11 @@ pub fn date_command(
     // Format the current time based on the specified format.
     let formatted = format_date_time(&date, &format);
 
+    // Create output with the formatted date.
+    let output = DateOutput { date: formatted };
+
     // Output the formatted date.
-    ctx.output().output(&formatted);
+    ctx.output().output(&output);
 
     // Success.
     Ok(())

@@ -1,4 +1,8 @@
+/// Output formatting for key generation.
+mod output;
+
 use crate::{app::AppContext, error::GivError};
+use output::KeyOutput;
 use rand::RngCore;
 
 /// The default size of the key.
@@ -81,8 +85,12 @@ pub fn key_command(size: Option<usize>, ctx: &mut AppContext) -> Result<(), GivE
     let size = size.unwrap_or(DEFAULT_KEY_SIZE);
     // Generate the key with the specified size.
     let key = get_key(size)?;
-    // Print the generated key with the prefix.
-    ctx.output().output(&format!("{KEY_PREFIX}{key}"));
+    // Create output with the key.
+    let output = KeyOutput {
+        key: format!("{KEY_PREFIX}{key}"),
+    };
+    // Output the key.
+    ctx.output().output(&output);
     // Success.
     Ok(())
 }

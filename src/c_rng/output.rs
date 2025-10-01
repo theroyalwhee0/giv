@@ -15,15 +15,9 @@ impl Output for RngOutput {
         self.rng
             .iter()
             .map(|result| match result {
-                RngResult::Dice { rolls, .. } => rolls
-                    .iter()
-                    .map(|r| r.to_string())
-                    .collect::<Vec<_>>()
-                    .join(" "),
+                RngResult::Dice { value, .. } => value.to_string(),
                 RngResult::RangeInt { value, .. } => value.to_string(),
-                RngResult::RangeFloat {
-                    value, precision, ..
-                } => format!("{value:.precision$}"),
+                RngResult::RangeFloat { value, .. } => value.clone(),
             })
             .collect::<Vec<_>>()
             .join("\n")
