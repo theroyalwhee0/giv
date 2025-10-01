@@ -20,6 +20,7 @@
 
 # Bin and Scripts.
 !/bin/*.sh
+!/bin/*.py
 
 # Disallow completely.
 /target
