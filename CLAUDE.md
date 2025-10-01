@@ -23,6 +23,27 @@
 - **Output system**: Centralized in `output.rs`, supports both plain text and JSON output
 - **Error handling**: Custom error types in `error.rs` using `thiserror`
 
+### File Organization (One Item Per File)
+
+- **Guideline**: Place one public item (struct, enum, or trait) per file as a general rule.
+  - File names should match the item name (e.g., `Schema` struct goes in `schema.rs`)
+  - Each file contains the item and all its implementations (Display, Default, methods, etc.)
+  - Type aliases are exempt from this rule and can be grouped logically
+  - When violating this guideline, include a comment explaining why:
+
+    ```rust
+    // Multiple error types grouped together for cohesion.
+    pub enum AtsError { ... }
+    pub enum LexError { ... }
+    ```
+
+- **Benefits of this pattern**:
+  - Clear file-to-type mapping for navigation
+  - Focused context when editing specific types
+  - Precise git history (changes to `Field` only touch `field.rs`)
+  - Reduced merge conflicts when working on different types
+  - Tests can be colocated with their specific type
+
 ### Code Structure
 
 ```text

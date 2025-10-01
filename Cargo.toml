@@ -66,6 +66,7 @@ full = [
     "date",
     "key",
     "pi",
+    "rng",
     "uuid",
     # Options.
     "json",
@@ -74,6 +75,7 @@ full = [
 date = ["dep:chrono"]
 key = ["dep:rand"]
 pi = []
+rng = ["dep:rand", "dep:serde"]
 uuid = ["dep:uuid"]
 # Option features.
 json = ["dep:serde_json", "dep:serde"]

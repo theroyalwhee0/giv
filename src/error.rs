@@ -9,4 +9,13 @@ pub enum GivError {
         "Requested number of PI decimal places '{0}' is not supported please select a value between '1' and '{1}'"
     )]
     DecimalPlacesOutOfRange(usize, usize),
+
+    /// Error when an invalid RNG specification is provided.
+    #[cfg(feature = "rng")]
+    #[error("Invalid RNG specification: '{0}'. Expected formats: 'XdY' or 'dY' for dice, 'X..Y' for ranges")]
+    InvalidRngSpec(String),
+
+    /// Error when required arguments are not provided.
+    #[error("Required arguments not provided. Use '{0}' for usage information")]
+    RequiredArgumentsNotProvided(String),
 }

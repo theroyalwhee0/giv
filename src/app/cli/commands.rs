@@ -1,19 +1,5 @@
 use crate::c_date::{DateFormat, DateKind};
-use clap::{Parser, Subcommand};
-
-/// A command-line utility generating values.
-#[derive(Parser)]
-#[command(author, version, about, long_about = None)]
-pub struct Cli {
-    /// Format the output as JSON.
-    #[cfg(feature = "json")]
-    #[arg(short, long, default_value_t = false)]
-    pub json: bool,
-
-    /// The available commands.
-    #[command(subcommand)]
-    pub command: Commands,
-}
+use clap::Subcommand;
 
 /// The available commands for the CLI.
 #[derive(Subcommand)]
@@ -58,46 +44,11 @@ pub enum Commands {
         #[arg(short, long, value_enum, default_value = None)]
         format: Option<DateFormat>,
     },
-}
-
-/// The shared options for all commands.
-#[derive(Debug)]
-pub struct CommandOptions {
-    /// Format the output as JSON.
-    #[cfg(feature = "json")]
-    pub json: bool,
-}
-
-/// Implement `Default` for `CommandOptions`
-impl Default for CommandOptions {
-    /// Create a default instance of `CommandOptions`
-    ///
-    /// # Returns
-    ///
-    /// A `CommandOptions` instance with default values.
-    fn default() -> Self {
-        Self {
-            #[cfg(feature = "json")]
-            json: false,
-        }
-    }
-}
-
-/// Implement the From trait for `CommandOptions`
-impl From<&Cli> for CommandOptions {
-    /// Convert a Cli reference into `CommandOptions`
-    ///
-    /// # Arguments
-    ///
-    /// - `cli` The CLI info.
-    ///
-    /// # Returns
-    ///
-    /// A `CommandOptions` instance.
-    fn from(cli: &Cli) -> Self {
-        Self {
-            #[cfg(feature = "json")]
-            json: cli.json,
-        }
-    }
+    /// Generate random numbers using dice notation or ranges
+    #[cfg(feature = "rng")]
+    Rng {
+        /// RNG specifications (e.g., '2d6', 'd20', '1..100', '0.0..1.0')
+        #[arg(required = true)]
+        specs: Vec<String>,
+    },
 }

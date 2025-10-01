@@ -2,10 +2,9 @@
 mod decimals;
 
 use crate::{
+    app::AppContext,
     c_pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
-    cli::CommandOptions,
     error::GivError,
-    output::outputln,
 };
 use std::borrow::Cow;
 
@@ -88,7 +87,7 @@ fn get_pi(places: usize, round: bool) -> Result<String, GivError> {
 ///
 /// - `places` The number of decimal places to display.
 /// - `rounding` A tuple indicating with the CLI rounding flags.
-/// - `options` The command options.
+/// - `ctx` The command context.
 ///
 /// # Returns
 ///
@@ -96,7 +95,7 @@ fn get_pi(places: usize, round: bool) -> Result<String, GivError> {
 pub fn pi_command(
     places: Option<usize>,
     rounding: Rounding,
-    options: CommandOptions,
+    ctx: &mut AppContext,
 ) -> Result<(), GivError> {
     // Default the number of places if not specified.
     let places = places.unwrap_or(PI_DEFAULT_PLACES);
@@ -115,7 +114,7 @@ pub fn pi_command(
     let pi_value = get_pi(places, round)?;
 
     // Output the PI value.
-    outputln(options, pi_value);
+    ctx.output().output(&pi_value);
 
     // Success.
     Ok(())
@@ -197,6 +196,13 @@ mod tests {
                 assert_eq!(places, 0);
                 assert_eq!(max, PI_MAX_DECIMALS);
             }
+            #[cfg(feature = "rng")]
+            GivError::InvalidRngSpec(_) => {
+                panic!("Unexpected error type: {}", err);
+            }
+            GivError::RequiredArgumentsNotProvided(_) => {
+                panic!("Unexpected error type: {}", err);
+            }
         }
         assert_eq!(
             err.to_string(),
@@ -217,6 +223,13 @@ mod tests {
             GivError::DecimalPlacesOutOfRange(places, max) => {
                 assert_eq!(places, PI_MAX_DECIMALS + 1);
                 assert_eq!(max, PI_MAX_DECIMALS);
+            }
+            #[cfg(feature = "rng")]
+            GivError::InvalidRngSpec(_) => {
+                panic!("Unexpected error type: {}", err);
+            }
+            GivError::RequiredArgumentsNotProvided(_) => {
+                panic!("Unexpected error type: {}", err);
             }
         }
         assert_eq!(

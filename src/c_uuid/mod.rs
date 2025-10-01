@@ -1,16 +1,20 @@
-use crate::{cli::CommandOptions, error::GivError, output::outputln};
+use crate::{app::AppContext, error::GivError};
 use uuid::Uuid;
 
 /// The 'uuid' command handler.
 ///
+/// # Arguments
+///
+/// - `ctx` The command context.
+///
 /// # Returns
 ///
 /// A result indicating success or failure.
-pub fn uuid_command(options: CommandOptions) -> Result<(), GivError> {
+pub fn uuid_command(ctx: &mut AppContext) -> Result<(), GivError> {
     // Generate a UUID version 7.
     let uuid = Uuid::now_v7();
     // Print the generated UUID.
-    outputln(options, uuid);
+    ctx.output().output(&uuid.to_string());
     // Success.
     Ok(())
 }

@@ -1,4 +1,4 @@
-use crate::{cli::CommandOptions, error::GivError, output::outputln};
+use crate::{app::AppContext, error::GivError};
 use rand::RngCore;
 
 /// The default size of the key.
@@ -72,16 +72,17 @@ fn get_key(size: usize) -> Result<String, GivError> {
 /// # Arguments
 ///
 /// - `size` An optional size for the key.
+/// - `ctx` The command context.
 ///
 /// # Returns
 ///
 /// A result indicating success or failure.
-pub fn key_command(size: Option<usize>, options: CommandOptions) -> Result<(), GivError> {
+pub fn key_command(size: Option<usize>, ctx: &mut AppContext) -> Result<(), GivError> {
     let size = size.unwrap_or(DEFAULT_KEY_SIZE);
     // Generate the key with the specified size.
     let key = get_key(size)?;
     // Print the generated key with the prefix.
-    outputln(options, format!("{KEY_PREFIX}{key}"));
+    ctx.output().output(&format!("{KEY_PREFIX}{key}"));
     // Success.
     Ok(())
 }

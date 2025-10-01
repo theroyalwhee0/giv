@@ -1,39 +1,13 @@
-use crate::{cli::CommandOptions, error::GivError, output::outputln};
+/// Date format enumeration.
+mod date_format;
+/// Date kind enumeration.
+mod date_kind;
+
+pub use date_format::DateFormat;
+pub use date_kind::DateKind;
+
+use crate::{app::AppContext, error::GivError};
 use chrono::{DateTime, SecondsFormat, Utc};
-
-/// Date kinds.
-#[derive(clap::ValueEnum, Clone, Default)]
-pub enum DateKind {
-    /// Now defaulting to a Rfc3339 format.
-    #[default]
-    Now,
-    /// Now defaulting to a Timestamp format.
-    Timestamp,
-    /// Now defaulting to a `Rfc3339Date` format.
-    Today,
-    /// Yesterday defaulting to a `Rfc3339Date` format.
-    Yesterday,
-    /// Tomorrow defaulting to a `Rfc3339Date` format.
-    Tomorrow,
-}
-
-/// The date formats.
-#[derive(clap::ValueEnum, Clone, PartialEq, Eq, Default, Debug)]
-pub enum DateFormat {
-    /// RFC 3339 format with milliseconds '2025-04-17T15:14:12.748Z'
-    #[default]
-    Rfc3339,
-    /// The RFC 3339 format with just the date '2025-04-17'
-    Rfc3339Date,
-    /// The RFC 3339 format with just the time '15:14:12.748Z'
-    Rfc3339Time,
-    /// Unix Timestamp '1744902865'
-    Timestamp,
-    /// Unix Timestamp in milliseconds '1744902874772'
-    TimestampMs,
-    /// RFC 2822 format 'Fri, 17 Apr 2025 15:14:12 +0000'
-    Rfc2882,
-}
 
 /// Get the date format based on the kind and format options.
 ///
@@ -119,8 +93,9 @@ fn format_date_time(date: &DateTime<Utc>, format: &DateFormat) -> String {
 ///
 /// # Arguments
 ///
-/// * `subcommand` - The date subcommand to execute
-/// * `options` - The command options
+/// * `kind` - The kind of date to generate
+/// * `format` - The optional format to use
+/// * `ctx` - The command context
 ///
 /// # Returns
 ///
@@ -128,7 +103,7 @@ fn format_date_time(date: &DateTime<Utc>, format: &DateFormat) -> String {
 pub fn date_command(
     kind: DateKind,
     format: Option<DateFormat>,
-    options: CommandOptions,
+    ctx: &mut AppContext,
 ) -> Result<(), GivError> {
     // Get the current time.
     let now = Utc::now();
@@ -143,7 +118,7 @@ pub fn date_command(
     let formatted = format_date_time(&date, &format);
 
     // Output the formatted date.
-    outputln(options, formatted);
+    ctx.output().output(&formatted);
 
     // Success.
     Ok(())
