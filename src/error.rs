@@ -30,6 +30,11 @@ pub enum GivError {
     #[error("Raw bytes encoding is not supported in JSON output mode. Use --encoding=hex or --encoding=base64 instead")]
     RawBytesNotSupportedInJson,
 
+    /// Error when an unknown character pattern or emoji shortcode is provided.
+    #[cfg(feature = "chars")]
+    #[error("Unknown character pattern or emoji shortcode: '{0}'")]
+    UnknownCharacterPattern(String),
+
     /// Error when required arguments are not provided.
     #[error("Required arguments not provided. Use '{0}' for usage information")]
     RequiredArgumentsNotProvided(String),

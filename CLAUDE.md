@@ -85,7 +85,7 @@ src/
 
 ### Development Workflow
 
-- Build/install script: `./bin/install.sh`
+- Build/install: `cargo install --path .`
 - Test with: `cargo test`
 - Lint with: `cargo clippy`
 - Documentation: `cargo doc --open`

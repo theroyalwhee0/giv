@@ -2,6 +2,7 @@
 //!
 //! This crate provides output for the following:
 //! - Random byte generation.
+//! - Character and emoji conversion.
 //! - Formatted dates.
 //! - Key generation.
 //! - UUID v7 generation.
@@ -13,6 +14,9 @@ mod app;
 /// Bytes generation module.
 #[cfg(feature = "bytes")]
 mod c_bytes;
+/// Character and emoji conversion module.
+#[cfg(feature = "chars")]
+mod c_chars;
 /// Date command module.
 #[cfg(feature = "date")]
 mod c_date;

@@ -19,6 +19,13 @@ pub enum Commands {
         #[arg(long, default_value_t = false)]
         pad: bool,
     },
+    /// Convert emoji shortcodes and character patterns to Unicode characters
+    #[cfg(feature = "chars")]
+    Chars {
+        /// Character patterns or emoji shortcodes to convert
+        #[arg(required = true)]
+        inputs: Vec<String>,
+    },
     /// Generate a random key in the format of `key_<alphanumeric[size]>`
     #[cfg(feature = "key")]
     Key {
