@@ -4,9 +4,13 @@ version = "0.1.0"
 edition = "2024"
 description = "A CLI for generating useful values."
 authors = ["Adam Mill <hismajesty@theroyalwhee.com>"]
-homepage = "https://www.theroyalwhee.com#giv"
+repository = "https://github.com/theroyalwhee0/giv"
+readme = "README.md"
 license = "Apache-2.0"
-rust-version = "1.88.0"
+keywords = ["cli", "random", "generator", "uuid", "utility"]
+categories = ["command-line-utilities"]
+rust-version = "1.85.0"
+exclude = ["scripts/"]
 
 [lints.rust]
 unsafe_code = "forbid"

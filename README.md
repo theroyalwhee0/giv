@@ -36,3 +36,9 @@ A CLI for generating useful values.
 ## Security
 
 For security vulnerabilities and reporting guidelines, see [SECURITY.md](SECURITY.md).
+
+## License
+
+Copyright © 2025 Adam Mill
+
+Licensed under the Apache License, Version 2.0. See [LICENSE.txt](LICENSE.txt) for details.
