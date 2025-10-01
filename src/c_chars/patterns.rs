@@ -11,15 +11,15 @@ pub fn lookup_pattern(pattern: &str) -> Option<(&'static str, &'static str)> {
     // Match against known patterns.
     match pattern {
         // Fractions
-        "1/4" => Some(("\u{00BC}", "vulgar fraction one quarter")),
-        "1/2" => Some(("\u{00BD}", "vulgar fraction one half")),
-        "3/4" => Some(("\u{00BE}", "vulgar fraction three quarters")),
-        "1/3" => Some(("\u{2153}", "vulgar fraction one third")),
-        "2/3" => Some(("\u{2154}", "vulgar fraction two thirds")),
-        "1/8" => Some(("\u{215B}", "vulgar fraction one eighth")),
-        "3/8" => Some(("\u{215C}", "vulgar fraction three eighths")),
-        "5/8" => Some(("\u{215D}", "vulgar fraction five eighths")),
-        "7/8" => Some(("\u{215E}", "vulgar fraction seven eighths")),
+        "1/4" => Some(("\u{00BC}", "fraction one quarter")),
+        "1/2" => Some(("\u{00BD}", "fraction one half")),
+        "3/4" => Some(("\u{00BE}", "fraction three quarters")),
+        "1/3" => Some(("\u{2153}", "fraction one third")),
+        "2/3" => Some(("\u{2154}", "fraction two thirds")),
+        "1/8" => Some(("\u{215B}", "fraction one eighth")),
+        "3/8" => Some(("\u{215C}", "fraction three eighths")),
+        "5/8" => Some(("\u{215D}", "fraction five eighths")),
+        "7/8" => Some(("\u{215E}", "fraction seven eighths")),
 
         // Symbols
         "(c)" | "(C)" => Some(("\u{00A9}", "copyright sign")),
@@ -30,8 +30,6 @@ pub fn lookup_pattern(pattern: &str) -> Option<(&'static str, &'static str)> {
         // Punctuation
         "..." => Some(("\u{2026}", "horizontal ellipsis")),
         "--" => Some(("\u{2014}", "em dash")),
-        ":)" => Some(("\u{263A}", "white smiling face")),
-        ":(" => Some(("\u{2639}", "white frowning face")),
 
         // Arrows
         "->" => Some(("\u{2192}", "rightwards arrow")),
@@ -48,19 +46,54 @@ pub fn lookup_pattern(pattern: &str) -> Option<(&'static str, &'static str)> {
         "yen" => Some(("\u{00A5}", "yen sign")),
 
         // Math
-        "degree" => Some(("\u{00B0}", "degree sign")),
+        "deg" | "degree" => Some(("\u{00B0}", "degree sign")),
         "+-" => Some(("\u{00B1}", "plus-minus sign")),
-        "x" => Some(("\u{00D7}", "multiplication sign")),
-        "divide" => Some(("\u{00F7}", "division sign")),
-        "!=" => Some(("\u{2260}", "not equal to")),
+        "*" | "x" => Some(("\u{00D7}", "multiplication sign")),
+        "div" | "divide" => Some(("\u{00F7}", "division sign")),
+        "ne" | "!=" => Some(("\u{2260}", "not equal to")),
         "lte" => Some(("\u{2264}", "less-than or equal to")),
         "gte" => Some(("\u{2265}", "greater-than or equal to")),
         "~=" => Some(("\u{2248}", "almost equal to")),
-        "infinity" => Some(("\u{221E}", "infinity")),
+        "inf" | "infinity" => Some(("\u{221E}", "infinity")),
 
-        // Quotes
-        "''" => Some(("\u{2019}", "right single quotation mark")),
-        "\"\"" => Some(("\u{201D}", "right double quotation mark")),
+        // Greek letters (lowercase)
+        "alpha" => Some(("\u{03B1}", "greek small letter alpha")),
+        "beta" => Some(("\u{03B2}", "greek small letter beta")),
+        "gamma" => Some(("\u{03B3}", "greek small letter gamma")),
+        "delta" => Some(("\u{03B4}", "greek small letter delta")),
+        "epsilon" => Some(("\u{03B5}", "greek small letter epsilon")),
+        "zeta" => Some(("\u{03B6}", "greek small letter zeta")),
+        "eta" => Some(("\u{03B7}", "greek small letter eta")),
+        "theta" => Some(("\u{03B8}", "greek small letter theta")),
+        "iota" => Some(("\u{03B9}", "greek small letter iota")),
+        "kappa" => Some(("\u{03BA}", "greek small letter kappa")),
+        "lambda" | "lamda" => Some(("\u{03BB}", "greek small letter lambda")),
+        "mu" => Some(("\u{03BC}", "greek small letter mu")),
+        "nu" => Some(("\u{03BD}", "greek small letter nu")),
+        "xi" => Some(("\u{03BE}", "greek small letter xi")),
+        "omicron" => Some(("\u{03BF}", "greek small letter omicron")),
+        "pi" => Some(("\u{03C0}", "greek small letter pi")),
+        "rho" => Some(("\u{03C1}", "greek small letter rho")),
+        "sigma" => Some(("\u{03C3}", "greek small letter sigma")),
+        "tau" => Some(("\u{03C4}", "greek small letter tau")),
+        "upsilon" => Some(("\u{03C5}", "greek small letter upsilon")),
+        "phi" => Some(("\u{03C6}", "greek small letter phi")),
+        "chi" => Some(("\u{03C7}", "greek small letter chi")),
+        "psi" => Some(("\u{03C8}", "greek small letter psi")),
+        "omega" => Some(("\u{03C9}", "greek small letter omega")),
+
+        // Greek letters (uppercase - commonly used)
+        "Alpha" => Some(("\u{0391}", "greek capital letter alpha")),
+        "Beta" => Some(("\u{0392}", "greek capital letter beta")),
+        "Gamma" => Some(("\u{0393}", "greek capital letter gamma")),
+        "Delta" => Some(("\u{0394}", "greek capital letter delta")),
+        "Theta" => Some(("\u{0398}", "greek capital letter theta")),
+        "Lambda" | "Lamda" => Some(("\u{039B}", "greek capital letter lambda")),
+        "Pi" => Some(("\u{03A0}", "greek capital letter pi")),
+        "Sigma" => Some(("\u{03A3}", "greek capital letter sigma")),
+        "Phi" => Some(("\u{03A6}", "greek capital letter phi")),
+        "Psi" => Some(("\u{03A8}", "greek capital letter psi")),
+        "Omega" => Some(("\u{03A9}", "greek capital letter omega")),
 
         // Other
         _ => None,
@@ -79,7 +112,7 @@ mod tests {
         assert!(lookup_pattern("3/4").is_some());
         let (char, name) = lookup_pattern("1/4").unwrap();
         assert_eq!(char, "\u{00BC}");
-        assert_eq!(name, "vulgar fraction one quarter");
+        assert_eq!(name, "fraction one quarter");
     }
 
     /// Test symbol lookups.
@@ -100,7 +133,6 @@ mod tests {
     fn test_punctuation() {
         assert!(lookup_pattern("...").is_some());
         assert!(lookup_pattern("--").is_some());
-        assert!(lookup_pattern(":)").is_some());
         let (char, name) = lookup_pattern("...").unwrap();
         assert_eq!(char, "\u{2026}");
         assert_eq!(name, "horizontal ellipsis");
@@ -115,6 +147,20 @@ mod tests {
         let (char, name) = lookup_pattern("->").unwrap();
         assert_eq!(char, "\u{2192}");
         assert_eq!(name, "rightwards arrow");
+    }
+
+    /// Test Greek letter lookups.
+    #[test]
+    fn test_greek_letters() {
+        assert!(lookup_pattern("alpha").is_some());
+        assert!(lookup_pattern("beta").is_some());
+        assert!(lookup_pattern("lambda").is_some());
+        assert!(lookup_pattern("lamda").is_some());
+        assert!(lookup_pattern("Lambda").is_some());
+        assert!(lookup_pattern("Omega").is_some());
+        let (char, name) = lookup_pattern("lambda").unwrap();
+        assert_eq!(char, "\u{03BB}");
+        assert_eq!(name, "greek small letter lambda");
     }
 
     /// Test unknown pattern.
