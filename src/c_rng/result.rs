@@ -9,8 +9,10 @@ pub enum RngResult {
     Dice {
         /// The dice notation used
         notation: String,
-        /// The sum of all rolls
-        value: u64,
+        /// The sum of all rolls plus modifier
+        value: i64,
+        /// The modifier applied (can be negative)
+        modifier: i64,
         /// The individual roll results
         source: Vec<u64>,
     },

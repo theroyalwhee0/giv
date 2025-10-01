@@ -9,6 +9,8 @@ pub enum RngSpec {
         count: u64,
         /// Number of sides per die
         sides: u64,
+        /// Modifier to add to the result (can be negative)
+        modifier: i64,
     },
     /// Integer range: X..Y (inclusive)
     RangeInt {
@@ -42,10 +44,10 @@ pub enum RngSpec {
 ///
 /// Returns an error if the specification string is invalid.
 pub fn parse_spec(spec: &str) -> Result<RngSpec, GivError> {
-    // Try to parse as dice notation: XdY or dY
+    // Try to parse as dice notation: XdY or dY with optional +N or -N modifier
     if let Some(d_pos) = spec.find('d') {
         let count_str = &spec[..d_pos];
-        let sides_str = &spec[d_pos + 1..];
+        let rest = &spec[d_pos + 1..];
 
         // Handle "dY" as "1dY"
         let count = if count_str.is_empty() {
@@ -56,6 +58,25 @@ pub fn parse_spec(spec: &str) -> Result<RngSpec, GivError> {
                 .map_err(|_| GivError::InvalidRngSpec(spec.to_string()))?
         };
 
+        // Parse sides and optional modifier
+        let (sides_str, modifier) = if let Some(plus_pos) = rest.find('+') {
+            let sides = &rest[..plus_pos];
+            let mod_str = &rest[plus_pos + 1..];
+            let modifier = mod_str
+                .parse::<i64>()
+                .map_err(|_| GivError::InvalidRngSpec(spec.to_string()))?;
+            (sides, modifier)
+        } else if let Some(minus_pos) = rest.find('-') {
+            let sides = &rest[..minus_pos];
+            let mod_str = &rest[minus_pos + 1..];
+            let modifier = mod_str
+                .parse::<i64>()
+                .map_err(|_| GivError::InvalidRngSpec(spec.to_string()))?;
+            (sides, -modifier)
+        } else {
+            (rest, 0)
+        };
+
         let sides = sides_str
             .parse::<u64>()
             .map_err(|_| GivError::InvalidRngSpec(spec.to_string()))?;
@@ -64,7 +85,11 @@ pub fn parse_spec(spec: &str) -> Result<RngSpec, GivError> {
             return Err(GivError::InvalidRngSpec(spec.to_string()));
         }
 
-        return Ok(RngSpec::Dice { count, sides });
+        return Ok(RngSpec::Dice {
+            count,
+            sides,
+            modifier,
+        });
     }
 
     // Try to parse as range notation: X..Y
@@ -144,11 +169,25 @@ mod tests {
     fn test_parse_dice() {
         // Standard dice notation
         let spec = parse_spec("2d6").unwrap();
-        assert_eq!(spec, RngSpec::Dice { count: 2, sides: 6 });
+        assert_eq!(
+            spec,
+            RngSpec::Dice {
+                count: 2,
+                sides: 6,
+                modifier: 0
+            }
+        );
 
         // Shorthand notation (d6 means 1d6)
         let spec = parse_spec("d8").unwrap();
-        assert_eq!(spec, RngSpec::Dice { count: 1, sides: 8 });
+        assert_eq!(
+            spec,
+            RngSpec::Dice {
+                count: 1,
+                sides: 8,
+                modifier: 0
+            }
+        );
 
         // Large numbers
         let spec = parse_spec("10d100").unwrap();
@@ -156,7 +195,41 @@ mod tests {
             spec,
             RngSpec::Dice {
                 count: 10,
-                sides: 100
+                sides: 100,
+                modifier: 0
+            }
+        );
+
+        // Dice with positive modifier
+        let spec = parse_spec("3d6+2").unwrap();
+        assert_eq!(
+            spec,
+            RngSpec::Dice {
+                count: 3,
+                sides: 6,
+                modifier: 2
+            }
+        );
+
+        // Dice with negative modifier
+        let spec = parse_spec("1d20-1").unwrap();
+        assert_eq!(
+            spec,
+            RngSpec::Dice {
+                count: 1,
+                sides: 20,
+                modifier: -1
+            }
+        );
+
+        // Shorthand with modifier
+        let spec = parse_spec("d8+5").unwrap();
+        assert_eq!(
+            spec,
+            RngSpec::Dice {
+                count: 1,
+                sides: 8,
+                modifier: 5
             }
         );
     }

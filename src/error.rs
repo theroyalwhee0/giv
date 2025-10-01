@@ -20,6 +20,11 @@ pub enum GivError {
     #[error("Invalid RNG specification: '{0}'. Expected formats: 'XdY' or 'dY' for dice, 'X..Y' for ranges")]
     InvalidRngSpec(String),
 
+    /// Error when a numeric overflow or underflow occurs.
+    #[cfg(feature = "rng")]
+    #[error("Numeric overflow or underflow in calculation: {0}")]
+    NumericOverflow(String),
+
     /// Error when required arguments are not provided.
     #[error("Required arguments not provided. Use '{0}' for usage information")]
     RequiredArgumentsNotProvided(String),

@@ -17,17 +17,47 @@ use super::spec::RngSpec;
 /// A result containing the `RngResult` or an error.
 pub fn execute_spec<R: RngCore>(rng: &mut R, spec: &RngSpec) -> Result<RngResult, GivError> {
     match spec {
-        RngSpec::Dice { count, sides } => {
+        RngSpec::Dice {
+            count,
+            sides,
+            modifier,
+        } => {
             let source: Vec<u64> = (0..*count).map(|_| gen_range_int(rng, 1, *sides)).collect();
-            let value: u64 = source.iter().sum();
+            let sum: u64 = source.iter().sum();
+
+            // Convert sum to i64 safely
+            let sum_i64 = i64::try_from(sum).map_err(|_| {
+                GivError::NumericOverflow(format!("dice sum {sum} too large for i64"))
+            })?;
+
+            // Apply modifier with overflow checking
+            let value = sum_i64.checked_add(*modifier).ok_or_else(|| {
+                GivError::NumericOverflow(format!(
+                    "overflow applying modifier {modifier} to sum {sum_i64}"
+                ))
+            })?;
+
+            // Format notation with modifier if non-zero
             let notation = if *count == 1 {
-                format!("d{sides}")
-            } else {
+                if *modifier == 0 {
+                    format!("d{sides}")
+                } else if *modifier > 0 {
+                    format!("d{sides}+{modifier}")
+                } else {
+                    format!("d{sides}{modifier}")
+                }
+            } else if *modifier == 0 {
                 format!("{count}d{sides}")
+            } else if *modifier > 0 {
+                format!("{count}d{sides}+{modifier}")
+            } else {
+                format!("{count}d{sides}{modifier}")
             };
+
             Ok(RngResult::Dice {
                 notation,
                 value,
+                modifier: *modifier,
                 source,
             })
         }
@@ -65,23 +95,77 @@ mod tests {
     fn test_execute_spec() {
         let mut rng = rand::rng();
 
-        // Test dice execution
-        let spec = RngSpec::Dice { count: 3, sides: 6 };
+        // Test dice execution without modifier
+        let spec = RngSpec::Dice {
+            count: 3,
+            sides: 6,
+            modifier: 0,
+        };
         let result = execute_spec(&mut rng, &spec).unwrap();
         match result {
             RngResult::Dice {
                 notation,
                 value,
+                modifier,
                 source,
             } => {
                 assert_eq!(notation, "3d6");
+                assert_eq!(modifier, 0);
                 assert_eq!(source.len(), 3);
-                let expected_sum: u64 = source.iter().sum();
+                let expected_sum: i64 = source.iter().map(|&x| i64::try_from(x).unwrap()).sum();
                 assert_eq!(value, expected_sum);
                 for roll in source {
                     assert!(roll >= 1 && roll <= 6);
                 }
                 assert!(value >= 3 && value <= 18);
+            }
+            _ => panic!("Expected Dice result"),
+        }
+
+        // Test dice execution with positive modifier
+        let spec = RngSpec::Dice {
+            count: 2,
+            sides: 6,
+            modifier: 5,
+        };
+        let result = execute_spec(&mut rng, &spec).unwrap();
+        match result {
+            RngResult::Dice {
+                notation,
+                value,
+                modifier,
+                source,
+            } => {
+                assert_eq!(notation, "2d6+5");
+                assert_eq!(modifier, 5);
+                assert_eq!(source.len(), 2);
+                let roll_sum: i64 = source.iter().map(|&x| i64::try_from(x).unwrap()).sum();
+                assert_eq!(value, roll_sum + 5);
+                assert!(value >= 7 && value <= 17);
+            }
+            _ => panic!("Expected Dice result"),
+        }
+
+        // Test dice execution with negative modifier
+        let spec = RngSpec::Dice {
+            count: 1,
+            sides: 20,
+            modifier: -1,
+        };
+        let result = execute_spec(&mut rng, &spec).unwrap();
+        match result {
+            RngResult::Dice {
+                notation,
+                value,
+                modifier,
+                source,
+            } => {
+                assert_eq!(notation, "d20-1");
+                assert_eq!(modifier, -1);
+                assert_eq!(source.len(), 1);
+                let roll_sum: i64 = source.iter().map(|&x| i64::try_from(x).unwrap()).sum();
+                assert_eq!(value, roll_sum - 1);
+                assert!(value >= 0 && value <= 19);
             }
             _ => panic!("Expected Dice result"),
         }

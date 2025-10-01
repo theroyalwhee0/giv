@@ -207,14 +207,76 @@ giv --json now
 
 ---
 
+### `rng` - Random Number Generation
+
+Generate random numbers using dice notation, integer ranges, or float ranges.
+
+**Usage**: `giv rng <SPEC>...`
+
+**Arguments**:
+
+- `SPEC`: One or more specifications for random number generation
+  - Dice notation: `XdY` or `dY` (e.g., `3d6`, `d20`)
+    - Optional modifiers: `+N` or `-N` (e.g., `3d6+2`, `1d20-1`)
+  - Integer ranges: `X..Y` (e.g., `1..100`)
+  - Float ranges: `X.Y..A.B` (e.g., `0.0..1.0`, `1.5..10.75`)
+
+**Examples**:
+
+```bash
+# Roll a single six-sided die
+giv rng d6
+# Output: 4
+
+# Roll three six-sided dice
+giv rng 3d6
+# Output: 11
+
+# Roll dice with positive modifier
+giv rng 3d6+2
+# Output: 15
+
+# Roll dice with negative modifier
+giv rng 1d20-1
+# Output: 14
+
+# Generate integer in range
+giv rng 1..100
+# Output: 42
+
+# Generate float in range
+giv rng 0.0..1.0
+# Output: 0.7
+
+# Multiple specifications
+giv rng 2d6 1d20+5 1..100
+# Output:
+# 8
+# 19
+# 67
+
+# JSON output
+giv --json rng 3d6+2
+# Output: {"rng":[{"type":"dice","notation":"3d6+2","value":15,"modifier":2,"source":[5,6,2]}]}
+```
+
+**Notes**:
+
+- Dice modifiers can result in negative values (e.g., `1d4-10` might return `-6`)
+- Arithmetic operations use overflow checking for safety
+- Float precision is determined by decimal places in the specification
+
+---
+
 ## Feature Compilation
 
 The `giv` tool supports conditional compilation of features. Commands are only available when their corresponding features are enabled:
 
 - `key` command: Requires `key` feature
-- `uuid` command: Requires `uuid` feature  
+- `uuid` command: Requires `uuid` feature
 - `pi` command: Requires `pi` feature
 - `date` and `now` commands: Require `date` feature
+- `rng` command: Requires `rng` feature
 - `--json` flag: Requires `json` feature
 
 ## Help and Version
