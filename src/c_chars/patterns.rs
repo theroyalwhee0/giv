@@ -38,12 +38,17 @@ pub fn lookup_pattern(pattern: &str) -> Option<(&'static str, &'static str)> {
         "<=" => Some(("\u{21D0}", "leftwards double arrow")),
         "<->" => Some(("\u{2194}", "left right arrow")),
         "<=>" => Some(("\u{21D4}", "left right double arrow")),
+        "^^" | "up" => Some(("\u{2191}", "upwards arrow")),
+        "vv" | "down" => Some(("\u{2193}", "downwards arrow")),
 
         // Currency
         "cent" => Some(("\u{00A2}", "cent sign")),
         "pound" => Some(("\u{00A3}", "pound sign")),
         "euro" => Some(("\u{20AC}", "euro sign")),
         "yen" => Some(("\u{00A5}", "yen sign")),
+        "rupee" => Some(("\u{20B9}", "rupee sign")),
+        "won" => Some(("\u{20A9}", "won sign")),
+        "bitcoin" | "btc" => Some(("\u{20BF}", "bitcoin sign")),
 
         // Math
         "deg" | "degree" => Some(("\u{00B0}", "degree sign")),
@@ -55,6 +60,22 @@ pub fn lookup_pattern(pattern: &str) -> Option<(&'static str, &'static str)> {
         "gte" => Some(("\u{2265}", "greater-than or equal to")),
         "~=" => Some(("\u{2248}", "almost equal to")),
         "inf" | "infinity" => Some(("\u{221E}", "infinity")),
+        "sqrt" => Some(("\u{221A}", "square root")),
+        "sum" => Some(("\u{2211}", "n-ary summation")),
+        "prod" | "product" => Some(("\u{220F}", "n-ary product")),
+        "int" => Some(("\u{222B}", "integral")),
+        "partial" => Some(("\u{2202}", "partial differential")),
+        "nabla" => Some(("\u{2207}", "nabla")),
+        "in" => Some(("\u{2208}", "element of")),
+        "notin" => Some(("\u{2209}", "not an element of")),
+        "subset" => Some(("\u{2282}", "subset of")),
+        "superset" => Some(("\u{2283}", "superset of")),
+        "union" => Some(("\u{222A}", "union")),
+        "intersect" => Some(("\u{2229}", "intersection")),
+        "forall" => Some(("\u{2200}", "for all")),
+        "exists" => Some(("\u{2203}", "there exists")),
+        "emptyset" => Some(("\u{2205}", "empty set")),
+        "propto" => Some(("\u{221D}", "proportional to")),
 
         // Greek letters (lowercase)
         "alpha" => Some(("\u{03B1}", "greek small letter alpha")),
@@ -94,6 +115,42 @@ pub fn lookup_pattern(pattern: &str) -> Option<(&'static str, &'static str)> {
         "Phi" => Some(("\u{03A6}", "greek capital letter phi")),
         "Psi" => Some(("\u{03A8}", "greek capital letter psi")),
         "Omega" => Some(("\u{03A9}", "greek capital letter omega")),
+
+        // Punctuation and symbols
+        "section" | "sect" => Some(("\u{00A7}", "section sign")),
+        "para" | "paragraph" => Some(("\u{00B6}", "pilcrow sign")),
+        "dag" | "dagger" => Some(("\u{2020}", "dagger")),
+        "ddag" => Some(("\u{2021}", "double dagger")),
+        "bullet" => Some(("\u{2022}", "bullet")),
+        "middot" => Some(("\u{00B7}", "middle dot")),
+
+        // Superscripts
+        "^0" => Some(("\u{2070}", "superscript zero")),
+        "^1" => Some(("\u{00B9}", "superscript one")),
+        "^2" => Some(("\u{00B2}", "superscript two")),
+        "^3" => Some(("\u{00B3}", "superscript three")),
+        "^4" => Some(("\u{2074}", "superscript four")),
+        "^5" => Some(("\u{2075}", "superscript five")),
+        "^6" => Some(("\u{2076}", "superscript six")),
+        "^7" => Some(("\u{2077}", "superscript seven")),
+        "^8" => Some(("\u{2078}", "superscript eight")),
+        "^9" => Some(("\u{2079}", "superscript nine")),
+        "^n" => Some(("\u{207F}", "superscript latin small letter n")),
+
+        // Subscripts
+        "_0" => Some(("\u{2080}", "subscript zero")),
+        "_1" => Some(("\u{2081}", "subscript one")),
+        "_2" => Some(("\u{2082}", "subscript two")),
+        "_3" => Some(("\u{2083}", "subscript three")),
+        "_4" => Some(("\u{2084}", "subscript four")),
+        "_5" => Some(("\u{2085}", "subscript five")),
+        "_6" => Some(("\u{2086}", "subscript six")),
+        "_7" => Some(("\u{2087}", "subscript seven")),
+        "_8" => Some(("\u{2088}", "subscript eight")),
+        "_9" => Some(("\u{2089}", "subscript nine")),
+
+        // Miscellaneous
+        "star" => Some(("\u{2605}", "black star")),
 
         // Other
         _ => None,

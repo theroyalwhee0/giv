@@ -24,6 +24,7 @@ giv --json chars <pattern1> <pattern2> ...
 | `7/8`   | ⅞      | fraction seven eighths |
 
 **Example:**
+
 ```bash
 $ giv chars 1/4 1/2 3/4
 ¼ ½ ¾
@@ -39,6 +40,7 @@ $ giv chars 1/4 1/2 3/4
 | `(p)`, `(P)` | ℗ | sound recording copyright |
 
 **Example:**
+
 ```bash
 $ giv chars "(c)" "(r)" "(tm)"
 © ® ™
@@ -52,6 +54,7 @@ $ giv chars "(c)" "(r)" "(tm)"
 | `--`    | —      | em dash |
 
 **Example:**
+
 ```bash
 $ giv chars "..." "--"
 … —
@@ -67,8 +70,11 @@ $ giv chars "..." "--"
 | `<=`    | ⇐      | leftwards double arrow |
 | `<->`   | ↔      | left right arrow |
 | `<=>`   | ⇔      | left right double arrow |
+| `^^`, `up` | ↑   | upwards arrow |
+| `vv`, `down` | ↓ | downwards arrow |
 
 **Example:**
+
 ```bash
 $ giv chars -- "->" "<-" "=>" "<="
 → ← ⇒ ⇐
@@ -84,31 +90,52 @@ Note: Use `--` before arrow patterns to prevent them being interpreted as flags.
 | `pound` | £      | pound sign |
 | `euro`  | €      | euro sign |
 | `yen`   | ¥      | yen sign |
+| `rupee` | ₹      | rupee sign |
+| `won`   | ₩      | won sign |
+| `bitcoin`, `btc` | ₿ | bitcoin sign |
 
 **Example:**
+
 ```bash
-$ giv chars cent pound euro yen
-¢ £ € ¥
+$ giv chars cent pound euro yen rupee won bitcoin
+¢ £ € ¥ ₹ ₩ ₿
 ```
 
 ## Math Symbols
 
-| Pattern | Aliases | Result | Description |
-|---------|---------|--------|-------------|
-| `degree` | `deg` | °      | degree sign |
-| `+-`    | -     | ±      | plus-minus sign |
-| `x`     | `*`   | ×      | multiplication sign |
-| `divide` | `div` | ÷      | division sign |
-| `!=`    | `ne`  | ≠      | not equal to |
-| `lte`   | -     | ≤      | less-than or equal to |
-| `gte`   | -     | ≥      | greater-than or equal to |
-| `~=`    | -     | ≈      | almost equal to |
-| `infinity` | `inf` | ∞   | infinity |
+| Pattern | Result | Description |
+|---------|--------|-------------|
+| `degree`, `deg` | °      | degree sign |
+| `+-`    | ±      | plus-minus sign |
+| `x`, `*`   | ×      | multiplication sign |
+| `divide`, `div` | ÷      | division sign |
+| `!=`, `ne`  | ≠      | not equal to |
+| `lte`   | ≤      | less-than or equal to |
+| `gte`   | ≥      | greater-than or equal to |
+| `~=`    | ≈      | almost equal to |
+| `infinity`, `inf` | ∞   | infinity |
+| `sqrt`  | √      | square root |
+| `sum`   | ∑      | n-ary summation |
+| `prod`, `product` | ∏ | n-ary product |
+| `int`   | ∫      | integral |
+| `partial` | ∂    | partial differential |
+| `nabla` | ∇      | nabla |
+| `in`    | ∈      | element of |
+| `notin` | ∉      | not an element of |
+| `subset` | ⊂     | subset of |
+| `superset` | ⊃   | superset of |
+| `union` | ∪      | union |
+| `intersect` | ∩  | intersection |
+| `forall` | ∀     | for all |
+| `exists` | ∃     | there exists |
+| `emptyset` | ∅   | empty set |
+| `propto` | ∝     | proportional to |
 
 **Example:**
+
 ```bash
-$ giv chars degree "+-" x divide "!=" infinity
-° ± × ÷ ≠ ∞
+$ giv chars sqrt sum int partial nabla in subset union forall exists
+√ ∑ ∫ ∂ ∇ ∈ ⊂ ∪ ∀ ∃
 ```
 
 ## Greek Letters (Lowercase)
@@ -141,6 +168,7 @@ $ giv chars degree "+-" x divide "!=" infinity
 | `omega`   | ω    | greek small letter omega |
 
 **Example:**
+
 ```bash
 $ giv chars alpha beta gamma delta lambda mu pi omega
 α β γ δ λ μ π ω
@@ -163,9 +191,86 @@ $ giv chars alpha beta gamma delta lambda mu pi omega
 | `Omega`   | Ω    | greek capital letter omega |
 
 **Example:**
+
 ```bash
 $ giv chars Alpha Beta Gamma Delta Sigma Omega
 Α Β Γ Δ Σ Ω
+```
+
+## Punctuation and Symbols
+
+| Pattern | Result | Description |
+|---------|--------|-------------|
+| `section`, `sect` | § | section sign |
+| `para`, `paragraph` | ¶ | pilcrow sign |
+| `dag`, `dagger` | † | dagger |
+| `ddag` | ‡ | double dagger |
+| `bullet` | • | bullet |
+| `middot` | · | middle dot |
+
+**Example:**
+
+```bash
+$ giv chars section para dag ddag bullet middot
+§ ¶ † ‡ • ·
+```
+
+## Superscripts
+
+| Pattern | Result | Description |
+|---------|--------|-------------|
+| `^0` | ⁰ | superscript zero |
+| `^1` | ¹ | superscript one |
+| `^2` | ² | superscript two |
+| `^3` | ³ | superscript three |
+| `^4` | ⁴ | superscript four |
+| `^5` | ⁵ | superscript five |
+| `^6` | ⁶ | superscript six |
+| `^7` | ⁷ | superscript seven |
+| `^8` | ⁸ | superscript eight |
+| `^9` | ⁹ | superscript nine |
+| `^n` | ⁿ | superscript n |
+
+**Example:**
+
+```bash
+$ giv chars "^2" "^3" "^n"
+² ³ ⁿ
+```
+
+## Subscripts
+
+| Pattern | Result | Description |
+|---------|--------|-------------|
+| `_0` | ₀ | subscript zero |
+| `_1` | ₁ | subscript one |
+| `_2` | ₂ | subscript two |
+| `_3` | ₃ | subscript three |
+| `_4` | ₄ | subscript four |
+| `_5` | ₅ | subscript five |
+| `_6` | ₆ | subscript six |
+| `_7` | ₇ | subscript seven |
+| `_8` | ₈ | subscript eight |
+| `_9` | ₉ | subscript nine |
+
+**Example:**
+
+```bash
+$ giv chars "_0" "_1" "_2"
+₀ ₁ ₂
+```
+
+## Miscellaneous
+
+| Pattern | Result | Description |
+|---------|--------|-------------|
+| `star` | ★ | black star |
+
+**Example:**
+
+```bash
+$ giv chars star
+★
 ```
 
 ## Common Emoji Shortcodes
@@ -220,6 +325,7 @@ The `chars` command supports all emoji shortcodes from the GitHub emoji set. Her
 | `:key:` | 🔑 | key |
 
 **Example:**
+
 ```bash
 $ giv chars :smile: :rocket: :thumbsup: :fire:
 😄 🚀 👍 🔥
@@ -278,8 +384,12 @@ Error: Unknown character pattern or emoji shortcode: 'unknown'
 
 ## Finding More Emoji
 
-The full list of supported emoji shortcodes can be found at:
-- https://github.com/ikatyang/emoji-cheat-sheet
-- https://www.webfx.com/tools/emoji-cheat-sheet/
+GitHub-compatible emoji shortcodes are supported.
 
-All GitHub-compatible emoji shortcodes are supported.
+The full list of supported emoji shortcodes can be found at:
+
+- <https://github.com/ikatyang/emoji-cheat-sheet>
+
+Emoji support is provided by:
+
+- <https://github.com/rossmacarthur/emojis>
