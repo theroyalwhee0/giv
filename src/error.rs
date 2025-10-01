@@ -10,6 +10,11 @@ pub enum GivError {
     )]
     DecimalPlacesOutOfRange(usize, usize),
 
+    /// Error when conflicting flags are provided.
+    #[cfg(feature = "pi")]
+    #[error("Conflicting flags: {0}")]
+    ConflictingFlags(String),
+
     /// Error when an invalid RNG specification is provided.
     #[cfg(feature = "rng")]
     #[error("Invalid RNG specification: '{0}'. Expected formats: 'XdY' or 'dY' for dice, 'X..Y' for ranges")]

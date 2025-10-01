@@ -28,7 +28,7 @@ const BASE10: u32 = 10;
 /// The rounding flags for the 'pi' command.
 /// The first element indicates if rounding is enabled,
 /// the second element indicates if rounding is disabled.
-pub type Rounding = (Option<bool>, Option<bool>);
+pub type RoundingFlags = (Option<bool>, Option<bool>);
 
 /// Get PI with the specified number of decimal places.
 ///
@@ -81,6 +81,34 @@ fn get_pi(places: usize, round: bool) -> Result<String, GivError> {
     }
 }
 
+/// Determine the rounding behavior from CLI flags.
+///
+/// # Arguments
+///
+/// - `rounding_flags` A tuple indicating the CLI rounding flags.
+///
+/// # Returns
+///
+/// A result containing the rounding flag or an error if conflicting flags are provided.
+///
+/// # Errors
+///
+/// Returns `GivError::ConflictingFlags` if both --round and --no-round are specified.
+fn get_rounding(rounding_flags: RoundingFlags) -> Result<bool, GivError> {
+    match rounding_flags {
+        // User specified both flags - conflict.
+        (Some(true), Some(true)) => Err(GivError::ConflictingFlags(
+            "cannot specify both --round and --no-round".to_string(),
+        )),
+        // User explicitly enabled rounding.
+        (Some(true), None) | (Some(true), Some(false)) => Ok(true),
+        // User explicitly disabled rounding.
+        (None, Some(true)) | (Some(false), Some(true)) => Ok(false),
+        // Remaining combinations use the default.
+        (_, _) => Ok(DEFAULT_ROUND),
+    }
+}
+
 /// The 'pi' command handler.
 ///
 /// # Arguments
@@ -92,23 +120,20 @@ fn get_pi(places: usize, round: bool) -> Result<String, GivError> {
 /// # Returns
 ///
 /// A result indicating success or failure.
+///
+/// # Errors
+///
+/// Returns an error if the number of decimal places is out of range or if conflicting flags are provided.
 pub fn pi_command(
     places: Option<usize>,
-    rounding: Rounding,
+    rounding_flags: RoundingFlags,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
     // Default the number of places if not specified.
     let places = places.unwrap_or(PI_DEFAULT_PLACES);
 
-    // Determines if rounding is enabled from CLI flags.
-    let round = match rounding {
-        // User explicitly enabled rounding.
-        (Some(true), None) => true,
-        // User explicitly disabled rounding.
-        (None, Some(true)) => false,
-        // Otherwise, use the default.
-        (_, _) => DEFAULT_ROUND,
-    };
+    // Determine if rounding is enabled from CLI flags.
+    let round = get_rounding(rounding_flags)?;
 
     // Get the PI value with the specified number of decimal places.
     let pi_value = get_pi(places, round)?;
@@ -196,11 +221,7 @@ mod tests {
                 assert_eq!(places, 0);
                 assert_eq!(max, PI_MAX_DECIMALS);
             }
-            #[cfg(feature = "rng")]
-            GivError::InvalidRngSpec(_) => {
-                panic!("Unexpected error type: {}", err);
-            }
-            GivError::RequiredArgumentsNotProvided(_) => {
+            _ => {
                 panic!("Unexpected error type: {}", err);
             }
         }
@@ -224,11 +245,7 @@ mod tests {
                 assert_eq!(places, PI_MAX_DECIMALS + 1);
                 assert_eq!(max, PI_MAX_DECIMALS);
             }
-            #[cfg(feature = "rng")]
-            GivError::InvalidRngSpec(_) => {
-                panic!("Unexpected error type: {}", err);
-            }
-            GivError::RequiredArgumentsNotProvided(_) => {
+            _ => {
                 panic!("Unexpected error type: {}", err);
             }
         }
@@ -247,5 +264,27 @@ mod tests {
     fn test_pi_decimals_length() {
         // Ensure the length of PI_DECIMALS is 10000.
         assert_eq!(PI_DECIMALS.len(), 10_000);
+    }
+
+    /// Test the error behavior when both --round and --no-round flags are specified.
+    #[test]
+    fn test_conflicting_rounding_flags() {
+        use crate::app::cli::CommandOptions;
+        let mut ctx = AppContext::new(CommandOptions::default());
+        let result = pi_command(Some(15), (Some(true), Some(true)), &mut ctx);
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        match err {
+            GivError::ConflictingFlags(_) => {
+                // Expected error type.
+            }
+            _ => {
+                panic!("Unexpected error type: {}", err);
+            }
+        }
+        assert_eq!(
+            err.to_string(),
+            "Conflicting flags: cannot specify both --round and --no-round"
+        );
     }
 }
