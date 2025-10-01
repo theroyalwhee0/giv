@@ -4,6 +4,14 @@ A CLI for generating useful values.
 
 ## Available Commands
 
+- `giv bytes`: Generate random bytes with various encodings.
+  - Base64 (default, no padding): `giv bytes`
+  - Hex encoding: `giv bytes -e hex`
+  - Base64 with padding: `giv bytes -e base64 --pad`
+  - Rust array: `giv bytes -e rust 16`
+  - JavaScript array: `giv bytes -e javascript 16`
+  - TypeScript array: `giv bytes -e typescript 16`
+  - Raw bytes: `giv bytes -e raw 100 | hexyl`
 - `giv date`: Prints the date in various formats.
   - `giv now`: Prints the current time in various formats.
 - `giv uuid`: Print a random UUID v7.

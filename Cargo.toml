@@ -51,6 +51,9 @@ chrono = { version = "0.4.41", default-features = false, features = [
 uuid = { version = "1.17.0", features = ["v7", "serde"], optional = true }
 # CLI and Terminal.
 clap = { version = "4.5.35", features = ["derive"] }
+# Encoding
+base64 = { version = "0.22.1", optional = true }
+hex = { version = "0.4.3", optional = true }
 # Security.
 rand = { version = "0.9.0", optional = true }
 # Serialziation.
@@ -63,6 +66,7 @@ serde_json = { version = "1.0.142", features = [
 default = ["full"]
 full = [
     # Commands.
+    "bytes",
     "date",
     "key",
     "pi",
@@ -72,6 +76,7 @@ full = [
     "json",
 ]
 # Command features.
+bytes = ["dep:rand", "dep:base64", "dep:hex", "dep:serde"]
 date = ["dep:chrono"]
 key = ["dep:rand"]
 pi = []

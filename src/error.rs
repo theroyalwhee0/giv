@@ -25,6 +25,11 @@ pub enum GivError {
     #[error("Numeric overflow or underflow in calculation: {0}")]
     NumericOverflow(String),
 
+    /// Error when raw bytes encoding is requested with JSON output mode.
+    #[cfg(feature = "bytes")]
+    #[error("Raw bytes encoding is not supported in JSON output mode. Use --encoding=hex or --encoding=base64 instead")]
+    RawBytesNotSupportedInJson,
+
     /// Error when required arguments are not provided.
     #[error("Required arguments not provided. Use '{0}' for usage information")]
     RequiredArgumentsNotProvided(String),

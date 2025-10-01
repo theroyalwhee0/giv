@@ -1,6 +1,7 @@
 //! Giv - A command-line utility providing various useful tools.
 //!
 //! This crate provides output for the following:
+//! - Random byte generation.
 //! - Formatted dates.
 //! - Key generation.
 //! - UUID v7 generation.
@@ -9,6 +10,9 @@
 
 /// Application module.
 mod app;
+/// Bytes generation module.
+#[cfg(feature = "bytes")]
+mod c_bytes;
 /// Date command module.
 #[cfg(feature = "date")]
 mod c_date;
