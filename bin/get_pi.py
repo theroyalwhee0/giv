@@ -113,72 +113,9 @@ def parse_html_continuous(content):
     return None
 
 
-def parse_txt(content):
-    """
-    Parse plain text files with Pi digits.
-
-    May have spaces, line breaks, or other formatting.
-    Looks for "3.14159..." pattern and extracts digits only.
-
-    Returns the decimal places (without the leading "3.").
-    """
-    # Find the first occurrence starting with known Pi digits
-    # Allow for spaces and newlines in the content
-    match = re.search(r'3[.\s]*1415926535', content)
-    if not match:
-        return None
-
-    # Start from this position and extract digits line by line
-    start_pos = match.start()
-    remaining = content[start_pos:]
-
-    # Split into lines and process each line
-    lines = remaining.split('\n')
-    all_digits = []
-
-    for line in lines:
-        # Skip completely empty lines, marker lines, or dashed separator lines
-        if not line.strip() or line.strip().startswith('*') or line.strip().startswith('-'):
-            continue
-
-        # For lines with annotations (like "<---- 50-th digit"),
-        # extract only the digit part before the annotation
-        if '<' in line:
-            # Take everything before the '<' character
-            line = line[:line.index('<')]
-
-        # For lines with block markers (like "*1" at the end),
-        # extract only the digit part before the marker
-        if '*' in line:
-            # Take everything before the '*' character
-            line = line[:line.index('*')]
-
-        # Extract digits from this line
-        line_digits = extract_digits(line)
-        if line_digits:
-            all_digits.append(line_digits)
-
-        # Stop once we have enough
-        if len(''.join(all_digits)) >= TARGET_PLACES + 1:  # +1 for the leading 3
-            break
-
-    # Combine all digits
-    result = ''.join(all_digits)
-
-    # Remove leading 3
-    if result.startswith('3'):
-        result = result[1:]
-
-    if len(result) < TARGET_PLACES:
-        return None
-
-    return result[:TARGET_PLACES]
-
-
 # Map parser names to functions
 PARSERS = {
     'parse_html_continuous': parse_html_continuous,
-    'parse_txt': parse_txt,
 }
 
 
@@ -311,6 +248,19 @@ def main():
     """Main entry point."""
     print(f'Pi Digit Downloader and Verifier')
     print(f'Target: First {TARGET_PLACES:,} decimal places')
+    print()
+    print('This script will:')
+    print(f'  1. Download Pi digits from {len(SOURCES)} independent sources')
+    print(f'  2. Cache downloaded files in {CACHE_DIR}')
+    print(f'  3. Parse and extract the first {TARGET_PLACES:,} decimal places')
+    print(f'  4. Cross-verify all sources agree')
+    print(f'  5. Verify against src/c_pi/decimals.rs if it exists')
+    print()
+
+    response = input('Do you want to continue (y/N)? ').strip().lower()
+    if response not in ('y', 'yes'):
+        print('Aborted.')
+        return 0
 
     ensure_cache_dir()
 
