@@ -100,6 +100,52 @@ src/
 
 This ensures only intentional source files are committed, preventing accidental inclusion of build artifacts, local config, or temporary files.
 
+### Task Focus Workflow
+
+The project uses a `.focus/` folder for temporary task-specific work:
+
+#### .focus Folder Guidelines
+
+- **Purpose**: Temporary workspace for the current task or GitHub issue
+- **Git Status**: Entire folder is excluded from git (listed in `.gitignore`)
+- **Lifecycle**: Contents are cleared when switching to a new major task
+- **Usage**: Store notes, experiments, and task-specific temporary files
+
+#### .focus Structure
+
+```text
+.focus/
+├── Task.md        # Current task description, todos, and notes
+├── Notes.md       # Additional research and implementation notes
+└── *.tmp          # Temporary files for experiments and testing
+```
+
+#### Task.md Format
+
+The `Task.md` file contains:
+
+- **Tasks**: Checkboxes for tracking implementation progress
+- **Notes**: Implementation details and constraints
+- **Samples**: Code examples and usage patterns
+- **Research**: Links and references for the current work
+
+This workflow keeps task-specific work organized without cluttering the main codebase with temporary files.
+
+#### Focus Issue Command
+
+The `focus-issue {issue-id}` command automates switching focus between GitHub issues:
+
+- **Usage**: `focus-issue 35` (sets focus to GitHub issue #35)
+- **Branch Requirements**: Must be run from `main` or from a branch matching `{issue-number}-{branch-slug}` pattern
+- **Functionality**:
+  - Creates and checks out the correct branch following `{issue-number}-{branch-slug}` naming convention
+  - Fetches issue details from GitHub API (title, description, labels, assignees)
+  - Populates `.focus/Task.md` with structured issue information and task checkboxes
+  - Moves previous `.focus/` contents to trash for recovery
+  - Provides clean workspace for the new task with all context preserved
+
+This command streamlines the workflow for switching between different GitHub issues while maintaining organized task-specific workspaces.
+
 ### Important Conventions
 
 1. **Documentation First**: Write docs before implementation
