@@ -75,7 +75,7 @@ serde_json = { version = "1.0.142", features = [
 ], optional = true }
 
 [features]
-default = ["full"]
+default = ["full", "bin"]
 full = [
     # Commands.
     "bytes",

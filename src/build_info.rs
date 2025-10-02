@@ -1,8 +1,7 @@
-/// Build information module.
-///
-/// Provides access to build-time information captured by build.rs,
-/// including build timestamp and profile.
-use chrono::{DateTime, Utc};
+//! Build information module.
+//!
+//! Provides access to build-time information captured by build.rs,
+//! including build timestamp and profile.
 
 /// Get the build timestamp in seconds.
 ///
@@ -18,23 +17,6 @@ use chrono::{DateTime, Utc};
 #[must_use]
 pub fn timestamp() -> u64 {
     env!("SOURCE_DATE_EPOCH").parse::<u64>().unwrap()
-}
-
-/// Get the build date.
-///
-/// Converts the SOURCE_DATE_EPOCH timestamp into a `DateTime<Utc>`.
-///
-/// # Returns
-///
-/// The build date as a `DateTime<Utc>`.
-///
-/// # Panics
-///
-/// Panics if SOURCE_DATE_EPOCH cannot be parsed or converted to a valid timestamp.
-#[must_use]
-pub fn date() -> DateTime<Utc> {
-    let timestamp: i64 = timestamp().try_into().unwrap();
-    DateTime::from_timestamp(timestamp, 0).unwrap()
 }
 
 /// Get the build profile.
@@ -128,26 +110,6 @@ mod tests {
         );
     }
 
-    /// Test that date returns a valid DateTime when date feature is enabled.
-    ///
-    /// # Panics
-    ///
-    /// Panics if SOURCE_DATE_EPOCH is not set or is invalid at compile time.
-    #[cfg(feature = "date")]
-    #[test]
-    fn test_date() {
-        let dt = date();
-        // Verify it's a valid date after 2020
-        assert!(
-            dt.timestamp() > 1577836800,
-            "Date should be after 2020-01-01"
-        );
-        assert!(
-            dt.timestamp() < 4102444800,
-            "Date should be before 2100-01-01"
-        );
-    }
-
     /// Test that timestamp is consistent across multiple calls.
     ///
     /// # Panics
@@ -164,7 +126,7 @@ mod tests {
     ///
     /// # Panics
     ///
-    /// Panics if EXPECT_PROFILE is not set at compile time.
+    /// # Panics if EXPECT_PROFILE is not set at compile time.
     #[test]
     fn test_profile_consistency() {
         let p1 = profile();
