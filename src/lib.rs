@@ -64,6 +64,9 @@ pub mod rng;
 #[cfg(feature = "uuid")]
 pub mod uuid;
 
+/// Build information module.
+pub mod build_info;
+
 /// Error types for the library.
 pub mod error;
 

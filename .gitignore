@@ -5,8 +5,8 @@
 !*/**/
 
 # Documentation.
-!CHANGELOG.md
 !README.md
+!/REPRODUCIBLE.md
 !/SECURITY.md
 !/CHANGELOG.md
 !docs/**/*.md
@@ -16,6 +16,7 @@
 !Cargo.lock
 !clippy.toml
 !src/**/*.rs
+!/build.rs
 
 # Bin and Scripts.
 !/scripts/*.sh
