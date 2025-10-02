@@ -3,8 +3,9 @@ pub mod patterns;
 /// Output formatting for character/emoji conversion.
 pub mod output;
 
-use crate::{app::AppContext, error::GivError};
+use crate::error::GivError;
 pub use output::{CharResult, CharsOutput};
+
 
 /// Convert a single input to a character or emoji.
 ///
@@ -19,7 +20,7 @@ pub use output::{CharResult, CharsOutput};
 /// # Errors
 ///
 /// Returns an error if the pattern or shortcode is not recognized.
-fn convert_input(input: &str) -> Result<CharResult, GivError> {
+pub fn convert_input(input: &str) -> Result<CharResult, GivError> {
     // First, try emoji lookup (requires colons).
     if input.starts_with(':') && input.ends_with(':') && input.len() > 2 {
         let emoji_shortcode = &input[1..input.len() - 1];
@@ -47,39 +48,6 @@ fn convert_input(input: &str) -> Result<CharResult, GivError> {
     Err(GivError::UnknownCharacterPattern(input.to_string()))
 }
 
-/// The 'chars' command handler.
-///
-/// # Arguments
-///
-/// - `inputs` The list of patterns or shortcodes to convert.
-/// - `ctx` The command context.
-///
-/// # Returns
-///
-/// A result indicating success or failure.
-///
-/// # Errors
-///
-/// Returns an error if any pattern or shortcode is not recognized.
-pub fn chars_command(inputs: Vec<String>, ctx: &mut AppContext) -> Result<(), GivError> {
-    // Convert all inputs, collecting into a Result.
-    let results: Result<Vec<CharResult>, GivError> = inputs
-        .iter()
-        .map(|input| convert_input(input))
-        .collect();
-
-    // If any conversion failed, return the error.
-    let results = results?;
-
-    // Create output.
-    let output = CharsOutput::new(results);
-
-    // Output the results.
-    ctx.output().output(&output);
-
-    // Success.
-    Ok(())
-}
 
 // Tests.
 #[cfg(test)]

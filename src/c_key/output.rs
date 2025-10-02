@@ -1,4 +1,4 @@
-use crate::app::output::Output;
+use crate::output::Output;
 use serde::Serialize;
 
 /// The output from the key command.

@@ -1,26 +1,17 @@
 /// CLI parsing and argument handling.
 pub mod cli;
+/// Command handlers bridging CLI to library functions.
+mod commands;
 /// Command execution context.
 mod context;
 /// Output formatting and display.
 pub mod output;
 
 pub use context::AppContext;
+use commands::*;
 
-#[cfg(feature = "bytes")]
-use crate::c_bytes::bytes_command;
-#[cfg(feature = "chars")]
-use crate::c_chars::chars_command;
 #[cfg(feature = "date")]
-use crate::c_date::{DateKind, date_command};
-#[cfg(feature = "key")]
-use crate::c_key::key_command;
-#[cfg(feature = "pi")]
-use crate::c_pi::pi_command;
-#[cfg(feature = "rng")]
-use crate::c_rng::rng_command;
-#[cfg(feature = "uuid")]
-use crate::c_uuid::uuid_command;
+use crate::c_date::DateKind;
 use clap::Parser as _;
 use cli::{Cli, Commands};
 use std::process::ExitCode;
@@ -34,7 +25,6 @@ use std::process::ExitCode;
 ///
 /// Returns an `ExitCode` indicating success or failure.
 #[allow(clippy::print_stderr)]
-#[allow(dead_code)] // Used by binary, not library
 pub fn run() -> ExitCode {
     // Parse command line arguments.
     let cli = Cli::parse();

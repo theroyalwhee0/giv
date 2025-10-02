@@ -34,6 +34,8 @@ mod c_rng;
 mod c_uuid;
 /// Error handling module.
 mod error;
+/// Output formatting module.
+mod output;
 
 use std::process::ExitCode;
 

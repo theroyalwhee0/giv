@@ -37,8 +37,9 @@
 //! - `full` (default) - All features enabled
 
 /// Application module containing CLI-specific code.
-/// This module is private and not part of the library API.
-mod app;
+/// This module is only compiled when building the binary.
+#[cfg(any(feature = "bin", test))]
+pub(crate) mod app;
 
 /// Random byte generation module.
 #[cfg(feature = "bytes")]
@@ -72,9 +73,7 @@ pub mod c_uuid;
 pub mod error;
 
 /// Output formatting types and traits.
-pub mod output {
-    pub use crate::app::output::Output;
-}
+pub mod output;
 
 // Re-export commonly used types at crate root
 pub use error::GivError;

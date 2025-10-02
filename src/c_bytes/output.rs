@@ -1,5 +1,5 @@
 use super::BytesEncoding;
-use crate::app::output::Output;
+use crate::output::Output;
 use base64::{engine::general_purpose, Engine};
 use serde::Serialize;
 

@@ -1,4 +1,4 @@
-use super::Output;
+use crate::output::Output;
 use crate::app::cli::CommandOptions;
 
 /// Handles outputting values in either plain text or JSON format.

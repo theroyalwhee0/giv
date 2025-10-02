@@ -1,9 +1,10 @@
 /// Output formatting for key generation.
 pub mod output;
 
-use crate::{app::AppContext, error::GivError};
+use crate::error::GivError;
 pub use output::KeyOutput;
 use rand::RngCore;
+
 
 /// The default size of the key.
 pub const DEFAULT_KEY_SIZE: usize = 36;
@@ -111,25 +112,6 @@ pub fn generate_key(size: Option<usize>) -> Result<KeyOutput, GivError> {
     })
 }
 
-/// The 'key' command handler.
-///
-/// # Arguments
-///
-/// - `size` An optional size for the key.
-/// - `ctx` The command context.
-///
-/// # Returns
-///
-/// A result indicating success or failure.
-///
-/// # Errors
-///
-/// Propagates errors from [`generate_key`].
-pub fn key_command(size: Option<usize>, ctx: &mut AppContext) -> Result<(), GivError> {
-    let output = generate_key(size)?;
-    ctx.output().output(&output);
-    Ok(())
-}
 
 // Tests.
 #[cfg(test)]

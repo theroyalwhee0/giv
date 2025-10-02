@@ -1,7 +1,7 @@
 /// Output formatting for uuid generation.
 pub mod output;
 
-use crate::{app::AppContext, error::GivError};
+use crate::error::GivError;
 pub use output::UuidOutput;
 use uuid::Uuid;
 
@@ -36,23 +36,4 @@ pub fn generate_uuid() -> Result<UuidOutput, GivError> {
         uuid: uuid.to_string(),
         version: "v7".to_string(),
     })
-}
-
-/// The 'uuid' command handler.
-///
-/// # Arguments
-///
-/// - `ctx` The command context.
-///
-/// # Returns
-///
-/// A result indicating success or failure.
-///
-/// # Errors
-///
-/// Propagates errors from [`generate_uuid`].
-pub fn uuid_command(ctx: &mut AppContext) -> Result<(), GivError> {
-    let output = generate_uuid()?;
-    ctx.output().output(&output);
-    Ok(())
 }
