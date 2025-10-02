@@ -62,7 +62,7 @@ mod tests {
         // Test that generated values are in range
         for _ in 0..100 {
             let value = gen_range_int(&mut rng, 1, 10);
-            assert!(value >= 1 && value <= 10);
+            assert!((1..=10).contains(&value));
         }
 
         // Test single value range
@@ -77,12 +77,12 @@ mod tests {
         // Test that generated values are in range
         for _ in 0..100 {
             let value = gen_range_float(&mut rng, 0.0, 1.0);
-            assert!(value >= 0.0 && value <= 1.0);
+            assert!((0.0..=1.0).contains(&value));
         }
 
         for _ in 0..100 {
             let value = gen_range_float(&mut rng, 10.5, 20.5);
-            assert!(value >= 10.5 && value <= 20.5);
+            assert!((10.5..=20.5).contains(&value));
         }
     }
 }

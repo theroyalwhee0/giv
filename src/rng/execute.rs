@@ -119,9 +119,9 @@ mod tests {
                 let expected_sum: i64 = source.iter().map(|&x| i64::try_from(x).unwrap()).sum();
                 assert_eq!(value, expected_sum);
                 for roll in source {
-                    assert!(roll >= 1 && roll <= 6);
+                    assert!((1..=6).contains(&roll));
                 }
-                assert!(value >= 3 && value <= 18);
+                assert!((3..=18).contains(&value));
             }
             _ => panic!("Expected Dice result"),
         }
@@ -145,7 +145,7 @@ mod tests {
                 assert_eq!(source.len(), 2);
                 let roll_sum: i64 = source.iter().map(|&x| i64::try_from(x).unwrap()).sum();
                 assert_eq!(value, roll_sum + 5);
-                assert!(value >= 7 && value <= 17);
+                assert!((7..=17).contains(&value));
             }
             _ => panic!("Expected Dice result"),
         }
@@ -169,7 +169,7 @@ mod tests {
                 assert_eq!(source.len(), 1);
                 let roll_sum: i64 = source.iter().map(|&x| i64::try_from(x).unwrap()).sum();
                 assert_eq!(value, roll_sum - 1);
-                assert!(value >= 0 && value <= 19);
+                assert!((0..=19).contains(&value));
             }
             _ => panic!("Expected Dice result"),
         }
@@ -180,7 +180,7 @@ mod tests {
         match result {
             RngResult::RangeInt { notation, value } => {
                 assert_eq!(notation, "1..100");
-                assert!(value >= 1 && value <= 100);
+                assert!((1..=100).contains(&value));
             }
             _ => panic!("Expected RangeInt result"),
         }

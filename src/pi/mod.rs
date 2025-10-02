@@ -122,7 +122,7 @@ pub fn get_rounding(rounding_flags: RoundingFlags) -> Result<bool, GivError> {
     }
 }
 
-/// Get PI digits with specified precision and rounding.
+/// Generate PI digits with specified precision and rounding.
 ///
 /// # Arguments
 ///
@@ -140,23 +140,23 @@ pub fn get_rounding(rounding_flags: RoundingFlags) -> Result<bool, GivError> {
 /// # Examples
 ///
 /// ```
-/// use giv::pi::{get_pi_digits, PI_DEFAULT_PLACES};
+/// use giv::pi::{generate_pi, PI_DEFAULT_PLACES};
 /// use giv::GivError;
 ///
 /// # fn main() -> Result<(), GivError> {
-/// // Get PI with default precision
-/// let pi = get_pi_digits(None, None)?;
+/// // Generate PI with default precision
+/// let pi = generate_pi(None, None)?;
 /// assert!(pi.pi.starts_with("3.14"));
 /// assert_eq!(pi.rounded, true);
 ///
-/// // Get PI with custom precision
-/// let pi = get_pi_digits(Some(5), Some(false))?;
+/// // Generate PI with custom precision
+/// let pi = generate_pi(Some(5), Some(false))?;
 /// assert_eq!(pi.pi, "3.14159");
 /// assert_eq!(pi.rounded, false);
 /// # Ok(())
 /// # }
 /// ```
-pub fn get_pi_digits(places: Option<usize>, round: Option<bool>) -> Result<PiOutput, GivError> {
+pub fn generate_pi(places: Option<usize>, round: Option<bool>) -> Result<PiOutput, GivError> {
     let places = places.unwrap_or(PI_DEFAULT_PLACES);
     let round = round.unwrap_or(DEFAULT_ROUND);
     let pi_value = get_pi(places, round)?;
@@ -244,7 +244,7 @@ mod tests {
                 assert_eq!(max, PI_MAX_DECIMALS);
             }
             _ => {
-                panic!("Unexpected error type: {}", err);
+                panic!("Unexpected error type: {err}");
             }
         }
         assert_eq!(
@@ -268,7 +268,7 @@ mod tests {
                 assert_eq!(max, PI_MAX_DECIMALS);
             }
             _ => {
-                panic!("Unexpected error type: {}", err);
+                panic!("Unexpected error type: {err}");
             }
         }
         assert_eq!(
@@ -299,7 +299,7 @@ mod tests {
                 // Expected error type.
             }
             _ => {
-                panic!("Unexpected error type: {}", err);
+                panic!("Unexpected error type: {err}");
             }
         }
         assert_eq!(

@@ -8,6 +8,3 @@ pub mod output;
 pub mod result;
 /// Specification parsing for RNG commands.
 pub mod spec;
-
-pub use output::RngOutput;
-

@@ -26,20 +26,6 @@ pub struct CharsOutput {
     pub results: Vec<CharResult>,
 }
 
-impl CharsOutput {
-    /// Create a new chars output.
-    ///
-    /// # Arguments
-    ///
-    /// - `results` The list of conversion results.
-    ///
-    /// # Returns
-    ///
-    /// A new `CharsOutput` instance.
-    pub fn new(results: Vec<CharResult>) -> Self {
-        Self { results }
-    }
-}
 
 impl Output for CharsOutput {
     fn to_plain(&self) -> String {
