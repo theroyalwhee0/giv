@@ -22,7 +22,7 @@ pub fn timestamp() -> u64 {
 
 /// Get the build date.
 ///
-/// Converts the SOURCE_DATE_EPOCH timestamp into a DateTime<Utc>.
+/// Converts the SOURCE_DATE_EPOCH timestamp into a `DateTime<Utc>`.
 ///
 /// # Returns
 ///

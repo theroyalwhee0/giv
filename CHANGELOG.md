@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-10-02
+
+### Added
+
+- Library API for programmatic access to all generation functions (#19, #21)
+  - Public functions in each command module that return structured output types
+  - All functions return `Result<OutputType, GivError>`
+  - Feature flags control which modules are included (default: all)
+  - Exported constants like `DEFAULT_KEY_SIZE` and `PI_DEFAULT_PLACES`
+- Reproducible builds with SOURCE_DATE_EPOCH support (#23, #25)
+  - Build process now respects SOURCE_DATE_EPOCH environment variable
+  - Enables reproducible binary builds for package managers
+
+### Changed
+
+- Version output now includes repository, crates.io, and docs.rs links (#18)
+- README now includes crates.io badge (#20)
+
+### Fixed
+
+- Code cleanup: Removed unused code and fixed compiler warnings (#22, #24)
+
 ## [0.1.0] - 2025-10-01
 
 ### Added
@@ -37,5 +59,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Structured output system with `Output` trait
 - Comprehensive documentation and usage guides
 
-[unreleased]: https://github.com/theroyalwhee0/giv/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/theroyalwhee0/giv/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/theroyalwhee0/giv/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/theroyalwhee0/giv/releases/tag/v0.1.0
