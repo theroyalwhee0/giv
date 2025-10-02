@@ -5,11 +5,18 @@ use clap::Parser;
 ///
 /// # Panics
 ///
-/// Panics if CARGO_PKG_VERSION, CARGO_PKG_REPOSITORY, or CARGO_PKG_NAME environment variables are not set at compile time.
+/// Panics if CARGO_PKG_VERSION, CARGO_PKG_REPOSITORY, CARGO_PKG_NAME, BUILD_DATETIME_ISO, or EXPECT_PROFILE environment variables are not set at compile time.
 const fn long_version() -> &'static str {
     concat!(
         // The version.
         env!("CARGO_PKG_VERSION"),
+        "\n\n",
+        // Build information.
+        "Build Date:    ",
+        env!("BUILD_DATETIME_ISO"),
+        "\n",
+        "Build Profile: ",
+        env!("EXPECT_PROFILE"),
         "\n\n",
         // The Git Repository.
         "Repository:    ",
