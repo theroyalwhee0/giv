@@ -1,23 +1,26 @@
 use crate::output::Output;
+#[cfg(feature = "json")]
 use serde::Serialize;
 
 /// A single character conversion result.
-#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[derive(Debug)]
 pub struct CharResult {
     /// The input pattern or shortcode.
     pub input: String,
     /// The output character or emoji.
     pub output: String,
     /// The type of conversion (emoji, pattern, or passthrough).
-    #[serde(rename = "type")]
+    #[cfg_attr(feature = "json", serde(rename = "type"))]
     pub result_type: String,
     /// Optional name/description of the character.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "json", serde(skip_serializing_if = "Option::is_none"))]
     pub name: Option<String>,
 }
 
 /// The output from the chars command.
-#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[derive(Debug)]
 pub struct CharsOutput {
     /// The list of conversion results.
     pub results: Vec<CharResult>,

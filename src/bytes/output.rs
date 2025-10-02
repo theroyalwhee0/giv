@@ -1,10 +1,12 @@
 use super::BytesEncoding;
 use crate::output::Output;
 use base64::{engine::general_purpose, Engine};
+#[cfg(feature = "json")]
 use serde::Serialize;
 
 /// The output from the bytes command.
-#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[derive(Debug)]
 pub struct BytesOutput {
     /// The encoded bytes as a string (hex, base64, or raw).
     pub bytes: String,
@@ -13,7 +15,7 @@ pub struct BytesOutput {
     /// The number of bytes generated.
     pub length: usize,
     /// Whether padding is used (base64 only).
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "json", serde(skip_serializing_if = "Option::is_none"))]
     pub padding: Option<bool>,
 }
 

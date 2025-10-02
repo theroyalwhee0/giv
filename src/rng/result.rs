@@ -1,11 +1,13 @@
+#[cfg(feature = "json")]
 use serde::Serialize;
 
 /// The result of a single random number generation.
-#[derive(Debug, Clone, Serialize)]
-#[serde(tag = "type")]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[cfg_attr(feature = "json", serde(tag = "type"))]
+#[derive(Debug, Clone)]
 pub enum RngResult {
     /// Dice roll result
-    #[serde(rename = "dice")]
+    #[cfg_attr(feature = "json", serde(rename = "dice"))]
     Dice {
         /// The dice notation used
         notation: String,
@@ -17,7 +19,7 @@ pub enum RngResult {
         source: Vec<u64>,
     },
     /// Integer range result
-    #[serde(rename = "range_int")]
+    #[cfg_attr(feature = "json", serde(rename = "range_int"))]
     RangeInt {
         /// The range notation used
         notation: String,
@@ -25,7 +27,7 @@ pub enum RngResult {
         value: u64,
     },
     /// Float range result
-    #[serde(rename = "range_float")]
+    #[cfg_attr(feature = "json", serde(rename = "range_float"))]
     RangeFloat {
         /// The range notation used
         notation: String,

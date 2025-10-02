@@ -1,8 +1,10 @@
 use crate::output::Output;
+#[cfg(feature = "json")]
 use serde::Serialize;
 
 /// The output from the uuid command.
-#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[derive(Debug)]
 pub struct UuidOutput {
     /// The generated UUID
     pub uuid: String,

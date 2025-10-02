@@ -1,8 +1,10 @@
 use crate::output::Output;
+#[cfg(feature = "json")]
 use serde::Serialize;
 
 /// The output from the pi command.
-#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[derive(Debug)]
 pub struct PiOutput {
     /// The pi value
     pub pi: String,
