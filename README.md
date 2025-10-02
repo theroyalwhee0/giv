@@ -1,5 +1,7 @@
 # giv
 
+[![Crates.io](https://img.shields.io/crates/v/giv.svg)](https://crates.io/crates/giv)
+
 A CLI for generating useful values.
 
 ## Available Commands
