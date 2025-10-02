@@ -7,7 +7,6 @@ pub mod output;
 
 pub use date_format::DateFormat;
 pub use date_kind::DateKind;
-pub use output::DateOutput;
 
 use chrono::{DateTime, SecondsFormat, Utc};
 

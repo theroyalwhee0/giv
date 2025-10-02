@@ -1,2 +1,2 @@
-// Re-export the Output trait from the top-level output module.
-pub use crate::output::Output;
+// This module is intentionally empty.
+// The Output trait is imported directly from crate::output where needed.

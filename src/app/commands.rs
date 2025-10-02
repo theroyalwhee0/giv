@@ -7,7 +7,7 @@ use super::AppContext;
 use crate::error::GivError;
 
 #[cfg(feature = "bytes")]
-use crate::bytes::{BytesEncoding, BytesOutput};
+use crate::bytes::BytesEncoding;
 #[cfg(feature = "chars")]
 use crate::chars::{convert_input, CharResult, CharsOutput};
 #[cfg(feature = "date")]
@@ -15,14 +15,11 @@ use crate::date::{DateFormat, DateKind};
 #[cfg(feature = "key")]
 use crate::key;
 #[cfg(feature = "pi")]
-use crate::pi::{self, RoundingFlags, PI_DEFAULT_PLACES};
+use crate::pi::{self, RoundingFlags};
 #[cfg(feature = "rng")]
 use crate::rng::{execute::execute_spec, output::RngOutput, spec::parse_spec};
 #[cfg(feature = "uuid")]
 use crate::uuid;
-
-#[cfg(feature = "bytes")]
-use rand::RngCore;
 #[cfg(feature = "date")]
 use chrono::Utc;
 
@@ -50,23 +47,15 @@ pub fn bytes_command(
     padding: bool,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
-    use crate::bytes::DEFAULT_BYTE_LENGTH;
-
-    let length = length.unwrap_or(DEFAULT_BYTE_LENGTH);
-    let encoding = encoding.unwrap_or_else(BytesEncoding::default);
+    use crate::bytes;
 
     // Check if raw encoding is requested with JSON output mode.
-    if matches!(encoding, BytesEncoding::Raw) && ctx.output().is_json() {
+    if matches!(encoding, Some(BytesEncoding::Raw)) && ctx.output().is_json() {
         return Err(GivError::RawBytesNotSupportedInJson);
     }
 
-    // Generate the random bytes.
-    let mut bytes = vec![0u8; length];
-    let mut rng = rand::rng();
-    rng.fill_bytes(&mut bytes);
-
-    // Create output with the encoded bytes.
-    let output = BytesOutput::new(&bytes, encoding, padding);
+    // Generate the random bytes with encoding.
+    let output = bytes::generate_bytes(length, encoding, padding)?;
 
     // Output the bytes.
     ctx.output().output(&output);
@@ -191,22 +180,13 @@ pub fn pi_command(
     rounding_flags: RoundingFlags,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
-    use crate::pi::{get_rounding, output::PiOutput};
-
-    // Default the number of places if not specified.
-    let places = places.unwrap_or(PI_DEFAULT_PLACES);
+    use crate::pi::get_rounding;
 
     // Determine if rounding is enabled from CLI flags.
     let round = get_rounding(rounding_flags)?;
 
-    // Get the PI value with the specified number of decimal places.
-    let pi_value = pi::get_pi(places, round)?;
-
-    // Create output with the pi value.
-    let output = PiOutput {
-        pi: pi_value,
-        rounded: round,
-    };
+    // Generate PI with the specified options.
+    let output = pi::generate_pi(places, Some(round))?;
 
     // Output the PI value.
     ctx.output().output(&output);

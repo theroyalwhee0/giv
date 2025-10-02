@@ -5,7 +5,7 @@ use serde::Serialize;
 /// The encoding format for bytes output.
 #[cfg_attr(feature = "json", derive(Serialize))]
 #[cfg_attr(feature = "json", serde(rename_all = "lowercase"))]
-#[derive(Debug, Clone, Copy, ValueEnum)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
 pub enum BytesEncoding {
     /// Hexadecimal encoding (lowercase).
     Hex,
