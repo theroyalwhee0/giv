@@ -1,8 +1,10 @@
-use crate::app::output::Output;
+use crate::output::Output;
+#[cfg(feature = "json")]
 use serde::Serialize;
 
 /// The output from the date command.
-#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[derive(Debug)]
 pub struct DateOutput {
     /// The formatted date
     pub date: String,

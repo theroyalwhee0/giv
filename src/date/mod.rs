@@ -1,16 +1,16 @@
 /// Date format enumeration.
-mod date_format;
+pub mod date_format;
 /// Date kind enumeration.
-mod date_kind;
+pub mod date_kind;
 /// Output formatting for date command.
-mod output;
+pub mod output;
 
 pub use date_format::DateFormat;
 pub use date_kind::DateKind;
+pub use output::DateOutput;
 
-use crate::{app::AppContext, error::GivError};
 use chrono::{DateTime, SecondsFormat, Utc};
-use output::DateOutput;
+
 
 /// Get the date format based on the kind and format options.
 ///
@@ -21,7 +21,7 @@ use output::DateOutput;
 /// # Returns
 ///
 /// The date format.
-fn get_date_format(kind: &DateKind, format: Option<DateFormat>) -> DateFormat {
+pub fn get_date_format(kind: &DateKind, format: Option<DateFormat>) -> DateFormat {
     match format {
         Some(format) => format,
         None => match kind {
@@ -47,7 +47,7 @@ fn get_date_format(kind: &DateKind, format: Option<DateFormat>) -> DateFormat {
 /// # Returns
 ///
 /// The date time.
-fn get_date_time(date: DateTime<Utc>, kind: &DateKind) -> chrono::DateTime<Utc> {
+pub fn get_date_time(date: DateTime<Utc>, kind: &DateKind) -> chrono::DateTime<Utc> {
     match kind {
         DateKind::Now => date,
         DateKind::Today => date,
@@ -67,7 +67,12 @@ fn get_date_time(date: DateTime<Utc>, kind: &DateKind) -> chrono::DateTime<Utc> 
 /// # Returns
 ///
 /// The formatted date as a string.
-fn format_date_time(date: &DateTime<Utc>, format: &DateFormat) -> String {
+///
+/// # Panics
+///
+/// May panic if the RFC3339 formatted date doesn't contain a 'T' separator,
+/// which should never happen with chrono's implementation.
+pub fn format_date_time(date: &DateTime<Utc>, format: &DateFormat) -> String {
     match format {
         // RFC 3339 format with milliseconds '2025-04-17T15:14:12.748Z'
         DateFormat::Rfc3339 => date.to_rfc3339_opts(SecondsFormat::Millis, true),
@@ -90,44 +95,6 @@ fn format_date_time(date: &DateTime<Utc>, format: &DateFormat) -> String {
         // RFC 2822 format 'Fri, 17 Apr 2025 15:14:12 +0000'
         DateFormat::Rfc2882 => date.to_rfc2822(),
     }
-}
-
-/// Handle the date command
-///
-/// # Arguments
-///
-/// * `kind` - The kind of date to generate
-/// * `format` - The optional format to use
-/// * `ctx` - The command context
-///
-/// # Returns
-///
-/// Returns a Result indicating success or failure.
-pub fn date_command(
-    kind: DateKind,
-    format: Option<DateFormat>,
-    ctx: &mut AppContext,
-) -> Result<(), GivError> {
-    // Get the current time.
-    let now = Utc::now();
-
-    // Get the specified date.
-    let date = get_date_time(now, &kind);
-
-    // Get the date format, defaulting if not specified.
-    let format = get_date_format(&kind, format);
-
-    // Format the current time based on the specified format.
-    let formatted = format_date_time(&date, &format);
-
-    // Create output with the formatted date.
-    let output = DateOutput { date: formatted };
-
-    // Output the formatted date.
-    ctx.output().output(&output);
-
-    // Success.
-    Ok(())
 }
 
 // Tests.

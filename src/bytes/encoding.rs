@@ -1,9 +1,11 @@
 use clap::ValueEnum;
+#[cfg(feature = "json")]
 use serde::Serialize;
 
 /// The encoding format for bytes output.
-#[derive(Debug, Clone, Copy, ValueEnum, Serialize)]
-#[serde(rename_all = "lowercase")]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[cfg_attr(feature = "json", serde(rename_all = "lowercase"))]
+#[derive(Debug, Clone, Copy, ValueEnum)]
 pub enum BytesEncoding {
     /// Hexadecimal encoding (lowercase).
     Hex,

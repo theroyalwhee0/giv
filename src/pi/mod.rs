@@ -1,22 +1,22 @@
 /// Module containing PI decimal constants.
 mod decimals;
 /// Output formatting for pi command.
-mod output;
+pub mod output;
 
 use crate::{
-    app::AppContext,
-    c_pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
+    pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
     error::GivError,
 };
-use output::PiOutput;
+pub use output::PiOutput;
 use std::borrow::Cow;
+
 
 /// The default rounding behavior.
 pub const DEFAULT_ROUND: bool = true;
 
 /// The default number of places to use, if not specified.
 /// This matches the f64 PI and JS Math.PI precision.
-const PI_DEFAULT_PLACES: usize = 15;
+pub const PI_DEFAULT_PLACES: usize = 15;
 
 /// The PI prefix.
 /// This is separated from the decimals to make the indexes 0-based.
@@ -38,11 +38,21 @@ pub type RoundingFlags = (Option<bool>, Option<bool>);
 /// # Arguments
 ///
 /// - `places` The number of decimal places to display.
+/// - `round` Whether to round the last digit based on the next digit.
 ///
 /// # Returns
 ///
 /// A string representation of PI with the specified number of decimal places.
-fn get_pi(places: usize, round: bool) -> Result<String, GivError> {
+///
+/// # Errors
+///
+/// Returns [`GivError::DecimalPlacesOutOfRange`] if `places` is 0 or exceeds the maximum supported precision.
+///
+/// # Panics
+///
+/// May panic if a digit cannot be converted to a character, which should never happen
+/// since all digits are guaranteed to be 0-9.
+pub fn get_pi(places: usize, round: bool) -> Result<String, GivError> {
     // Ensure the number of places is within the valid range...
     if places == 0 || places > PI_MAX_DECIMALS {
         Err(GivError::DecimalPlacesOutOfRange(places, PI_MAX_DECIMALS))
@@ -97,7 +107,7 @@ fn get_pi(places: usize, round: bool) -> Result<String, GivError> {
 /// # Errors
 ///
 /// Returns `GivError::ConflictingFlags` if both --round and --no-round are specified.
-fn get_rounding(rounding_flags: RoundingFlags) -> Result<bool, GivError> {
+pub fn get_rounding(rounding_flags: RoundingFlags) -> Result<bool, GivError> {
     match rounding_flags {
         // User specified both flags - conflict.
         (Some(true), Some(true)) => Err(GivError::ConflictingFlags(
@@ -112,47 +122,50 @@ fn get_rounding(rounding_flags: RoundingFlags) -> Result<bool, GivError> {
     }
 }
 
-/// The 'pi' command handler.
+/// Get PI digits with specified precision and rounding.
 ///
 /// # Arguments
 ///
-/// - `places` The number of decimal places to display.
-/// - `rounding` A tuple indicating with the CLI rounding flags.
-/// - `ctx` The command context.
+/// - `places` Optional number of decimal places. If `None`, uses [`PI_DEFAULT_PLACES`] (15).
+/// - `round` Whether to round the last digit based on the next digit. Defaults to [`DEFAULT_ROUND`] (true).
 ///
 /// # Returns
 ///
-/// A result indicating success or failure.
+/// Returns a [`PiOutput`] containing the PI value and rounding information.
 ///
 /// # Errors
 ///
-/// Returns an error if the number of decimal places is out of range or if conflicting flags are provided.
-pub fn pi_command(
-    places: Option<usize>,
-    rounding_flags: RoundingFlags,
-    ctx: &mut AppContext,
-) -> Result<(), GivError> {
-    // Default the number of places if not specified.
+/// Returns [`GivError::DecimalPlacesOutOfRange`] if `places` is 0 or exceeds the maximum supported precision.
+///
+/// # Examples
+///
+/// ```
+/// use giv::pi::{get_pi_digits, PI_DEFAULT_PLACES};
+/// use giv::GivError;
+///
+/// # fn main() -> Result<(), GivError> {
+/// // Get PI with default precision
+/// let pi = get_pi_digits(None, None)?;
+/// assert!(pi.pi.starts_with("3.14"));
+/// assert_eq!(pi.rounded, true);
+///
+/// // Get PI with custom precision
+/// let pi = get_pi_digits(Some(5), Some(false))?;
+/// assert_eq!(pi.pi, "3.14159");
+/// assert_eq!(pi.rounded, false);
+/// # Ok(())
+/// # }
+/// ```
+pub fn get_pi_digits(places: Option<usize>, round: Option<bool>) -> Result<PiOutput, GivError> {
     let places = places.unwrap_or(PI_DEFAULT_PLACES);
-
-    // Determine if rounding is enabled from CLI flags.
-    let round = get_rounding(rounding_flags)?;
-
-    // Get the PI value with the specified number of decimal places.
+    let round = round.unwrap_or(DEFAULT_ROUND);
     let pi_value = get_pi(places, round)?;
-
-    // Create output with the pi value.
-    let output = PiOutput {
+    Ok(PiOutput {
         pi: pi_value,
         rounded: round,
-    };
-
-    // Output the PI value.
-    ctx.output().output(&output);
-
-    // Success.
-    Ok(())
+    })
 }
+
 
 // Tests
 #[cfg(test)]
@@ -278,9 +291,7 @@ mod tests {
     /// Test the error behavior when both --round and --no-round flags are specified.
     #[test]
     fn test_conflicting_rounding_flags() {
-        use crate::app::cli::CommandOptions;
-        let mut ctx = AppContext::new(CommandOptions::default());
-        let result = pi_command(Some(15), (Some(true), Some(true)), &mut ctx);
+        let result = get_rounding((Some(true), Some(true)));
         assert!(result.is_err());
         let err = result.unwrap_err();
         match err {

@@ -12,6 +12,11 @@ categories = ["command-line-utilities"]
 rust-version = "1.85.0"
 exclude = ["scripts/"]
 
+[[bin]]
+name = "giv"
+path = "src/main.rs"
+required-features = ["bin"]
+
 [lints.rust]
 unsafe_code = "forbid"
 missing_docs = "deny"
@@ -82,13 +87,15 @@ full = [
     # Options.
     "json",
 ]
+# Binary-specific features.
+bin = []
 # Command features.
-bytes = ["dep:rand", "dep:base64", "dep:hex", "dep:serde"]
-chars = ["dep:emojis", "dep:serde"]
+bytes = ["dep:rand", "dep:base64", "dep:hex"]
+chars = ["dep:emojis"]
 date = ["dep:chrono"]
 key = ["dep:rand"]
 pi = []
-rng = ["dep:rand", "dep:serde"]
+rng = ["dep:rand"]
 uuid = ["dep:uuid"]
 # Option features.
 json = ["dep:serde_json", "dep:serde"]

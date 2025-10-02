@@ -1,10 +1,12 @@
-use crate::app::output::Output;
+use crate::output::Output;
+#[cfg(feature = "json")]
 use serde::Serialize;
 
 use super::result::RngResult;
 
 /// The output from the RNG command.
-#[derive(Debug, Serialize)]
+#[cfg_attr(feature = "json", derive(Serialize))]
+#[derive(Debug)]
 pub struct RngOutput {
     /// List of results from each specification
     pub rng: Vec<RngResult>,

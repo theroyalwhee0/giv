@@ -13,27 +13,29 @@
 mod app;
 /// Bytes generation module.
 #[cfg(feature = "bytes")]
-mod c_bytes;
+mod bytes;
 /// Character and emoji conversion module.
 #[cfg(feature = "chars")]
-mod c_chars;
+mod chars;
 /// Date command module.
 #[cfg(feature = "date")]
-mod c_date;
+mod date;
 /// Key generation module.
 #[cfg(feature = "key")]
-mod c_key;
+mod key;
 /// Pi calculation module.
 #[cfg(feature = "pi")]
-mod c_pi;
+mod pi;
 /// Random number generation module.
 #[cfg(feature = "rng")]
-mod c_rng;
+mod rng;
 /// UUID generation module.
 #[cfg(feature = "uuid")]
-mod c_uuid;
+mod uuid;
 /// Error handling module.
 mod error;
+/// Output formatting module.
+mod output;
 
 use std::process::ExitCode;
 
