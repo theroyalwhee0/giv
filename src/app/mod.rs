@@ -11,7 +11,7 @@ pub use context::AppContext;
 use commands::*;
 
 #[cfg(feature = "date")]
-use crate::c_date::DateKind;
+use crate::date::DateKind;
 use clap::Parser as _;
 use cli::{Cli, Commands};
 use std::process::ExitCode;

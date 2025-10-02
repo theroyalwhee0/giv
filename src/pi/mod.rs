@@ -4,7 +4,7 @@ mod decimals;
 pub mod output;
 
 use crate::{
-    c_pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
+    pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
     error::GivError,
 };
 pub use output::PiOutput;
@@ -140,7 +140,7 @@ pub fn get_rounding(rounding_flags: RoundingFlags) -> Result<bool, GivError> {
 /// # Examples
 ///
 /// ```
-/// use giv::c_pi::{get_pi_digits, PI_DEFAULT_PLACES};
+/// use giv::pi::{get_pi_digits, PI_DEFAULT_PLACES};
 /// use giv::GivError;
 ///
 /// # fn main() -> Result<(), GivError> {

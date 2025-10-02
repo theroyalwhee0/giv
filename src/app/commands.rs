@@ -7,19 +7,19 @@ use super::AppContext;
 use crate::error::GivError;
 
 #[cfg(feature = "bytes")]
-use crate::c_bytes::{BytesEncoding, BytesOutput};
+use crate::bytes::{BytesEncoding, BytesOutput};
 #[cfg(feature = "chars")]
-use crate::c_chars::{convert_input, CharResult, CharsOutput};
+use crate::chars::{convert_input, CharResult, CharsOutput};
 #[cfg(feature = "date")]
-use crate::c_date::{DateFormat, DateKind};
+use crate::date::{DateFormat, DateKind};
 #[cfg(feature = "key")]
-use crate::c_key;
+use crate::key;
 #[cfg(feature = "pi")]
-use crate::c_pi::{self, RoundingFlags, PI_DEFAULT_PLACES};
+use crate::pi::{self, RoundingFlags, PI_DEFAULT_PLACES};
 #[cfg(feature = "rng")]
-use crate::c_rng::{execute::execute_spec, output::RngOutput, spec::parse_spec};
+use crate::rng::{execute::execute_spec, output::RngOutput, spec::parse_spec};
 #[cfg(feature = "uuid")]
-use crate::c_uuid;
+use crate::uuid;
 
 #[cfg(feature = "bytes")]
 use rand::RngCore;
@@ -50,7 +50,7 @@ pub fn bytes_command(
     padding: bool,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
-    use crate::c_bytes::DEFAULT_BYTE_LENGTH;
+    use crate::bytes::DEFAULT_BYTE_LENGTH;
 
     let length = length.unwrap_or(DEFAULT_BYTE_LENGTH);
     let encoding = encoding.unwrap_or_else(BytesEncoding::default);
@@ -126,7 +126,7 @@ pub fn date_command(
     format: Option<DateFormat>,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
-    use crate::c_date::{format_date_time, get_date_format, get_date_time, output::DateOutput};
+    use crate::date::{format_date_time, get_date_format, get_date_time, output::DateOutput};
 
     // Get the current time.
     let now = Utc::now();
@@ -162,10 +162,10 @@ pub fn date_command(
 ///
 /// # Errors
 ///
-/// Propagates errors from [`c_key::generate_key`].
+/// Propagates errors from [`key::generate_key`].
 #[cfg(feature = "key")]
 pub fn key_command(size: Option<usize>, ctx: &mut AppContext) -> Result<(), GivError> {
-    let output = c_key::generate_key(size)?;
+    let output = key::generate_key(size)?;
     ctx.output().output(&output);
     Ok(())
 }
@@ -191,7 +191,7 @@ pub fn pi_command(
     rounding_flags: RoundingFlags,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
-    use crate::c_pi::{get_rounding, output::PiOutput};
+    use crate::pi::{get_rounding, output::PiOutput};
 
     // Default the number of places if not specified.
     let places = places.unwrap_or(PI_DEFAULT_PLACES);
@@ -200,7 +200,7 @@ pub fn pi_command(
     let round = get_rounding(rounding_flags)?;
 
     // Get the PI value with the specified number of decimal places.
-    let pi_value = c_pi::get_pi(places, round)?;
+    let pi_value = pi::get_pi(places, round)?;
 
     // Create output with the pi value.
     let output = PiOutput {
@@ -269,10 +269,10 @@ pub fn rng_command(specs: Vec<String>, ctx: &mut AppContext) -> Result<(), GivEr
 ///
 /// # Errors
 ///
-/// Propagates errors from [`c_uuid::generate_uuid`].
+/// Propagates errors from [`uuid::generate_uuid`].
 #[cfg(feature = "uuid")]
 pub fn uuid_command(ctx: &mut AppContext) -> Result<(), GivError> {
-    let output = c_uuid::generate_uuid()?;
+    let output = uuid::generate_uuid()?;
     ctx.output().output(&output);
     Ok(())
 }

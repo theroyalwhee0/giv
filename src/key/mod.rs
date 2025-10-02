@@ -89,7 +89,7 @@ fn get_key(size: usize) -> Result<String, GivError> {
 /// # Examples
 ///
 /// ```
-/// use giv::c_key::{generate_key, DEFAULT_KEY_SIZE};
+/// use giv::key::{generate_key, DEFAULT_KEY_SIZE};
 /// use giv::GivError;
 ///
 /// # fn main() -> Result<(), GivError> {

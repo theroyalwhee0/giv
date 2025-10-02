@@ -15,7 +15,7 @@
 //! # Examples
 //!
 //! ```
-//! use giv::c_uuid::generate_uuid;
+//! use giv::uuid::generate_uuid;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
 //! let uuid = generate_uuid()?;
@@ -43,31 +43,31 @@ pub(crate) mod app;
 
 /// Random byte generation module.
 #[cfg(feature = "bytes")]
-pub mod c_bytes;
+pub mod bytes;
 
 /// Character and emoji conversion module.
 #[cfg(feature = "chars")]
-pub mod c_chars;
+pub mod chars;
 
 /// Date and time formatting module.
 #[cfg(feature = "date")]
-pub mod c_date;
+pub mod date;
 
 /// Random key generation module.
 #[cfg(feature = "key")]
-pub mod c_key;
+pub mod key;
 
 /// PI digit calculation module.
 #[cfg(feature = "pi")]
-pub mod c_pi;
+pub mod pi;
 
 /// Random number generation module.
 #[cfg(feature = "rng")]
-pub mod c_rng;
+pub mod rng;
 
 /// UUID v7 generation module.
 #[cfg(feature = "uuid")]
-pub mod c_uuid;
+pub mod uuid;
 
 /// Error types for the library.
 pub mod error;

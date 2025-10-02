@@ -18,7 +18,7 @@ use uuid::Uuid;
 /// # Examples
 ///
 /// ```
-/// use giv::c_uuid::generate_uuid;
+/// use giv::uuid::generate_uuid;
 /// use giv::GivError;
 ///
 /// # fn main() -> Result<(), GivError> {
