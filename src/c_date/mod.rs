@@ -1,16 +1,16 @@
 /// Date format enumeration.
-mod date_format;
+pub mod date_format;
 /// Date kind enumeration.
-mod date_kind;
+pub mod date_kind;
 /// Output formatting for date command.
-mod output;
+pub mod output;
 
 pub use date_format::DateFormat;
 pub use date_kind::DateKind;
+pub use output::DateOutput;
 
 use crate::{app::AppContext, error::GivError};
 use chrono::{DateTime, SecondsFormat, Utc};
-use output::DateOutput;
 
 /// Get the date format based on the kind and format options.
 ///
@@ -103,6 +103,10 @@ fn format_date_time(date: &DateTime<Utc>, format: &DateFormat) -> String {
 /// # Returns
 ///
 /// Returns a Result indicating success or failure.
+///
+/// # Errors
+///
+/// This function does not currently return errors, but returns a Result for consistency.
 pub fn date_command(
     kind: DateKind,
     format: Option<DateFormat>,

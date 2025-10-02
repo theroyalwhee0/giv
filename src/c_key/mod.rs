@@ -1,12 +1,12 @@
 /// Output formatting for key generation.
-mod output;
+pub mod output;
 
 use crate::{app::AppContext, error::GivError};
-use output::KeyOutput;
+pub use output::KeyOutput;
 use rand::RngCore;
 
 /// The default size of the key.
-const DEFAULT_KEY_SIZE: usize = 36;
+pub const DEFAULT_KEY_SIZE: usize = 36;
 
 /// The alphabet used for generating the key.
 const KEY_ALPHABET: &str = concat!(
@@ -71,6 +71,46 @@ fn get_key(size: usize) -> Result<String, GivError> {
     Ok(result)
 }
 
+/// Generate a cryptographically secure random key.
+///
+/// # Arguments
+///
+/// - `size` Optional size for the key. If `None`, uses [`DEFAULT_KEY_SIZE`] (36 characters).
+///
+/// # Returns
+///
+/// Returns a [`KeyOutput`] containing the generated key with 'key_' prefix.
+///
+/// # Errors
+///
+/// This function does not currently return errors, but returns a Result for consistency.
+///
+/// # Examples
+///
+/// ```
+/// use giv::c_key::{generate_key, DEFAULT_KEY_SIZE};
+/// use giv::GivError;
+///
+/// # fn main() -> Result<(), GivError> {
+/// // Generate key with default size
+/// let key = generate_key(None)?;
+/// assert!(key.key.starts_with("key_"));
+/// assert_eq!(key.key.len(), 4 + DEFAULT_KEY_SIZE);
+///
+/// // Generate key with custom size
+/// let key = generate_key(Some(16))?;
+/// assert_eq!(key.key.len(), 4 + 16);
+/// # Ok(())
+/// # }
+/// ```
+pub fn generate_key(size: Option<usize>) -> Result<KeyOutput, GivError> {
+    let size = size.unwrap_or(DEFAULT_KEY_SIZE);
+    let key = get_key(size)?;
+    Ok(KeyOutput {
+        key: format!("{KEY_PREFIX}{key}"),
+    })
+}
+
 /// The 'key' command handler.
 ///
 /// # Arguments
@@ -81,17 +121,13 @@ fn get_key(size: usize) -> Result<String, GivError> {
 /// # Returns
 ///
 /// A result indicating success or failure.
+///
+/// # Errors
+///
+/// Propagates errors from [`generate_key`].
 pub fn key_command(size: Option<usize>, ctx: &mut AppContext) -> Result<(), GivError> {
-    let size = size.unwrap_or(DEFAULT_KEY_SIZE);
-    // Generate the key with the specified size.
-    let key = get_key(size)?;
-    // Create output with the key.
-    let output = KeyOutput {
-        key: format!("{KEY_PREFIX}{key}"),
-    };
-    // Output the key.
+    let output = generate_key(size)?;
     ctx.output().output(&output);
-    // Success.
     Ok(())
 }
 

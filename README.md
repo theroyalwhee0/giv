@@ -38,6 +38,10 @@ A CLI for generating useful values.
 
 `giv --help` for basic help. `giv <COMMAND> --help` for help on a specific command.
 
+## Development Notes
+
+- This project uses a whitelist approach to the `.gitignore`.
+
 ## Security
 
 For security vulnerabilities and reporting guidelines, see [SECURITY.md](SECURITY.md).

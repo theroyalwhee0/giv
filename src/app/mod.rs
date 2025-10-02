@@ -34,6 +34,7 @@ use std::process::ExitCode;
 ///
 /// Returns an `ExitCode` indicating success or failure.
 #[allow(clippy::print_stderr)]
+#[allow(dead_code)] // Used by binary, not library
 pub fn run() -> ExitCode {
     // Parse command line arguments.
     let cli = Cli::parse();

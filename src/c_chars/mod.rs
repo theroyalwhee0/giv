@@ -1,10 +1,10 @@
 /// Character pattern mappings.
-mod patterns;
+pub mod patterns;
 /// Output formatting for character/emoji conversion.
-mod output;
+pub mod output;
 
 use crate::{app::AppContext, error::GivError};
-use output::{CharResult, CharsOutput};
+pub use output::{CharResult, CharsOutput};
 
 /// Convert a single input to a character or emoji.
 ///

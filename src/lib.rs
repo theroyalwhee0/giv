@@ -1,0 +1,80 @@
+//! Giv - A library for generating useful values.
+//!
+//! This library provides functionality for generating:
+//! - Random bytes with various encodings
+//! - Character and emoji conversion
+//! - Formatted dates and timestamps
+//! - Cryptographically secure random keys
+//! - UUID v7 identifiers
+//! - PI digits with configurable precision
+//! - Random numbers using dice notation or ranges
+//!
+//! Each module corresponds to a feature flag, allowing you to include only
+//! the functionality you need. All features are enabled by default.
+//!
+//! # Examples
+//!
+//! ```
+//! use giv::c_uuid::generate_uuid;
+//!
+//! # fn main() -> Result<(), Box<dyn std::error::Error>> {
+//! let uuid = generate_uuid()?;
+//! println!("Generated UUID: {}", uuid.uuid);
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! # Features
+//!
+//! - `bytes` - Random byte generation
+//! - `chars` - Character and emoji conversion
+//! - `date` - Date and time formatting
+//! - `key` - Random key generation
+//! - `pi` - PI digit calculation
+//! - `rng` - Random number generation
+//! - `uuid` - UUID v7 generation
+//! - `json` - JSON output support
+//! - `full` (default) - All features enabled
+
+/// Application module containing CLI-specific code.
+/// This module is private and not part of the library API.
+mod app;
+
+/// Random byte generation module.
+#[cfg(feature = "bytes")]
+pub mod c_bytes;
+
+/// Character and emoji conversion module.
+#[cfg(feature = "chars")]
+pub mod c_chars;
+
+/// Date and time formatting module.
+#[cfg(feature = "date")]
+pub mod c_date;
+
+/// Random key generation module.
+#[cfg(feature = "key")]
+pub mod c_key;
+
+/// PI digit calculation module.
+#[cfg(feature = "pi")]
+pub mod c_pi;
+
+/// Random number generation module.
+#[cfg(feature = "rng")]
+pub mod c_rng;
+
+/// UUID v7 generation module.
+#[cfg(feature = "uuid")]
+pub mod c_uuid;
+
+/// Error types for the library.
+pub mod error;
+
+/// Output formatting types and traits.
+pub mod output {
+    pub use crate::app::output::Output;
+}
+
+// Re-export commonly used types at crate root
+pub use error::GivError;

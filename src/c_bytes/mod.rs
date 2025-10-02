@@ -1,16 +1,16 @@
 /// Encoding formats for bytes output.
-mod encoding;
+pub mod encoding;
 /// Output formatting for bytes generation.
-mod output;
+pub mod output;
 
 pub use encoding::BytesEncoding;
+pub use output::BytesOutput;
 
 use crate::{app::AppContext, error::GivError};
-use output::BytesOutput;
 use rand::RngCore;
 
 /// The default number of bytes to generate.
-const DEFAULT_BYTE_LENGTH: usize = 32;
+pub const DEFAULT_BYTE_LENGTH: usize = 32;
 
 /// Generate random bytes.
 ///

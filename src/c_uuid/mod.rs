@@ -1,9 +1,42 @@
 /// Output formatting for uuid generation.
-mod output;
+pub mod output;
 
 use crate::{app::AppContext, error::GivError};
-use output::UuidOutput;
+pub use output::UuidOutput;
 use uuid::Uuid;
+
+/// Generate a UUID v7.
+///
+/// # Returns
+///
+/// Returns a [`UuidOutput`] containing the generated UUID and version information.
+///
+/// # Errors
+///
+/// This function does not currently return errors, but returns a Result for consistency.
+///
+/// # Examples
+///
+/// ```
+/// use giv::c_uuid::generate_uuid;
+/// use giv::GivError;
+///
+/// # fn main() -> Result<(), GivError> {
+/// let uuid = generate_uuid()?;
+/// println!("Generated UUID: {}", uuid.uuid);
+/// assert_eq!(uuid.version, "v7");
+/// # Ok(())
+/// # }
+/// ```
+pub fn generate_uuid() -> Result<UuidOutput, GivError> {
+    // Generate a UUID version 7.
+    let uuid = Uuid::now_v7();
+    // Create output with the UUID.
+    Ok(UuidOutput {
+        uuid: uuid.to_string(),
+        version: "v7".to_string(),
+    })
+}
 
 /// The 'uuid' command handler.
 ///
@@ -14,16 +47,12 @@ use uuid::Uuid;
 /// # Returns
 ///
 /// A result indicating success or failure.
+///
+/// # Errors
+///
+/// Propagates errors from [`generate_uuid`].
 pub fn uuid_command(ctx: &mut AppContext) -> Result<(), GivError> {
-    // Generate a UUID version 7.
-    let uuid = Uuid::now_v7();
-    // Create output with the UUID.
-    let output = UuidOutput {
-        uuid: uuid.to_string(),
-        version: "v7".to_string(),
-    };
-    // Output the UUID.
+    let output = generate_uuid()?;
     ctx.output().output(&output);
-    // Success.
     Ok(())
 }

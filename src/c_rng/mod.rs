@@ -1,18 +1,18 @@
 /// Execution logic for RNG specifications.
-mod execute;
+pub mod execute;
 /// Random number generation functions.
-mod generator;
+pub mod generator;
 /// Output formatting for RNG results.
-mod output;
+pub mod output;
 /// Result types for RNG operations.
-mod result;
+pub mod result;
 /// Specification parsing for RNG commands.
-mod spec;
+pub mod spec;
 
 use crate::{app::AppContext, error::GivError};
 
 use execute::execute_spec;
-use output::RngOutput;
+pub use output::RngOutput;
 use spec::parse_spec;
 
 /// The 'rng' command handler.
@@ -25,6 +25,11 @@ use spec::parse_spec;
 /// # Returns
 ///
 /// A result indicating success or failure.
+///
+/// # Errors
+///
+/// Returns [`GivError::RequiredArgumentsNotProvided`] if specs is empty.
+/// Propagates parsing errors from spec parsing and execution.
 pub fn rng_command(specs: Vec<String>, ctx: &mut AppContext) -> Result<(), GivError> {
     if specs.is_empty() {
         return Err(GivError::RequiredArgumentsNotProvided(

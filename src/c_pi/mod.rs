@@ -1,14 +1,14 @@
 /// Module containing PI decimal constants.
 mod decimals;
 /// Output formatting for pi command.
-mod output;
+pub mod output;
 
 use crate::{
     app::AppContext,
     c_pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
     error::GivError,
 };
-use output::PiOutput;
+pub use output::PiOutput;
 use std::borrow::Cow;
 
 /// The default rounding behavior.
@@ -16,7 +16,7 @@ pub const DEFAULT_ROUND: bool = true;
 
 /// The default number of places to use, if not specified.
 /// This matches the f64 PI and JS Math.PI precision.
-const PI_DEFAULT_PLACES: usize = 15;
+pub const PI_DEFAULT_PLACES: usize = 15;
 
 /// The PI prefix.
 /// This is separated from the decimals to make the indexes 0-based.
@@ -110,6 +110,51 @@ fn get_rounding(rounding_flags: RoundingFlags) -> Result<bool, GivError> {
         // Remaining combinations use the default.
         (_, _) => Ok(DEFAULT_ROUND),
     }
+}
+
+/// Get PI digits with specified precision and rounding.
+///
+/// # Arguments
+///
+/// - `places` Optional number of decimal places. If `None`, uses [`PI_DEFAULT_PLACES`] (15).
+/// - `round` Whether to round the last digit based on the next digit. Defaults to [`DEFAULT_ROUND`] (true).
+///
+/// # Returns
+///
+/// Returns a [`PiOutput`] containing the PI value and rounding information.
+///
+/// # Errors
+///
+/// Returns [`GivError::DecimalPlacesOutOfRange`] if `places` is 0 or exceeds the maximum supported precision.
+///
+/// # Examples
+///
+/// ```
+/// use giv::c_pi::{get_pi_digits, PI_DEFAULT_PLACES};
+/// use giv::GivError;
+///
+/// # fn main() -> Result<(), GivError> {
+/// // Get PI with default precision
+/// let pi = get_pi_digits(None, None)?;
+/// assert!(pi.pi.starts_with("3.14"));
+/// assert_eq!(pi.rounded, true);
+///
+/// // Get PI with custom precision
+/// let pi = get_pi_digits(Some(5), Some(false))?;
+/// assert_eq!(pi.pi, "3.14159");
+/// assert_eq!(pi.rounded, false);
+/// # Ok(())
+/// # }
+/// ```
+#[allow(dead_code)] // Used by library, not CLI binary
+pub fn get_pi_digits(places: Option<usize>, round: Option<bool>) -> Result<PiOutput, GivError> {
+    let places = places.unwrap_or(PI_DEFAULT_PLACES);
+    let round = round.unwrap_or(DEFAULT_ROUND);
+    let pi_value = get_pi(places, round)?;
+    Ok(PiOutput {
+        pi: pi_value,
+        rounded: round,
+    })
 }
 
 /// The 'pi' command handler.

@@ -15,6 +15,10 @@ use super::spec::RngSpec;
 /// # Returns
 ///
 /// A result containing the `RngResult` or an error.
+///
+/// # Errors
+///
+/// Returns [`GivError::NumericOverflow`] if dice sums or range values overflow their types.
 pub fn execute_spec<R: RngCore>(rng: &mut R, spec: &RngSpec) -> Result<RngResult, GivError> {
     match spec {
         RngSpec::Dice {
