@@ -7,8 +7,8 @@ mod context;
 /// Output formatting and display.
 pub mod output;
 
-pub use context::AppContext;
 use commands::*;
+pub use context::AppContext;
 
 #[cfg(feature = "date")]
 use crate::date::DateKind;
@@ -57,7 +57,6 @@ pub fn run() -> ExitCode {
         Commands::Date { kind, format } => date_command(kind, format, &mut ctx),
         // The 'pi' command.
         #[cfg(feature = "pi")]
-        #[allow(unused_variables)]
         Commands::Pi {
             places,
             round,
