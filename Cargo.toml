@@ -1,6 +1,6 @@
 [package]
 name = "giv"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
 description = "A CLI for generating useful values."
 authors = ["Adam Mill <hismajesty@theroyalwhee.com>"]
