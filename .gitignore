@@ -10,6 +10,8 @@
 !/SECURITY.md
 !/CHANGELOG.md
 !/LICENSE.txt
+!/CODE_OF_CONDUCT.md
+!/CONTRIBUTING.md
 !docs/**/*.md
 
 # Rust ecosystem.
