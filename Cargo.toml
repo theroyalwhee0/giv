@@ -15,7 +15,7 @@ build = "build.rs"
 
 [[bin]]
 name = "giv"
-path = "src/main.rs"
+path = "src/bin/giv/main.rs"
 required-features = ["bin"]
 
 [lints.rust]

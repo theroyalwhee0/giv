@@ -4,22 +4,22 @@
 //! the CLI argument parsing and the library API functions.
 
 use super::AppContext;
-use crate::error::GivError;
+use giv::error::GivError;
 
 #[cfg(feature = "bytes")]
-use crate::bytes::BytesEncoding;
+use giv::bytes::BytesEncoding;
 #[cfg(feature = "chars")]
-use crate::chars::{convert_input, CharResult, CharsOutput};
+use giv::chars::{convert_input, CharResult, CharsOutput};
 #[cfg(feature = "date")]
-use crate::date::{DateFormat, DateKind};
+use giv::date::{DateFormat, DateKind};
 #[cfg(feature = "key")]
-use crate::key;
+use giv::key;
 #[cfg(feature = "pi")]
-use crate::pi::{self, RoundingFlags};
+use giv::pi::{self, RoundingFlags};
 #[cfg(feature = "rng")]
-use crate::rng::{execute::execute_spec, output::RngOutput, spec::parse_spec};
+use giv::rng::{execute::execute_spec, output::RngOutput, spec::parse_spec};
 #[cfg(feature = "uuid")]
-use crate::uuid;
+use giv::uuid;
 #[cfg(feature = "date")]
 use chrono::Utc;
 
@@ -47,7 +47,7 @@ pub fn bytes_command(
     padding: bool,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
-    use crate::bytes;
+    use giv::bytes;
 
     // Check if raw encoding is requested with JSON output mode.
     if matches!(encoding, Some(BytesEncoding::Raw)) && ctx.output().is_json() {
@@ -115,7 +115,7 @@ pub fn date_command(
     format: Option<DateFormat>,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
-    use crate::date::{format_date_time, get_date_format, get_date_time, output::DateOutput};
+    use giv::date::{format_date_time, get_date_format, get_date_time, output::DateOutput};
 
     // Get the current time.
     let now = Utc::now();
@@ -180,7 +180,7 @@ pub fn pi_command(
     rounding_flags: RoundingFlags,
     ctx: &mut AppContext,
 ) -> Result<(), GivError> {
-    use crate::pi::get_rounding;
+    use giv::pi::get_rounding;
 
     // Determine if rounding is enabled from CLI flags.
     let round = get_rounding(rounding_flags)?;
