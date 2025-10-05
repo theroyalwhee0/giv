@@ -9,6 +9,7 @@
 !/REPRODUCIBLE.md
 !/SECURITY.md
 !/CHANGELOG.md
+!/LICENSE.txt
 !docs/**/*.md
 
 # Rust ecosystem.
