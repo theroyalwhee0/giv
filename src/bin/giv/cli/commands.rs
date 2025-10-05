@@ -1,6 +1,6 @@
-use crate::date::{DateFormat, DateKind};
+use giv::date::{DateFormat, DateKind};
 #[cfg(feature = "bytes")]
-use crate::bytes::BytesEncoding;
+use giv::bytes::BytesEncoding;
 use clap::Subcommand;
 
 /// The available commands for the CLI.

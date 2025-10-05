@@ -1,22 +1,33 @@
+//! Giv - A command-line utility providing various useful tools.
+//!
+//! This crate provides output for the following:
+//! - Random byte generation.
+//! - Character and emoji conversion.
+//! - Formatted dates.
+//! - Key generation.
+//! - UUID v7 generation.
+//! - PI.
+//! - Random number generation.
+
 /// CLI parsing and argument handling.
-pub mod cli;
+mod cli;
 /// Command handlers bridging CLI to library functions.
 mod commands;
 /// Command execution context.
 mod context;
 /// Output formatting and display.
-pub mod output;
+mod output;
 
 use commands::*;
-pub use context::AppContext;
+use context::AppContext;
 
 #[cfg(feature = "date")]
-use crate::date::DateKind;
+use giv::date::DateKind;
 use clap::Parser as _;
 use cli::{Cli, Commands};
 use std::process::ExitCode;
 
-/// Run the application.
+/// The application entry point.
 ///
 /// Parses command-line arguments, creates a command context, and executes
 /// the requested command.
@@ -25,7 +36,7 @@ use std::process::ExitCode;
 ///
 /// Returns an `ExitCode` indicating success or failure.
 #[allow(clippy::print_stderr)]
-pub fn run() -> ExitCode {
+fn main() -> ExitCode {
     // Parse command line arguments.
     let cli = Cli::parse();
     let cmd_options = (&cli).into();
