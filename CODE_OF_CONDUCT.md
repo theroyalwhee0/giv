@@ -21,7 +21,6 @@ With these considerations in mind, we agree to behave mindfully toward each othe
 6. Committing to **repairing harm** when it occurs.
 7. Behaving in other ways that promote and sustain the **well-being of our community**.
 
-
 ## Restricted Behaviors
 
 We agree to restrict the following behaviors in our community. Instances, threats, and promotion of these behaviors are violations of this Code of Conduct.
@@ -41,15 +40,13 @@ We agree to restrict the following behaviors in our community. Instances, threat
 3. **Promotional materials**. Sharing marketing or other commercial content in a way that is outside the norms of the community.
 4. **Irresponsible communication.** Failing to responsibly present content which includes, links or describes any other restricted behaviors.
 
-
 ## Reporting an Issue
 
 Tensions can occur between community members even when they are trying their best to collaborate. Not every conflict represents a code of conduct violation, and this Code of Conduct reinforces encouraged behaviors and norms that can help avoid conflicts and minimize harm.
 
-When an incident does occur, it is important to report it promptly. To report a possible violation, **Please email hismajesty@theroyalwhee.com to report any issues. Please include 'COMMUNITY INCIDENT` in the subject to improve classification of the email.**
+When an incident does occur, it is important to report it promptly. To report a possible violation, **Please email <hismajesty@theroyalwhee.com> to report any issues. Please include 'COMMUNITY INCIDENT' in the subject to improve classification of the email.**
 
 Community Moderators take reports of violations seriously and will make every effort to respond in a timely manner. They will investigate all reports of code of conduct violations, reviewing messages, logs, and recordings, or interviewing witnesses and other participants. Community Moderators will keep investigation and enforcement actions as transparent as possible while prioritizing safety and confidentiality. In order to honor these values, enforcement actions are carried out in private with the involved parties, but communicating to the whole community may be part of a mutually agreed upon resolution.
-
 
 ## Addressing and Repairing Harm
 
@@ -74,11 +71,9 @@ If an investigation by the Community Moderators finds that this Code of Conduct 
 
 This enforcement ladder is intended as a guideline. It does not limit the ability of Community Managers to use their discretion and judgment, in keeping with the best interests of our community.
 
-
 ## Scope
 
 This Code of Conduct applies within all community spaces, and also applies when an individual is officially representing the community in public or other spaces. Examples of representing our community include using an official email address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
-
 
 ## Attribution
 
@@ -86,5 +81,4 @@ This Code of Conduct is adapted from the Contributor Covenant, version 3.0, perm
 
 Contributor Covenant is stewarded by the Organization for Ethical Source and licensed under CC BY-SA 4.0. To view a copy of this license, visit [https://creativecommons.org/licenses/by-sa/4.0/](https://creativecommons.org/licenses/by-sa/4.0/)
 
-For answers to common questions about Contributor Covenant, see the FAQ at [https://www.contributor-covenant.org/faq](https://www.contributor-covenant.org/faq). Translations are provided at [https://www.contributor-covenant.org/translations](https://www.contributor-covenant.org/translations). Additional enforcement and community guideline resources can be found at [https://www.contributor-covenant.org/resources](https://www.contributor-covenant.org/resources). The enforcement ladder was inspired by the work of [Mozilla’s code of conduct team](https://github.com/mozilla/inclusion).
-
+For answers to common questions about Contributor Covenant, see the FAQ at [https://www.contributor-covenant.org/faq](https://www.contributor-covenant.org/faq). Translations are provided at [https://www.contributor-covenant.org/translations](https://www.contributor-covenant.org/translations). Additional enforcement and community guideline resources can be found at [https://www.contributor-covenant.org/resources](https://www.contributor-covenant.org/resources). The enforcement ladder was inspired by the work of [Mozilla's code of conduct team](https://github.com/mozilla/inclusion).

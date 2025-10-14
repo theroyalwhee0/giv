@@ -4,6 +4,9 @@
 !*/
 !*/**/
 
+# Configuration.
+!.markdownlintrc
+
 # Documentation.
 !README.md
 !/REPRODUCIBLE.md
@@ -12,6 +15,7 @@
 !/LICENSE.txt
 !/CODE_OF_CONDUCT.md
 !/CONTRIBUTING.md
+!/CLAUDE.md
 !docs/**/*.md
 
 # Rust ecosystem.

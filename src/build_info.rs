@@ -88,8 +88,7 @@ mod tests {
         let profile = profile();
         assert!(
             profile == "debug" || profile == "release",
-            "Profile should be either 'debug' or 'release', got: {}",
-            profile
+            "Profile should be either 'debug' or 'release', got: {profile}"
         );
     }
 
@@ -105,8 +104,7 @@ mod tests {
         // Should follow semver pattern (basic check)
         assert!(
             ver.contains('.'),
-            "Version should contain at least one dot: {}",
-            ver
+            "Version should contain at least one dot: {ver}"
         );
     }
 
@@ -147,7 +145,7 @@ mod tests {
         assert!(date.contains('-'), "ISO date should contain dashes");
         // Verify it starts with a reasonable year
         let year: u32 = date[0..4].parse().expect("Year should be numeric");
-        assert!(year >= 2020 && year <= 2100, "Year should be reasonable");
+        assert!((2020..=2100).contains(&year), "Year should be reasonable");
     }
 
     /// Test that datetime_iso returns a valid ISO 8601 datetime.
