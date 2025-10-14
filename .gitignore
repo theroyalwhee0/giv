@@ -18,6 +18,10 @@
 !/CLAUDE.md
 !docs/**/*.md
 
+# GitHub.
+!.github/ISSUE_TEMPLATE/**/*.md
+!.github/workflows/**/*.yaml
+
 # Rust ecosystem.
 !Cargo.toml
 !Cargo.lock
