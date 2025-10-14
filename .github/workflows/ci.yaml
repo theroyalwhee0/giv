@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  # Cache version - update this date to invalidate all caches
+  # Can be overridden with repository variable CACHE_VERSION
+  CACHE_VERSION: ${{ vars.CACHE_VERSION || '2025-10-14' }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ env.CACHE_VERSION }}
+
+      - name: Cargo build
+        run: |
+          cargo build --locked --all-targets
+
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck jq
+
+      - name: Shellcheck
+        run: |
+          SCRIPTS=$(git ls-files '*.sh')
+          if [ -n "$SCRIPTS" ]; then
+            echo "Running shellcheck on shell scripts"
+            echo "$SCRIPTS" | xargs shellcheck --severity=warning
+          else
+            echo "No shell scripts found"
+          fi
+
+      - name: Markdown linting
+        run: |
+          MD_FILES=$(git ls-files '*.md')
+          if [ -n "$MD_FILES" ]; then
+            echo "Checking markdown files with markdownlint"
+            if [ -f .markdownlintrc ]; then
+              echo "$MD_FILES" | xargs npx markdownlint-cli@0.45.0 --config .markdownlintrc
+            else
+              echo "$MD_FILES" | xargs npx markdownlint-cli@0.45.0
+            fi
+          else
+            echo "No markdown files found"
+          fi
+
+      - name: Cargo clippy
+        run: |
+          cargo clippy --locked --all-targets -- -D warnings
+
+      - name: Cargo test
+        run: |
+          echo "Running tests"
+          cargo test --locked --all-features --all-targets
+
+          if cargo metadata --no-deps --format-version 1 | jq -e '.packages[].targets[] | select(.kind[] == "lib")' >/dev/null 2>&1; then
+            echo "Running doc tests"
+            cargo test --locked --all-features --doc
+          fi
+
+      - name: Clean cargo cache
+        run: |
+          cargo install cargo-cache --no-default-features --features ci-autoclean
+          cargo-cache
