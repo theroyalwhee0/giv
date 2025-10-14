@@ -27,12 +27,12 @@ fn main() -> io::Result<()> {
     // Get the output directory from Cargo.
     let out_dir = PathBuf::from(env::var("OUT_DIR").expect("Expected OUT_DIR to be set"));
 
-    // Find the build directory (two directories up from OUT_DIR).
-    // OUT_DIR is usually something like 'target/debug/build/package-hash/out'.
-    // We want to go up to 'target/debug/'.
+    // Find the build directory by locating the 'build' component.
+    // OUT_DIR is something like 'target/<profile>/build/<package-hash>/out'.
+    // We want 'target/<profile>/'.
     let build_dir = out_dir
-        .parent()
-        .and_then(|p| p.parent())
+        .ancestors()
+        .find(|p| p.file_name().and_then(|n| n.to_str()) == Some("build"))
         .and_then(|p| p.parent())
         .expect("Could not find build directory");
 
