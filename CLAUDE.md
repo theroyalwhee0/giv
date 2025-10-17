@@ -187,21 +187,6 @@ fn main() -> Result<(), giv::GivError> {
 
 This ensures only intentional source files are committed, preventing accidental inclusion of build artifacts, local config, or temporary files.
 
-### Task Focus Workflow
-
-The `.focus/` folder provides a temporary workspace for development tasks:
-
-- **Purpose**: Store task-specific notes, experiments, and temporary files
-- **Git Status**: Excluded from version control (in `.gitignore`)
-- **Lifecycle**: Contents cleared when switching to new major tasks
-- **Structure**: Typically includes `Task.md`, `Notes.md`, and temporary test files
-- **Focusing an issue**: Use `focus-issue {issue-number}` command to safely fetch and save an issue to `.focus/`
-  - This command handles the directory creation and file saving automatically
-  - NEVER manually create `.focus/` or write to it - always use `focus-issue` instead
-  - The command is safer and prevents potential errors
-
-This keeps experimental work organized without cluttering the main codebase.
-
 ### Important Conventions
 
 1. **Documentation First**: Write docs before implementation
