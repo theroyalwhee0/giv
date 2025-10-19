@@ -61,6 +61,7 @@ chrono = { version = "0.4.41", default-features = false, features = [
 uuid = { version = "1.17.0", features = ["v7", "serde"], optional = true }
 # Lookups.
 emojis = { version = "0.7.2", optional = true }
+lipsum = { version = "0.9.1", optional = true }
 # CLI and Terminal.
 clap = { version = "4.5.35", features = ["derive"] }
 # Encoding
@@ -82,6 +83,7 @@ full = [
     "chars",
     "date",
     "key",
+    "lorem",
     "pi",
     "rng",
     "uuid",
@@ -95,6 +97,7 @@ bytes = ["dep:rand", "dep:base64", "dep:hex"]
 chars = ["dep:emojis"]
 date = ["dep:chrono"]
 key = ["dep:rand"]
+lorem = ["dep:lipsum", "dep:rand", "dep:serde"]
 pi = []
 rng = ["dep:rand"]
 uuid = ["dep:uuid"]

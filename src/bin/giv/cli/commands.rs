@@ -73,4 +73,21 @@ pub enum Commands {
         #[arg(required = true)]
         specs: Vec<String>,
     },
+    /// Generate lorem ipsum placeholder text
+    #[cfg(feature = "lorem")]
+    #[command(alias = "ipsum")]
+    Lorem {
+        /// Number of units to generate (default: 50)
+        #[arg(default_value = None)]
+        count: Option<usize>,
+        /// Generate words (default if no unit flag is specified)
+        #[arg(long, group = "unit")]
+        words: bool,
+        /// Generate sentences
+        #[arg(short, long, group = "unit")]
+        sentences: bool,
+        /// Generate paragraphs
+        #[arg(short, long, group = "unit")]
+        paragraphs: bool,
+    },
 }

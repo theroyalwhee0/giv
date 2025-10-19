@@ -1,18 +1,18 @@
 use giv::output::Output;
 use crate::cli::CommandOptions;
 
-/// Handles outputting values in either plain text or JSON format.
+/// Handles formatting and outputting values in either plain text or JSON format.
 ///
 /// This struct carries the output configuration (whether to use JSON or plain text)
-/// and provides a unified interface for outputting values.
-pub struct Outputer {
+/// and provides a unified interface for formatting and outputting values.
+pub struct Formatter {
     /// Whether to output in JSON format.
     #[cfg(feature = "json")]
     json: bool,
 }
 
-impl Outputer {
-    /// Create a new `Outputer` from command options.
+impl Formatter {
+    /// Create a new `Formatter` from command options.
     ///
     /// # Arguments
     ///
@@ -20,7 +20,7 @@ impl Outputer {
     ///
     /// # Returns
     ///
-    /// An `Outputer` configured according to the command options.
+    /// A `Formatter` configured according to the command options.
     #[must_use]
     pub fn new(options: CommandOptions) -> Self {
         Self {
@@ -29,7 +29,7 @@ impl Outputer {
         }
     }
 
-    /// Check if the outputer is configured for JSON output.
+    /// Check if the formatter is configured for JSON output.
     ///
     /// # Returns
     ///
@@ -40,7 +40,7 @@ impl Outputer {
         self.json
     }
 
-    /// Check if the outputer is configured for JSON output.
+    /// Check if the formatter is configured for JSON output.
     ///
     /// # Returns
     ///
