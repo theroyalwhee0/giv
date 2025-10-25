@@ -53,7 +53,7 @@ mod tests {
     /// are properly distinguished from each other.
     #[test]
     fn test_encoding_variants() {
-        let variants = vec![
+        let variants = [
             BytesEncoding::Hex,
             BytesEncoding::Base64,
             BytesEncoding::Raw,
