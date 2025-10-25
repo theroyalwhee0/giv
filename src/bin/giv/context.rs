@@ -1,12 +1,12 @@
-use super::{cli::CommandOptions, output::Outputer};
+use super::{cli::CommandOptions, output::Formatter};
 
 /// Context for command execution.
 ///
 /// This struct holds shared resources that commands need to execute,
-/// including the output handler and, when enabled, a random number generator.
+/// including the output formatter and, when enabled, a random number generator.
 pub struct AppContext {
-    /// The output handler for this command.
-    output: Outputer,
+    /// The output formatter for this command.
+    output: Formatter,
     /// Random number generator (only when rng feature is enabled).
     #[cfg(feature = "rng")]
     rng: rand::rngs::ThreadRng,
@@ -25,19 +25,19 @@ impl AppContext {
     #[must_use]
     pub fn new(options: CommandOptions) -> Self {
         Self {
-            output: Outputer::new(options),
+            output: Formatter::new(options),
             #[cfg(feature = "rng")]
             rng: rand::rng(),
         }
     }
 
-    /// Get a reference to the output handler.
+    /// Get a reference to the output formatter.
     ///
     /// # Returns
     ///
-    /// A reference to the `Outputer`.
+    /// A reference to the `Formatter`.
     #[must_use]
-    pub fn output(&self) -> &Outputer {
+    pub fn format(&self) -> &Formatter {
         &self.output
     }
 

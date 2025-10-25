@@ -5,7 +5,6 @@ use crate::error::GivError;
 pub use output::KeyOutput;
 use rand::RngCore;
 
-
 /// The default size of the key.
 pub const DEFAULT_KEY_SIZE: usize = 36;
 
@@ -111,7 +110,6 @@ pub fn generate_key(size: Option<usize>) -> Result<KeyOutput, GivError> {
         key: format!("{KEY_PREFIX}{key}"),
     })
 }
-
 
 // Tests.
 #[cfg(test)]

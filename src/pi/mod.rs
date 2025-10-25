@@ -4,12 +4,11 @@ mod decimals;
 pub mod output;
 
 use crate::{
-    pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
     error::GivError,
+    pi::decimals::{PI_DECIMALS, PI_MAX_DECIMALS},
 };
 pub use output::PiOutput;
 use std::borrow::Cow;
-
 
 /// The default rounding behavior.
 pub const DEFAULT_ROUND: bool = true;
@@ -165,7 +164,6 @@ pub fn generate_pi(places: Option<usize>, round: Option<bool>) -> Result<PiOutpu
         rounded: round,
     })
 }
-
 
 // Tests
 #[cfg(test)]

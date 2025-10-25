@@ -6,22 +6,24 @@
 use super::AppContext;
 use giv::error::GivError;
 
+#[cfg(feature = "date")]
+use chrono::Utc;
 #[cfg(feature = "bytes")]
 use giv::bytes::BytesEncoding;
 #[cfg(feature = "chars")]
-use giv::chars::{convert_input, CharResult, CharsOutput};
+use giv::chars::{CharResult, CharsOutput, convert_input};
 #[cfg(feature = "date")]
 use giv::date::{DateFormat, DateKind};
 #[cfg(feature = "key")]
 use giv::key;
+#[cfg(feature = "lorem")]
+use giv::lorem::{self, LoremUnit};
 #[cfg(feature = "pi")]
 use giv::pi::{self, RoundingFlags};
 #[cfg(feature = "rng")]
 use giv::rng::{execute::execute_spec, output::RngOutput, spec::parse_spec};
 #[cfg(feature = "uuid")]
 use giv::uuid;
-#[cfg(feature = "date")]
-use chrono::Utc;
 
 /// The 'bytes' command handler.
 ///
@@ -50,7 +52,7 @@ pub fn bytes_command(
     use giv::bytes;
 
     // Check if raw encoding is requested with JSON output mode.
-    if matches!(encoding, Some(BytesEncoding::Raw)) && ctx.output().is_json() {
+    if matches!(encoding, Some(BytesEncoding::Raw)) && ctx.format().is_json() {
         return Err(GivError::RawBytesNotSupportedInJson);
     }
 
@@ -58,7 +60,7 @@ pub fn bytes_command(
     let output = bytes::generate_bytes(length, encoding, padding)?;
 
     // Output the bytes.
-    ctx.output().output(&output);
+    ctx.format().output(&output);
 
     Ok(())
 }
@@ -89,7 +91,7 @@ pub fn chars_command(inputs: Vec<String>, ctx: &mut AppContext) -> Result<(), Gi
     let output = CharsOutput { results };
 
     // Output the results.
-    ctx.output().output(&output);
+    ctx.format().output(&output);
 
     Ok(())
 }
@@ -133,7 +135,7 @@ pub fn date_command(
     let output = DateOutput { date: formatted };
 
     // Output the date.
-    ctx.output().output(&output);
+    ctx.format().output(&output);
 
     Ok(())
 }
@@ -155,7 +157,7 @@ pub fn date_command(
 #[cfg(feature = "key")]
 pub fn key_command(size: Option<usize>, ctx: &mut AppContext) -> Result<(), GivError> {
     let output = key::generate_key(size)?;
-    ctx.output().output(&output);
+    ctx.format().output(&output);
     Ok(())
 }
 
@@ -189,7 +191,7 @@ pub fn pi_command(
     let output = pi::generate_pi(places, Some(round))?;
 
     // Output the PI value.
-    ctx.output().output(&output);
+    ctx.format().output(&output);
 
     Ok(())
 }
@@ -218,8 +220,10 @@ pub fn rng_command(specs: Vec<String>, ctx: &mut AppContext) -> Result<(), GivEr
     }
 
     // Parse all specifications
-    let parsed_specs: Result<Vec<_>, GivError> =
-        specs.iter().map(|s| parse_spec(s.as_str())).collect();
+    let parsed_specs: Result<Vec<_>, GivError> = specs
+        .iter()
+        .map(|value| parse_spec(value.as_str()))
+        .collect();
     let parsed_specs = parsed_specs?;
 
     // Execute all specifications using the context's RNG
@@ -232,8 +236,34 @@ pub fn rng_command(specs: Vec<String>, ctx: &mut AppContext) -> Result<(), GivEr
     let output = RngOutput { rng: results };
 
     // Output the results
-    ctx.output().output(&output);
+    ctx.format().output(&output);
 
+    Ok(())
+}
+
+/// The 'lorem' command handler.
+///
+/// # Arguments
+///
+/// - `count` An optional count of units to generate.
+/// - `unit` The unit type (words, sentences, paragraphs).
+/// - `ctx` The command context.
+///
+/// # Returns
+///
+/// A result indicating success or failure.
+///
+/// # Errors
+///
+/// Propagates errors from [`lorem::generate_lorem`].
+#[cfg(feature = "lorem")]
+pub fn lorem_command(
+    count: Option<usize>,
+    unit: LoremUnit,
+    ctx: &mut AppContext,
+) -> Result<(), GivError> {
+    let output = lorem::generate_lorem(count, unit)?;
+    ctx.format().output(&output);
     Ok(())
 }
 
@@ -253,6 +283,6 @@ pub fn rng_command(specs: Vec<String>, ctx: &mut AppContext) -> Result<(), GivEr
 #[cfg(feature = "uuid")]
 pub fn uuid_command(ctx: &mut AppContext) -> Result<(), GivError> {
     let output = uuid::generate_uuid()?;
-    ctx.output().output(&output);
+    ctx.format().output(&output);
     Ok(())
 }

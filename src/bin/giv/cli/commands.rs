@@ -1,7 +1,7 @@
-use giv::date::{DateFormat, DateKind};
+use clap::Subcommand;
 #[cfg(feature = "bytes")]
 use giv::bytes::BytesEncoding;
-use clap::Subcommand;
+use giv::date::{DateFormat, DateKind};
 
 /// The available commands for the CLI.
 #[derive(Subcommand)]
@@ -72,5 +72,22 @@ pub enum Commands {
         /// RNG specifications (e.g., '2d6', 'd20', '1..100', '0.0..1.0')
         #[arg(required = true)]
         specs: Vec<String>,
+    },
+    /// Generate lorem ipsum placeholder text
+    #[cfg(feature = "lorem")]
+    #[command(alias = "ipsum")]
+    Lorem {
+        /// Number of units to generate (default: 50)
+        #[arg(default_value = None)]
+        count: Option<usize>,
+        /// Generate words (default if no unit flag is specified)
+        #[arg(long, group = "unit")]
+        words: bool,
+        /// Generate sentences
+        #[arg(short, long, group = "unit")]
+        sentences: bool,
+        /// Generate paragraphs
+        #[arg(short, long, group = "unit")]
+        paragraphs: bool,
     },
 }

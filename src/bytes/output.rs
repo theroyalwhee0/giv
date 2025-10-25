@@ -1,6 +1,6 @@
 use super::BytesEncoding;
 use crate::output::Output;
-use base64::{engine::general_purpose, Engine};
+use base64::{Engine, engine::general_purpose};
 #[cfg(feature = "json")]
 use serde::Serialize;
 

@@ -5,6 +5,7 @@
 //! - Character and emoji conversion.
 //! - Formatted dates.
 //! - Key generation.
+//! - Lorem ipsum text.
 //! - UUID v7 generation.
 //! - PI.
 //! - Random number generation.
@@ -21,10 +22,10 @@ mod output;
 use commands::*;
 use context::AppContext;
 
-#[cfg(feature = "date")]
-use giv::date::DateKind;
 use clap::Parser as _;
 use cli::{Cli, Commands};
+#[cfg(feature = "date")]
+use giv::date::DateKind;
 use std::process::ExitCode;
 
 /// The application entry point.
@@ -76,6 +77,25 @@ fn main() -> ExitCode {
         // The 'rng' command.
         #[cfg(feature = "rng")]
         Commands::Rng { specs } => rng_command(specs, &mut ctx),
+        // The 'lorem' command.
+        #[cfg(feature = "lorem")]
+        Commands::Lorem {
+            count,
+            words: _,
+            sentences,
+            paragraphs,
+        } => {
+            use giv::lorem::LoremUnit;
+            let unit = if sentences {
+                LoremUnit::Sentences
+            } else if paragraphs {
+                LoremUnit::Paragraphs
+            } else {
+                // Default to words if no flag is specified
+                LoremUnit::Words
+            };
+            lorem_command(count, unit, &mut ctx)
+        }
     };
 
     // If the result is an error, print the error message and return failure.

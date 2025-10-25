@@ -5,6 +5,7 @@
 //! - Character and emoji conversion
 //! - Formatted dates and timestamps
 //! - Cryptographically secure random keys
+//! - Lorem ipsum placeholder text
 //! - UUID v7 identifiers
 //! - PI digits with configurable precision
 //! - Random numbers using dice notation or ranges
@@ -30,6 +31,7 @@
 //! - `chars` - Character and emoji conversion
 //! - `date` - Date and time formatting
 //! - `key` - Random key generation
+//! - `lorem` - Lorem ipsum text generation
 //! - `pi` - PI digit calculation
 //! - `rng` - Random number generation
 //! - `uuid` - UUID v7 generation
@@ -51,6 +53,10 @@ pub mod date;
 /// Random key generation module.
 #[cfg(feature = "key")]
 pub mod key;
+
+/// Lorem ipsum text generation module.
+#[cfg(feature = "lorem")]
+pub mod lorem;
 
 /// PI digit calculation module.
 #[cfg(feature = "pi")]

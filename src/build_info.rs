@@ -157,7 +157,10 @@ mod tests {
     fn test_datetime_iso() {
         let datetime = datetime_iso();
         // Should match YYYY-MM-DDTHH:MM:SSZ format (basic check)
-        assert!(datetime.len() >= 19, "ISO datetime should be at least 19 characters");
+        assert!(
+            datetime.len() >= 19,
+            "ISO datetime should be at least 19 characters"
+        );
         assert!(datetime.contains('T'), "ISO datetime should contain 'T'");
         assert!(datetime.ends_with('Z'), "ISO datetime should end with 'Z'");
     }
