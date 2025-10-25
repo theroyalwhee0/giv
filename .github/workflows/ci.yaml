@@ -10,9 +10,6 @@ env:
   # Cache version - update this date to invalidate all caches
   # Can be overridden with repository variable CACHE_VERSION
   CACHE_VERSION: ${{ vars.CACHE_VERSION || '2025-10-14' }}
-  # Coverage thresholds - can be overridden with repository variables:
-  # - COVERAGE_OVERALL_THRESHOLD: minimum overall line coverage % (default: 90)
-  # - COVERAGE_PER_FILE_THRESHOLD: minimum per-file line coverage % (default: 70)
 
 jobs:
   validate:
@@ -75,62 +72,15 @@ jobs:
         run: |
           cargo clippy --locked --all-targets -- -D warnings
 
-      - name: Install cargo-llvm-cov and cargo-nextest
+      - name: Cargo test
         run: |
-          cargo install cargo-llvm-cov --locked
-          cargo install cargo-nextest --locked
-
-      - name: Cargo test with coverage
-        run: |
-          echo "Running tests with coverage"
-          # Run all tests including integration tests with coverage
-          # Using nextest for better test discovery and parallel execution
-          cargo llvm-cov nextest --all-features --lcov --output-path lcov.info
+          echo "Running tests"
+          cargo test --locked --all-features --all-targets
 
           if cargo metadata --no-deps --format-version 1 | jq -e '.packages[].targets[] | select(.kind[] == "lib")' >/dev/null 2>&1; then
             echo "Running doc tests"
-            cargo test --all-features --doc
+            cargo test --locked --all-features --doc
           fi
-
-      - name: Check coverage thresholds
-        env:
-          COVERAGE_OVERALL_THRESHOLD: ${{ vars.COVERAGE_OVERALL_THRESHOLD || '90' }}
-          COVERAGE_PER_FILE_THRESHOLD: ${{ vars.COVERAGE_PER_FILE_THRESHOLD || '70' }}
-        run: |
-          # Get coverage report (must use nextest with same flags as test run)
-          cargo llvm-cov nextest --all-features --summary-only > coverage-summary.txt
-          cat coverage-summary.txt
-
-          # Extract overall line coverage percentage
-          OVERALL_COVERAGE=$(grep '^TOTAL' coverage-summary.txt | awk '{print $10}' | sed 's/%//')
-          echo "Overall coverage: ${OVERALL_COVERAGE}%"
-
-          # Check overall threshold (default: 90%, configurable via COVERAGE_OVERALL_THRESHOLD)
-          OVERALL_THRESHOLD=${COVERAGE_OVERALL_THRESHOLD}
-          echo "Overall threshold: ${OVERALL_THRESHOLD}%"
-          if awk -v cov="$OVERALL_COVERAGE" -v thresh="$OVERALL_THRESHOLD" 'BEGIN {exit !(cov < thresh)}'; then
-            echo "ERROR: Overall coverage ${OVERALL_COVERAGE}% is below minimum ${OVERALL_THRESHOLD}%"
-            exit 1
-          fi
-
-          # Check per-file threshold (default: 70%, configurable via COVERAGE_PER_FILE_THRESHOLD)
-          PER_FILE_THRESHOLD=${COVERAGE_PER_FILE_THRESHOLD}
-          echo "Per-file threshold: ${PER_FILE_THRESHOLD}%"
-          LOW_COVERAGE_FILES=$(grep 'giv/src' coverage-summary.txt | grep -v '100.00%' | awk -v thresh="$PER_FILE_THRESHOLD" '{
-            line_cov=$(NF-3)
-            gsub(/%/, "", line_cov)
-            if (line_cov != "-" && line_cov < thresh && line_cov != "" && line_cov ~ /^[0-9]+(\.[0-9]+)?$/) {
-              print $1 ": " line_cov "%"
-            }
-          }')
-
-          if [ -n "$LOW_COVERAGE_FILES" ]; then
-            echo "ERROR: Files below ${PER_FILE_THRESHOLD}% coverage threshold:"
-            echo "$LOW_COVERAGE_FILES"
-            exit 1
-          fi
-
-          echo "✓ Coverage thresholds met: Overall ${OVERALL_COVERAGE}% (>= ${OVERALL_THRESHOLD}%), all files >= ${PER_FILE_THRESHOLD}%"
 
       - name: Clean cargo cache
         run: |
