@@ -29,6 +29,10 @@ A CLI for generating useful values.
   - `giv now`: Prints the current time in various formats.
 - `giv uuid`: Print a random UUID v7.
 - `giv key`: Prints a strong random key with a 'key_' prefix.
+- `giv lorem`: Generate lorem ipsum placeholder text.
+  - Words (default): `giv lorem 50`
+  - Sentences: `giv lorem -s 3`
+  - Paragraphs: `giv lorem -p 2`
 - `giv pi`: Prints the requested number of digits of PI with rounding.
 - `giv rng`: Generate cryptographically secure random numbers.
   - Dice notation: `giv rng 2d6`, `giv rng d20`
