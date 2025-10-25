@@ -33,3 +33,65 @@ impl BytesEncoding {
         Self::Base64
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Test the default encoding format.
+    ///
+    /// Verifies that `BytesEncoding::default()` returns Base64 as the
+    /// default encoding format for bytes output.
+    #[test]
+    fn test_default_encoding() {
+        assert_eq!(BytesEncoding::default(), BytesEncoding::Base64);
+    }
+
+    /// Test enum variants exist and are distinct.
+    ///
+    /// Verifies that all encoding format variants can be created and
+    /// are properly distinguished from each other.
+    #[test]
+    fn test_encoding_variants() {
+        let variants = vec![
+            BytesEncoding::Hex,
+            BytesEncoding::Base64,
+            BytesEncoding::Raw,
+            BytesEncoding::Rust,
+            BytesEncoding::JavaScript,
+            BytesEncoding::TypeScript,
+        ];
+
+        // Verify all variants are distinct
+        for (i, v1) in variants.iter().enumerate() {
+            for (j, v2) in variants.iter().enumerate() {
+                if i == j {
+                    assert_eq!(v1, v2);
+                } else {
+                    assert_ne!(v1, v2);
+                }
+            }
+        }
+    }
+
+    /// Test JSON serialization of encoding variants.
+    ///
+    /// Verifies that `BytesEncoding` variants serialize correctly to
+    /// lowercase strings in JSON format.
+    #[test]
+    #[cfg(feature = "json")]
+    fn test_json_serialization() {
+        assert_eq!(
+            serde_json::to_string(&BytesEncoding::Hex).unwrap(),
+            "\"hex\""
+        );
+        assert_eq!(
+            serde_json::to_string(&BytesEncoding::Base64).unwrap(),
+            "\"base64\""
+        );
+        assert_eq!(
+            serde_json::to_string(&BytesEncoding::Raw).unwrap(),
+            "\"raw\""
+        );
+    }
+}
