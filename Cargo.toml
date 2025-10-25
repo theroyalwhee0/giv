@@ -104,6 +104,10 @@ uuid = ["dep:uuid"]
 # Option features.
 json = ["dep:serde_json", "dep:serde"]
 
+[dev-dependencies]
+# Testing.
+assert_cmd = "2.0.17"
+
 [build-dependencies]
 chrono = { version = "0.4.41", default-features = false, features = [
     "clock",
