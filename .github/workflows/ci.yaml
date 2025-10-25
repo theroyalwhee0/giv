@@ -85,7 +85,7 @@ jobs:
           echo "Running tests with coverage"
           # Run all tests including integration tests with coverage
           # Using nextest for better test discovery and parallel execution
-          cargo llvm-cov nextest --all-features --workspace --lcov --output-path lcov.info
+          cargo llvm-cov nextest --all-features --lcov --output-path lcov.info
 
           if cargo metadata --no-deps --format-version 1 | jq -e '.packages[].targets[] | select(.kind[] == "lib")' >/dev/null 2>&1; then
             echo "Running doc tests"
@@ -97,8 +97,8 @@ jobs:
           COVERAGE_OVERALL_THRESHOLD: ${{ vars.COVERAGE_OVERALL_THRESHOLD || '90' }}
           COVERAGE_PER_FILE_THRESHOLD: ${{ vars.COVERAGE_PER_FILE_THRESHOLD || '70' }}
         run: |
-          # Get coverage report (must use nextest --workspace to match the test run)
-          cargo llvm-cov nextest --all-features --workspace --summary-only > coverage-summary.txt
+          # Get coverage report (must use nextest with same flags as test run)
+          cargo llvm-cov nextest --all-features --summary-only > coverage-summary.txt
           cat coverage-summary.txt
 
           # Extract overall line coverage percentage
