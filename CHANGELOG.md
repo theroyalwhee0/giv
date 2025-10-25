@@ -12,33 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `lorem` command for generating lorem ipsum placeholder text (#4, #47)
-  - Words mode: Generate specified number of words
-  - Sentences mode: Generate specified number of sentences
-  - Paragraphs mode: Generate specified number of paragraphs
+  - Generate specified number of words, sentences, or paragraphs
   - Starts with classic "Lorem ipsum dolor sit amet..." opening
 - GitHub Actions CI workflow for automated testing (#42, #43)
   - Runs tests on push and pull requests
-  - Supports multiple Rust toolchains
 - Community standards documentation (#34, #38, #39)
-  - Contributing guidelines
-  - Code of conduct
-  - Issue templates
-  - Security policy
 
 ### Changed
 
 - Improved code coverage to meet 90% threshold (#46, #48)
-  - Added comprehensive unit and integration tests
-  - Coverage enforcement in pre-commit hooks
-- Refactored app module to src/bin/giv for consistency (#33, #36)
 - Updated project documentation and README (#44, #45, #50)
-
-### Fixed
-
-- Lorem paragraph formatting now consistent across all paragraphs (#51, #52)
-  - Removed internal newlines from classic lorem ipsum paragraph
-- Linting issues and template improvements (#40, #41)
-- LICENSE.txt now properly tracked in git (#35, #37)
 
 ## [0.2.1] - 2025-10-02
 
