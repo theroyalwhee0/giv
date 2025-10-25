@@ -161,3 +161,134 @@ impl Output for BytesOutput {
         serde_json::json!(self)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Test hex encoding of bytes.
+    ///
+    /// Verifies that `BytesOutput::new()` correctly encodes raw bytes
+    /// as hexadecimal representation.
+    #[test]
+    fn test_hex_encoding() {
+        let raw_bytes = vec![0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef];
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::Hex, false);
+        assert_eq!(output.bytes, "0123456789abcdef");
+        assert_eq!(output.encoding, BytesEncoding::Hex);
+        assert_eq!(output.length, 8);
+        assert!(output.padding.is_none());
+    }
+
+    /// Test base64 encoding with padding.
+    ///
+    /// Verifies that `BytesOutput::new()` correctly encodes bytes as
+    /// base64 with padding characters when requested.
+    #[test]
+    fn test_base64_with_padding() {
+        let raw_bytes = vec![0x48, 0x65, 0x6c, 0x6c, 0x6f]; // "Hello"
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::Base64, true);
+        assert_eq!(output.bytes, "SGVsbG8=");
+        assert_eq!(output.encoding, BytesEncoding::Base64);
+        assert_eq!(output.length, 5);
+        assert_eq!(output.padding, Some(true));
+    }
+
+    /// Test base64 encoding without padding.
+    ///
+    /// Verifies that `BytesOutput::new()` correctly encodes bytes as
+    /// base64 without padding characters when requested.
+    #[test]
+    fn test_base64_without_padding() {
+        let raw_bytes = vec![0x48, 0x65, 0x6c, 0x6c, 0x6f]; // "Hello"
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::Base64, false);
+        assert_eq!(output.bytes, "SGVsbG8");
+        assert_eq!(output.encoding, BytesEncoding::Base64);
+        assert_eq!(output.padding, Some(false));
+    }
+
+    /// Test Rust array formatting.
+    ///
+    /// Verifies that `BytesOutput::new()` correctly formats bytes as
+    /// a Rust array literal with type annotation and hex values.
+    #[test]
+    fn test_rust_array_formatting() {
+        let raw_bytes = vec![0x01, 0x02, 0x03];
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::Rust, false);
+        assert_eq!(output.bytes, "[u8; 3] = [0x01, 0x02, 0x03]");
+        assert!(output.padding.is_none());
+    }
+
+    /// Test JavaScript array formatting.
+    ///
+    /// Verifies that `BytesOutput::new()` correctly formats bytes as
+    /// a JavaScript array literal.
+    #[test]
+    fn test_javascript_array_formatting() {
+        let raw_bytes = vec![0xaa, 0xbb, 0xcc];
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::JavaScript, false);
+        assert_eq!(output.bytes, "[0xaa, 0xbb, 0xcc]");
+    }
+
+    /// Test TypeScript array formatting.
+    ///
+    /// Verifies that `BytesOutput::new()` correctly formats bytes as
+    /// a TypeScript array literal with type annotation.
+    #[test]
+    fn test_typescript_array_formatting() {
+        let raw_bytes = vec![0x11, 0x22];
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::TypeScript, false);
+        assert_eq!(output.bytes, "number[] = [0x11, 0x22]");
+    }
+
+    /// Test number formatting with underscores.
+    ///
+    /// Verifies that `format_number_with_underscores()` correctly
+    /// inserts underscores every 3 digits for readability.
+    #[test]
+    fn test_format_number_with_underscores() {
+        assert_eq!(format_number_with_underscores(123), "123");
+        assert_eq!(format_number_with_underscores(1234), "1_234");
+        assert_eq!(format_number_with_underscores(1234567), "1_234_567");
+        assert_eq!(format_number_with_underscores(1000000), "1_000_000");
+    }
+
+    /// Test plain text output.
+    ///
+    /// Verifies that `BytesOutput::to_plain()` returns the encoded
+    /// bytes string directly, suitable for command-line piping.
+    #[test]
+    fn test_to_plain() {
+        let raw_bytes = vec![0x01, 0x02, 0x03];
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::Hex, false);
+        assert_eq!(output.to_plain(), "010203");
+    }
+
+    /// Test JSON output.
+    ///
+    /// Verifies that `BytesOutput::to_json()` produces complete JSON
+    /// with bytes, encoding, length, and optional padding information.
+    #[test]
+    #[cfg(feature = "json")]
+    fn test_to_json() {
+        let raw_bytes = vec![0xab, 0xcd];
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::Hex, false);
+        let json = output.to_json();
+        assert_eq!(json["bytes"], "abcd");
+        assert_eq!(json["encoding"], "hex");
+        assert_eq!(json["length"], 2);
+    }
+
+    /// Test JSON output with base64 padding information.
+    ///
+    /// Verifies that the padding field is included in JSON output
+    /// when using base64 encoding.
+    #[test]
+    #[cfg(feature = "json")]
+    fn test_to_json_with_padding() {
+        let raw_bytes = vec![0x48, 0x65];
+        let output = BytesOutput::new(&raw_bytes, BytesEncoding::Base64, true);
+        let json = output.to_json();
+        assert_eq!(json["padding"], true);
+    }
+}
