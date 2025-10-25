@@ -1,11 +1,10 @@
-/// Character pattern mappings.
-pub mod patterns;
 /// Output formatting for character/emoji conversion.
 pub mod output;
+/// Character pattern mappings.
+pub mod patterns;
 
 use crate::error::GivError;
 pub use output::{CharResult, CharsOutput};
-
 
 /// Convert a single input to a character or emoji.
 ///
@@ -47,7 +46,6 @@ pub fn convert_input(input: &str) -> Result<CharResult, GivError> {
     // If no match, return an error.
     Err(GivError::UnknownCharacterPattern(input.to_string()))
 }
-
 
 // Tests.
 #[cfg(test)]

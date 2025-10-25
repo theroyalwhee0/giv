@@ -1,5 +1,5 @@
-use giv::output::Output;
 use crate::cli::CommandOptions;
+use giv::output::Output;
 
 /// Handles formatting and outputting values in either plain text or JSON format.
 ///

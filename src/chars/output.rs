@@ -26,7 +26,6 @@ pub struct CharsOutput {
     pub results: Vec<CharResult>,
 }
 
-
 impl Output for CharsOutput {
     fn to_plain(&self) -> String {
         self.results

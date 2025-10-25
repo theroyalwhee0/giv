@@ -22,10 +22,10 @@ mod output;
 use commands::*;
 use context::AppContext;
 
-#[cfg(feature = "date")]
-use giv::date::DateKind;
 use clap::Parser as _;
 use cli::{Cli, Commands};
+#[cfg(feature = "date")]
+use giv::date::DateKind;
 use std::process::ExitCode;
 
 /// The application entry point.

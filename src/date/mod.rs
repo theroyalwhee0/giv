@@ -10,7 +10,6 @@ pub use date_kind::DateKind;
 
 use chrono::{DateTime, SecondsFormat, Utc};
 
-
 /// Get the date format based on the kind and format options.
 ///
 /// # Arguments

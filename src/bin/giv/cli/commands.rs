@@ -1,7 +1,7 @@
-use giv::date::{DateFormat, DateKind};
+use clap::Subcommand;
 #[cfg(feature = "bytes")]
 use giv::bytes::BytesEncoding;
-use clap::Subcommand;
+use giv::date::{DateFormat, DateKind};
 
 /// The available commands for the CLI.
 #[derive(Subcommand)]
