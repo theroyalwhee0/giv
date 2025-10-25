@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2025-10-24
+
+### Added
+
+- `lorem` command for generating lorem ipsum placeholder text (#4, #47)
+  - Words mode: Generate specified number of words
+  - Sentences mode: Generate specified number of sentences
+  - Paragraphs mode: Generate specified number of paragraphs
+  - Starts with classic "Lorem ipsum dolor sit amet..." opening
+- GitHub Actions CI workflow for automated testing (#42, #43)
+  - Runs tests on push and pull requests
+  - Supports multiple Rust toolchains
+- Community standards documentation (#34, #38, #39)
+  - Contributing guidelines
+  - Code of conduct
+  - Issue templates
+  - Security policy
+
+### Changed
+
+- Improved code coverage to meet 90% threshold (#46, #48)
+  - Added comprehensive unit and integration tests
+  - Coverage enforcement in pre-commit hooks
+- Refactored app module to src/bin/giv for consistency (#33, #36)
+- Updated project documentation and README (#44, #45, #50)
+
+### Fixed
+
+- Lorem paragraph formatting now consistent across all paragraphs (#51, #52)
+  - Removed internal newlines from classic lorem ipsum paragraph
+- Linting issues and template improvements (#40, #41)
+- LICENSE.txt now properly tracked in git (#35, #37)
+
 ## [0.2.1] - 2025-10-02
 
 ### Fixed
@@ -67,7 +100,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Structured output system with `Output` trait
 - Comprehensive documentation and usage guides
 
-[unreleased]: https://github.com/theroyalwhee0/giv/compare/v0.2.1...HEAD
+[unreleased]: https://github.com/theroyalwhee0/giv/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/theroyalwhee0/giv/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/theroyalwhee0/giv/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/theroyalwhee0/giv/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/theroyalwhee0/giv/releases/tag/v0.1.0
