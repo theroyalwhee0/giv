@@ -75,15 +75,17 @@ jobs:
         run: |
           cargo clippy --locked --all-targets -- -D warnings
 
-      - name: Install cargo-llvm-cov
+      - name: Install cargo-llvm-cov and cargo-nextest
         run: |
           cargo install cargo-llvm-cov --locked
+          cargo install cargo-nextest --locked
 
       - name: Cargo test with coverage
         run: |
           echo "Running tests with coverage"
           # Run all tests including integration tests with coverage
-          cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+          # Using nextest for better test discovery and parallel execution
+          cargo llvm-cov nextest --all-features --workspace --lcov --output-path lcov.info
 
           if cargo metadata --no-deps --format-version 1 | jq -e '.packages[].targets[] | select(.kind[] == "lib")' >/dev/null 2>&1; then
             echo "Running doc tests"
@@ -95,8 +97,8 @@ jobs:
           COVERAGE_OVERALL_THRESHOLD: ${{ vars.COVERAGE_OVERALL_THRESHOLD || '90' }}
           COVERAGE_PER_FILE_THRESHOLD: ${{ vars.COVERAGE_PER_FILE_THRESHOLD || '70' }}
         run: |
-          # Get coverage report (must use --workspace to match the test run)
-          cargo llvm-cov --all-features --workspace --summary-only > coverage-summary.txt
+          # Get coverage report (must use nextest --workspace to match the test run)
+          cargo llvm-cov nextest --all-features --workspace --summary-only > coverage-summary.txt
           cat coverage-summary.txt
 
           # Extract overall line coverage percentage
