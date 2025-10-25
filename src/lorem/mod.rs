@@ -260,7 +260,11 @@ fn generate_lorem_text(count: usize, unit: LoremUnit) -> Result<String, GivError
                 .map(|(i, _)| {
                     if i == 0 {
                         // First paragraph is the complete classic lorem ipsum
-                        lipsum::LOREM_IPSUM.trim().to_string()
+                        // Remove internal newlines to match other paragraphs
+                        lipsum::LOREM_IPSUM
+                            .split_whitespace()
+                            .collect::<Vec<_>>()
+                            .join(" ")
                     } else {
                         // Subsequent paragraphs are random
                         get_some_sentences(SENTENCES_PER_PARAGRAPH_RANGE, false)
@@ -380,14 +384,17 @@ mod tests {
     /// Test that paragraphs mode starts with full classic lorem ipsum.
     #[test]
     fn test_paragraphs_classic_opening() {
-        // First paragraph should be the full classic lorem ipsum
+        // First paragraph should be the full classic lorem ipsum (without internal newlines)
         let text = generate_lorem_text(1, LoremUnit::Paragraphs).unwrap();
-        let classic = lipsum::LOREM_IPSUM.trim();
+        let classic = lipsum::LOREM_IPSUM
+            .split_whitespace()
+            .collect::<Vec<_>>()
+            .join(" ");
         assert_eq!(text, classic);
 
         // Multiple paragraphs - first should be classic, followed by double newline
         let text = generate_lorem_text(2, LoremUnit::Paragraphs).unwrap();
-        assert!(text.starts_with(classic));
+        assert!(text.starts_with(&classic));
         assert!(text.contains("\n\n"));
     }
 
