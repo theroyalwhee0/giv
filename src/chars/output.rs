@@ -40,3 +40,69 @@ impl Output for CharsOutput {
         serde_json::json!(self.results)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Test plain text output formatting for character conversions.
+    ///
+    /// Verifies that `CharsOutput::to_plain()` returns only the output
+    /// characters separated by spaces, without metadata, suitable for
+    /// command-line piping.
+    #[test]
+    fn test_to_plain() {
+        let output = CharsOutput {
+            results: vec![
+                CharResult {
+                    input: ":smile:".to_string(),
+                    output: "😀".to_string(),
+                    result_type: "emoji".to_string(),
+                    name: Some("grinning face".to_string()),
+                },
+                CharResult {
+                    input: "->".to_string(),
+                    output: "→".to_string(),
+                    result_type: "pattern".to_string(),
+                    name: Some("rightwards arrow".to_string()),
+                },
+            ],
+        };
+        assert_eq!(output.to_plain(), "😀 →");
+    }
+
+    /// Test JSON output formatting for character conversions.
+    ///
+    /// Verifies that `CharsOutput::to_json()` produces a JSON array with
+    /// complete conversion information including input, output, type, and
+    /// optional name fields.
+    #[test]
+    #[cfg(feature = "json")]
+    fn test_to_json() {
+        let output = CharsOutput {
+            results: vec![
+                CharResult {
+                    input: ":smile:".to_string(),
+                    output: "😀".to_string(),
+                    result_type: "emoji".to_string(),
+                    name: Some("grinning face".to_string()),
+                },
+                CharResult {
+                    input: "->".to_string(),
+                    output: "→".to_string(),
+                    result_type: "pattern".to_string(),
+                    name: None,
+                },
+            ],
+        };
+        let json = output.to_json();
+        assert!(json.is_array());
+        assert_eq!(json[0]["input"], ":smile:");
+        assert_eq!(json[0]["output"], "😀");
+        assert_eq!(json[0]["type"], "emoji");
+        assert_eq!(json[0]["name"], "grinning face");
+        assert_eq!(json[1]["input"], "->");
+        assert_eq!(json[1]["output"], "→");
+        assert!(json[1]["name"].is_null());
+    }
+}
