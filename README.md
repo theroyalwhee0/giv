@@ -7,20 +7,6 @@
 
 A CLI for generating useful values.
 
-## Global Options
-
-- `--clip` / `-c`: Copy output to clipboard (still prints to stdout)
-- `--json` / `-j`: Format output as JSON
-
-Examples:
-
-```bash
-giv --clip uuid           # Copy UUID to clipboard + print
-giv -c now                # Copy timestamp to clipboard + print
-giv --json uuid           # Output UUID as JSON
-giv --clip --json key 32  # Copy JSON to clipboard + print
-```
-
 ## Available Commands
 
 - `giv bytes`: Generate random bytes with various encodings.
@@ -64,6 +50,20 @@ giv --clip --json key 32  # Copy JSON to clipboard + print
   - Multiple specs: `giv rng 2d6 1..100 0.0..1.0`
 
 `giv --help` for basic help. `giv <COMMAND> --help` for help on a specific command.
+
+## Global Options
+
+- `--clip` / `-c`: Copy output to clipboard (still prints to stdout)
+- `--json` / `-j`: Format output as JSON
+
+Examples:
+
+```bash
+giv --clip uuid           # Copy UUID to clipboard + print
+giv -c now                # Copy timestamp to clipboard + print
+giv --json uuid           # Output UUID as JSON
+giv --clip --json key 32  # Copy JSON to clipboard + print
+```
 
 ## Development Notes
 
