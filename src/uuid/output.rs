@@ -10,6 +10,10 @@ pub struct UuidOutput {
     pub uuid: String,
     /// The UUID version
     pub version: String,
+    /// The formatting style used
+    pub format: String,
+    /// Whether uppercase hex digits were used
+    pub uppercase: bool,
 }
 
 impl Output for UuidOutput {
@@ -30,30 +34,52 @@ mod tests {
     /// Test plain text output formatting for UUID generation.
     ///
     /// Verifies that `UuidOutput::to_plain()` returns only the UUID string
-    /// without the version information, suitable for command-line piping.
+    /// without the metadata, suitable for command-line piping.
     #[test]
     fn test_to_plain() {
         let output = UuidOutput {
             uuid: "01234567-89ab-7def-0123-456789abcdef".to_string(),
             version: "v7".to_string(),
+            format: "standard".to_string(),
+            uppercase: false,
         };
         assert_eq!(output.to_plain(), "01234567-89ab-7def-0123-456789abcdef");
     }
 
     /// Test JSON output formatting for UUID generation.
     ///
-    /// Verifies that `UuidOutput::to_json()` produces valid JSON with both
-    /// the UUID and version fields, providing complete information in
-    /// structured format.
+    /// Verifies that `UuidOutput::to_json()` produces valid JSON with
+    /// all metadata fields, providing complete information in structured format.
     #[test]
     #[cfg(feature = "json")]
     fn test_to_json() {
         let output = UuidOutput {
             uuid: "01234567-89ab-7def-0123-456789abcdef".to_string(),
             version: "v7".to_string(),
+            format: "standard".to_string(),
+            uppercase: false,
         };
         let json = output.to_json();
         assert_eq!(json["uuid"], "01234567-89ab-7def-0123-456789abcdef");
         assert_eq!(json["version"], "v7");
+        assert_eq!(json["format"], "standard");
+        assert_eq!(json["uppercase"], false);
+    }
+
+    /// Test JSON output with uppercase format.
+    ///
+    /// Verifies that the uppercase field is properly serialized.
+    #[test]
+    #[cfg(feature = "json")]
+    fn test_to_json_uppercase() {
+        let output = UuidOutput {
+            uuid: "01234567-89AB-7DEF-0123-456789ABCDEF".to_string(),
+            version: "v4".to_string(),
+            format: "simple".to_string(),
+            uppercase: true,
+        };
+        let json = output.to_json();
+        assert_eq!(json["uppercase"], true);
+        assert_eq!(json["format"], "simple");
     }
 }

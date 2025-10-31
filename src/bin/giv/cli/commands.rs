@@ -33,9 +33,19 @@ pub enum Commands {
         #[arg(default_value = None)]
         size: Option<usize>,
     },
-    /// Generate and display a UUID version 7
+    /// Generate and display a UUID
     #[cfg(feature = "uuid")]
-    Uuid,
+    Uuid {
+        /// UUID version to generate (default: v7)
+        #[arg(short, long, value_enum, default_value = None)]
+        version: Option<giv::uuid::UuidVersion>,
+        /// Formatting style for output (default: standard)
+        #[arg(short, long, value_enum, default_value = None)]
+        format: Option<giv::uuid::UuidFormat>,
+        /// Use uppercase hex digits (default: false)
+        #[arg(short, long, default_value_t = false)]
+        uppercase: bool,
+    },
     /// Pi with the specified number of places.
     #[cfg(feature = "pi")]
     Pi {
