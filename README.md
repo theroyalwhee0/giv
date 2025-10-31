@@ -29,7 +29,14 @@ A CLI for generating useful values.
   - **Note**: Patterns starting with `-` (like `--` or `->`) require quoting or using `--` separator: `giv chars -- "--" "->"` or `giv chars em` for em-dash
 - `giv date`: Prints the date in various formats.
   - `giv now`: Prints the current time in various formats.
-- `giv uuid`: Print a random UUID v7.
+- `giv uuid`: Generate UUIDs with multiple versions and formats.
+  - UUID v7 (default): `giv uuid`
+  - UUID v4: `giv uuid --version v4`
+  - Simple format: `giv uuid --format simple`
+  - Braced format: `giv uuid --format braced`
+  - URN format: `giv uuid --format urn`
+  - Hex format: `giv uuid --format hex`
+  - Uppercase: `giv uuid --uppercase`
 - `giv key`: Prints a strong random key with a 'key_' prefix.
 - `giv lorem`: Generate lorem ipsum placeholder text.
   - Words (default): `giv lorem 50`
@@ -43,6 +50,20 @@ A CLI for generating useful values.
   - Multiple specs: `giv rng 2d6 1..100 0.0..1.0`
 
 `giv --help` for basic help. `giv <COMMAND> --help` for help on a specific command.
+
+## Global Options
+
+- `--clip` / `-c`: Copy output to clipboard (still prints to stdout)
+- `--json` / `-j`: Format output as JSON
+
+Examples:
+
+```bash
+giv --clip uuid           # Copy UUID to clipboard + print
+giv -c now                # Copy timestamp to clipboard + print
+giv --json uuid           # Output UUID as JSON
+giv --clip --json key 32  # Copy JSON to clipboard + print
+```
 
 ## Development Notes
 

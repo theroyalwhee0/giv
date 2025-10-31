@@ -6,6 +6,9 @@ use giv::output::Output;
 /// This struct carries the output configuration (whether to use JSON or plain text)
 /// and provides a unified interface for formatting and outputting values.
 pub struct Formatter {
+    /// Whether to copy output to clipboard.
+    #[cfg(feature = "clipboard")]
+    clip: bool,
     /// Whether to output in JSON format.
     #[cfg(feature = "json")]
     json: bool,
@@ -24,6 +27,8 @@ impl Formatter {
     #[must_use]
     pub fn new(options: CommandOptions) -> Self {
         Self {
+            #[cfg(feature = "clipboard")]
+            clip: options.clip,
             #[cfg(feature = "json")]
             json: options.json,
         }
@@ -54,21 +59,39 @@ impl Formatter {
     /// Output a value that implements the `Output` trait.
     ///
     /// This will output the value in either plain text or JSON format,
-    /// depending on the configuration.
+    /// depending on the configuration. If clipboard is enabled, the output
+    /// will also be copied to the clipboard.
     ///
     /// # Arguments
     ///
     /// - `value` The value to output.
     #[allow(clippy::print_stdout)]
+    #[allow(clippy::print_stderr)]
     pub fn output<T: Output>(&self, value: &T) {
-        #[cfg(feature = "json")]
-        if self.json {
-            let json_value = value.to_json();
-            let json_output = serde_json::to_string(&json_value).unwrap();
-            println!("{json_output}");
-            return;
-        }
+        // Generate the output string
+        let output_string = {
+            #[cfg(feature = "json")]
+            if self.json {
+                let json_value = value.to_json();
+                serde_json::to_string(&json_value).unwrap()
+            } else {
+                value.to_plain()
+            }
 
-        println!("{}", value.to_plain());
+            #[cfg(not(feature = "json"))]
+            value.to_plain()
+        };
+
+        // Always print to stdout
+        println!("{output_string}");
+
+        // Copy to clipboard if enabled
+        #[cfg(feature = "clipboard")]
+        if self.clip {
+            match arboard::Clipboard::new().and_then(|mut ctx| ctx.set_text(output_string)) {
+                Ok(()) => {}
+                Err(e) => eprintln!("Warning: Failed to copy to clipboard: {e}"),
+            }
+        }
     }
 }

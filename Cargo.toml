@@ -70,6 +70,8 @@ base64 = { version = "0.22.1", optional = true }
 hex = { version = "0.4.3", optional = true }
 # Security.
 rand = { version = "0.9.0", optional = true }
+# Clipboard.
+arboard = { version = "3.6.1", optional = true }
 # Serialziation.
 serde = { version = "1.0.219", features = ["derive"], optional = true }
 serde_json = { version = "1.0.142", features = [
@@ -89,6 +91,7 @@ full = [
     "rng",
     "uuid",
     # Options.
+    "clipboard",
     "json",
 ]
 # Binary features.
@@ -103,6 +106,7 @@ pi = []
 rng = ["dep:rand"]
 uuid = ["dep:uuid"]
 # Option features.
+clipboard = ["dep:arboard"]
 json = ["dep:serde_json", "dep:serde"]
 
 [dev-dependencies]

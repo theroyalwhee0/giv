@@ -9,6 +9,8 @@
 //! - UUID generation (v4 and v7 with multiple formats).
 //! - PI.
 //! - Random number generation.
+//!
+//! Output can be formatted as JSON and optionally copied to the clipboard.
 
 /// CLI parsing and argument handling.
 mod cli;
