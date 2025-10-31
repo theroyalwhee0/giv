@@ -1,12 +1,36 @@
 # Characters and Emoji Reference
 
-This document lists all supported character patterns and common emoji shortcodes for the `giv chars` command.
+This document lists commonly used character patterns and emoji shortcodes for the `giv chars` command.
+
+The `giv chars` command uses the [penmanship](https://github.com/theroyalwhee0/penmanship) crate for Unicode character lookup, which provides comprehensive support for:
+
+- **Character patterns**: Punctuation, math symbols, Greek letters, fractions, currency, and more
+- **HTML entities**: 2200+ named character references (e.g., `&nbsp;`, `&copy;`, `&alpha;`)
+- **Emoji shortcodes**: 1800+ GitHub-compatible emoji (e.g., `:smile:`, `:rocket:`)
+
+For a complete list of all supported patterns, see:
+
+- [penmanship character mappings](https://github.com/theroyalwhee0/penmanship/blob/main/docs/mappings.md)
+- [penmanship HTML entities](https://github.com/theroyalwhee0/penmanship/blob/main/docs/html-entities.md)
 
 ## Usage
 
 ```bash
 giv chars <pattern1> <pattern2> ...
 giv --json chars <pattern1> <pattern2> ...
+```
+
+**Important Note**: Patterns starting with `-` (like `--` or `->`) require quoting or using the `--` separator to prevent them being interpreted as command-line flags:
+
+```bash
+# Using quotes
+giv chars "--" "->"
+
+# Using -- separator
+giv chars -- "--" "->"
+
+# Or use the "em" alias for em-dash
+giv chars em
 ```
 
 ## Fractions
@@ -51,12 +75,16 @@ $ giv chars "(c)" "(r)" "(tm)"
 | Pattern | Result | Description |
 |---------|--------|-------------|
 | `...`   | …      | horizontal ellipsis |
-| `--`    | —      | em dash |
+| `--`, `em` | —   | em dash |
 
 **Example:**
 
 ```bash
-$ giv chars "..." "--"
+$ giv chars "..." em
+… —
+
+# Or use the pattern (requires -- separator or quotes)
+$ giv chars -- "..." "--"
 … —
 ```
 
@@ -273,6 +301,33 @@ $ giv chars star
 ★
 ```
 
+## HTML Entities
+
+The `chars` command supports 2200+ HTML named character references. Here are some commonly used ones:
+
+| Pattern | Result | Description |
+|---------|--------|-------------|
+| `&nbsp;` | (non-breaking space) | html named character reference |
+| `&lt;` | < | html named character reference |
+| `&gt;` | > | html named character reference |
+| `&amp;` | & | html named character reference |
+| `&copy;` | © | html named character reference |
+| `&reg;` | ® | html named character reference |
+| `&alpha;` | α | html named character reference |
+| `&beta;` | β | html named character reference |
+| `&rarr;` | → | html named character reference |
+
+**Example:**
+
+```bash
+$ giv chars "&lt;" "&gt;" "&amp;" "&copy;"
+< > & ©
+```
+
+For a complete list of HTML entities, see:
+
+- [penmanship HTML entities documentation](https://github.com/theroyalwhee0/penmanship/blob/main/docs/html-entities.md)
+
 ## Common Emoji Shortcodes
 
 The `chars` command supports all emoji shortcodes from the GitHub emoji set. Here are some commonly used ones:
@@ -347,10 +402,10 @@ $ giv chars :rocket: "->" :star: "+" :sparkles:
 
 ## JSON Output
 
-All conversions can be output as JSON with metadata:
+All conversions can be output as JSON with metadata. The `type` field indicates whether the input was a pattern, HTML entity, or emoji:
 
 ```bash
-$ giv --json chars alpha :smile: 1/4
+$ giv --json chars alpha "&nbsp;" :smile:
 [
   {
     "input": "alpha",
@@ -359,16 +414,16 @@ $ giv --json chars alpha :smile: 1/4
     "name": "greek small letter alpha"
   },
   {
+    "input": "&nbsp;",
+    "output": " ",
+    "type": "html",
+    "name": "html named character reference"
+  },
+  {
     "input": ":smile:",
     "output": "😄",
     "type": "emoji",
     "name": "grinning face with smiling eyes"
-  },
-  {
-    "input": "1/4",
-    "output": "¼",
-    "type": "pattern",
-    "name": "fraction one quarter"
   }
 ]
 ```
@@ -382,13 +437,31 @@ $ giv chars unknown
 Error: Unknown character pattern or emoji shortcode: 'unknown'
 ```
 
-## Finding More Emoji
+## Finding More Patterns
 
-GitHub-compatible emoji shortcodes are supported.
+### Character Patterns
 
-The full list of supported emoji shortcodes can be found at:
+For the complete list of supported character patterns (punctuation, math symbols, Greek letters, fractions, currency, etc.), see:
+
+- [penmanship character mappings](https://github.com/theroyalwhee0/penmanship/blob/main/docs/mappings.md)
+
+### HTML Entities
+
+For the complete list of 2200+ HTML named character references, see:
+
+- [penmanship HTML entities](https://github.com/theroyalwhee0/penmanship/blob/main/docs/html-entities.md)
+
+### Emoji Shortcodes
+
+GitHub-compatible emoji shortcodes are supported. The full list of supported emoji shortcodes can be found at:
 
 - <https://github.com/ikatyang/emoji-cheat-sheet>
+
+## Implementation Details
+
+Character lookup is provided by:
+
+- [penmanship](https://github.com/theroyalwhee0/penmanship) - Unicode character lookup library
 
 Emoji support is provided by:
 

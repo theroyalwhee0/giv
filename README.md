@@ -19,12 +19,14 @@ A CLI for generating useful values.
   - Raw bytes: `giv bytes -e raw 100 | hexyl`
 - `giv chars`: Convert emoji shortcodes and character patterns to Unicode.
   - Emoji: `giv chars :smile: :rocket: :thumbsup:`
+  - HTML entities: `giv chars "&nbsp;" "&copy;" "&lt;"`
   - Fractions: `giv chars 1/4 1/2 3/4`
   - Symbols: `giv chars "(c)" "(r)" "(tm)"`
   - Arrows: `giv chars -- "->" "<-" "=>"`
-  - Punctuation: `giv chars "..." "--"`
+  - Punctuation: `giv chars "..." em` (em-dash: —)
   - Greek: `giv chars alpha beta gamma delta lambda pi omega`
   - Multiple: `giv chars 1/4 :smile: "(c)" lambda` → `¼ 😄 © λ`
+  - **Note**: Patterns starting with `-` (like `--` or `->`) require quoting or using `--` separator: `giv chars -- "--" "->"` or `giv chars em` for em-dash
 - `giv date`: Prints the date in various formats.
   - `giv now`: Prints the current time in various formats.
 - `giv uuid`: Print a random UUID v7.
