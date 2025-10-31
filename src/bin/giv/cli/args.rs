@@ -44,6 +44,11 @@ const fn long_version() -> &'static str {
 #[derive(Parser)]
 #[command(author, version, about, long_about = None, long_version = long_version())]
 pub struct Cli {
+    /// Copy output to clipboard (still prints to stdout).
+    #[cfg(feature = "clipboard")]
+    #[arg(short = 'c', long, default_value_t = false)]
+    pub clip: bool,
+
     /// Format the output as JSON.
     #[cfg(feature = "json")]
     #[arg(short, long, default_value_t = false)]
