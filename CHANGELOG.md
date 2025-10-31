@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2025-10-31
+
+### Added
+
+- `--clip` / `-c` global flag for clipboard support (#60, #61)
+  - Copies generated output to clipboard while still printing to stdout
+  - Works with all commands and output formats
+  - Cross-platform support via arboard library
+  - Graceful fallback with warning if clipboard unavailable
+- UUID v4 support alongside existing v7 (#32, #59)
+- UUID formatting options: standard, simple, braced, URN, hex (#32, #59)
+- UUID case option for uppercase/lowercase hex digits (#32, #59)
+- Comprehensive Unicode character support via penmanship crate (#56, #57)
+
+### Changed
+
+- Refactored `chars` command to use penmanship crate for better Unicode coverage (#56, #57)
+- Refactored UUID module to follow table of contents pattern (#32, #59)
+- Updated README with global options and UUID improvements
+
 ## [0.2.2] - 2025-10-24
 
 ### Added
@@ -83,7 +103,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Structured output system with `Output` trait
 - Comprehensive documentation and usage guides
 
-[unreleased]: https://github.com/theroyalwhee0/giv/compare/v0.2.2...HEAD
+[unreleased]: https://github.com/theroyalwhee0/giv/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/theroyalwhee0/giv/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/theroyalwhee0/giv/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/theroyalwhee0/giv/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/theroyalwhee0/giv/compare/v0.1.0...v0.2.0
