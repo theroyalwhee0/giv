@@ -19,7 +19,8 @@
 //! use giv::uuid::generate_uuid;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
-//! let uuid = generate_uuid()?;
+//! // Generate a default UUID (v7, standard format)
+//! let uuid = generate_uuid(None, None, false)?;
 //! println!("Generated UUID: {}", uuid.uuid);
 //! # Ok(())
 //! # }

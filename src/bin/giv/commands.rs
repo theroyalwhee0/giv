@@ -271,6 +271,9 @@ pub fn lorem_command(
 ///
 /// # Arguments
 ///
+/// - `version` An optional UUID version to generate.
+/// - `format` An optional formatting style.
+/// - `uppercase` Whether to use uppercase hex digits.
 /// - `ctx` The command context.
 ///
 /// # Returns
@@ -281,8 +284,13 @@ pub fn lorem_command(
 ///
 /// Propagates errors from [`uuid::generate_uuid`].
 #[cfg(feature = "uuid")]
-pub fn uuid_command(ctx: &mut AppContext) -> Result<(), GivError> {
-    let output = uuid::generate_uuid()?;
+pub fn uuid_command(
+    version: Option<giv::uuid::UuidVersion>,
+    format: Option<giv::uuid::UuidFormat>,
+    uppercase: bool,
+    ctx: &mut AppContext,
+) -> Result<(), GivError> {
+    let output = uuid::generate_uuid(version, format, uppercase)?;
     ctx.format().output(&output);
     Ok(())
 }

@@ -6,7 +6,7 @@
 //! - Formatted dates.
 //! - Key generation.
 //! - Lorem ipsum text.
-//! - UUID v7 generation.
+//! - UUID generation (v4 and v7 with multiple formats).
 //! - PI.
 //! - Random number generation.
 
@@ -63,7 +63,11 @@ fn main() -> ExitCode {
         Commands::Key { size } => key_command(size, &mut ctx),
         // The 'uuid' command.
         #[cfg(feature = "uuid")]
-        Commands::Uuid => uuid_command(&mut ctx),
+        Commands::Uuid {
+            version,
+            format,
+            uppercase,
+        } => uuid_command(version, format, uppercase, &mut ctx),
         // The 'date' command.
         #[cfg(feature = "date")]
         Commands::Date { kind, format } => date_command(kind, format, &mut ctx),
