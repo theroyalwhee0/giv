@@ -62,6 +62,7 @@ uuid = { version = "1.17.0", features = ["v7", "serde"], optional = true }
 # Lookups.
 emojis = { version = "0.7.2", optional = true }
 lipsum = { version = "0.9.1", optional = true }
+penmanship = { version = "0.1", optional = true }
 # CLI and Terminal.
 clap = { version = "4.5.35", features = ["derive"] }
 # Encoding
@@ -94,7 +95,7 @@ full = [
 bin = []
 # Command features.
 bytes = ["dep:rand", "dep:base64", "dep:hex"]
-chars = ["dep:emojis"]
+chars = ["dep:penmanship"]
 date = ["dep:chrono"]
 key = ["dep:rand"]
 lorem = ["dep:lipsum", "dep:rand", "dep:serde"]

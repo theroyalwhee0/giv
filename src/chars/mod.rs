@@ -8,9 +8,15 @@ pub use output::{CharResult, CharsOutput};
 
 /// Convert a single input to a character or emoji.
 ///
+/// This function uses the `penmanship` crate for Unicode character lookup,
+/// which supports multiple input formats:
+/// - Patterns: `"..."`, `"alpha"`, `"(c)"`, `"em"` (for em-dash), `"->"`, etc.
+/// - HTML entities: `"&nbsp;"`, `"&lt;"`, `"&copy;"`, etc.
+/// - Emoji shortcodes: `":smile:"`, `":heart:"`, `":thumbsup:"`, etc.
+///
 /// # Arguments
 ///
-/// - `input` The input pattern or shortcode.
+/// - `input` The input pattern, HTML entity, or emoji shortcode.
 ///
 /// # Returns
 ///
@@ -18,27 +24,23 @@ pub use output::{CharResult, CharsOutput};
 ///
 /// # Errors
 ///
-/// Returns an error if the pattern or shortcode is not recognized.
+/// Returns an error if the pattern, entity, or shortcode is not recognized.
 pub fn convert_input(input: &str) -> Result<CharResult, GivError> {
-    // First, try emoji lookup (requires colons).
-    if input.starts_with(':') && input.ends_with(':') && input.len() > 2 {
-        let emoji_shortcode = &input[1..input.len() - 1];
-        if let Some(emoji) = emojis::get_by_shortcode(emoji_shortcode) {
-            return Ok(CharResult {
-                input: input.to_string(),
-                output: emoji.as_str().to_string(),
-                result_type: "emoji".to_string(),
-                name: Some(emoji.name().to_string()),
-            });
-        }
-    }
-
-    // Next, try pattern lookup.
+    // Use penmanship for all lookups (handles patterns, HTML entities, and emoji).
     if let Some((character, name)) = patterns::lookup_pattern(input) {
+        // Determine the type based on the input format.
+        let result_type = if input.starts_with(':') && input.ends_with(':') {
+            "emoji"
+        } else if input.starts_with('&') && input.ends_with(';') {
+            "html"
+        } else {
+            "pattern"
+        };
+
         return Ok(CharResult {
             input: input.to_string(),
             output: character.to_string(),
-            result_type: "pattern".to_string(),
+            result_type: result_type.to_string(),
             name: Some(name.to_string()),
         });
     }
@@ -52,7 +54,7 @@ pub fn convert_input(input: &str) -> Result<CharResult, GivError> {
 mod tests {
     use super::*;
 
-    /// Test emoji conversion.
+    /// Test emoji conversion via penmanship.
     #[test]
     fn test_emoji_conversion() {
         let result = convert_input(":smile:").unwrap();
@@ -60,11 +62,12 @@ mod tests {
         assert_eq!(result.result_type, "emoji");
     }
 
-    /// Test emoji without colons should fail.
+    /// Test HTML entity conversion via penmanship.
     #[test]
-    fn test_emoji_requires_colons() {
-        let result = convert_input("thumbsup");
-        assert!(result.is_err());
+    fn test_html_entity_conversion() {
+        let result = convert_input("&nbsp;").unwrap();
+        assert_eq!(result.output, "\u{00A0}");
+        assert_eq!(result.result_type, "html");
     }
 
     /// Test pattern conversion.
@@ -80,6 +83,22 @@ mod tests {
     fn test_copyright() {
         let result = convert_input("(c)").unwrap();
         assert_eq!(result.output, "©");
+        assert_eq!(result.result_type, "pattern");
+    }
+
+    /// Test em-dash via "em" alias (issue #56).
+    #[test]
+    fn test_em_dash_alias() {
+        let result = convert_input("em").unwrap();
+        assert_eq!(result.output, "—");
+        assert_eq!(result.result_type, "pattern");
+    }
+
+    /// Test arrow patterns (issue #56).
+    #[test]
+    fn test_arrow_patterns() {
+        let result = convert_input("->").unwrap();
+        assert_eq!(result.output, "→");
         assert_eq!(result.result_type, "pattern");
     }
 
